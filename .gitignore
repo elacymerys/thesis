@@ -1,4 +1,5 @@
 /.idea
+__pycache__
 
 thesis-api/venv
 thesis-api/.idea
