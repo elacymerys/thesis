@@ -12,28 +12,38 @@ import {
 import './Tab1.css';
 import { useState } from "react";
 
-const mockAnswers = [
-    {
-        id: 1,
-        name: "Answer 1"
-    },
-    {
-        id: 2,
-        name: "Answer 2"
-    },
-    {
-        id: 3,
-        name: "Answer 3"
-    },
-    {
-        id: 4,
-        name: "Answer 4"
-    }
-];
+const mockData = {
+    category: "Category",
+    question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore " +
+        "et dolore magna aliqua. Libero nunc consequat.",
+    answers: [
+        {
+            id: 1,
+            name: "Answer 1",
+            correct: true
+        },
+        {
+            id: 2,
+            name: "Answer 2",
+            correct: false
+        },
+        {
+            id: 3,
+            name: "Answer 3",
+            correct: false
+        },
+        {
+            id: 4,
+            name: "Answer 4",
+            correct: false
+        }
+    ]
+};
 
 type AnswerType = {
     id: number,
-    name: string
+    name: string,
+    correct: boolean
 }
 
 const Answer: React.FC<{ answer: AnswerType }> = props => {
@@ -42,17 +52,17 @@ const Answer: React.FC<{ answer: AnswerType }> = props => {
             <IonLabel>
                 { props.answer.name }
             </IonLabel>
-            <IonRadio slot="start" value={ `ans${props.answer.id}` } />
+            <IonRadio slot="start" value={ props.answer.id } />
         </IonItem>
     );
 }
 
-const answerItems = mockAnswers.map(answer =>
+const answerItems = mockData.answers.map(answer =>
     <Answer answer={ answer } />
 );
 
 const Tab1: React.FC = () => {
-  const [selected, setSelected] = useState<string>(null!);
+  const [selected, setSelected] = useState<number>(null!);
 
   return (
     <IonPage>
@@ -71,7 +81,7 @@ const Tab1: React.FC = () => {
           <IonCard>
               <IonCardHeader>
                   <IonCardSubtitle>
-                      Category
+                      { mockData.category }
                   </IonCardSubtitle>
                   <IonCardTitle>
                       Question X
@@ -79,8 +89,7 @@ const Tab1: React.FC = () => {
               </IonCardHeader>
 
               <IonCardContent style={{ textAlign: "justify" }}>
-                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore
-                  et dolore magna aliqua. Libero nunc consequat.
+                  { mockData.question }
               </IonCardContent>
           </IonCard>
 
