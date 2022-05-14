@@ -10,7 +10,46 @@ import {
     IonToolbar
 } from '@ionic/react';
 import './Tab1.css';
-import {useState} from "react";
+import { useState } from "react";
+
+const mockAnswers = [
+    {
+        id: 1,
+        name: "Answer 1"
+    },
+    {
+        id: 2,
+        name: "Answer 2"
+    },
+    {
+        id: 3,
+        name: "Answer 3"
+    },
+    {
+        id: 4,
+        name: "Answer 4"
+    }
+];
+
+type AnswerType = {
+    id: number,
+    name: string
+}
+
+const Answer: React.FC<{ answer: AnswerType }> = props => {
+    return (
+        <IonItem>
+            <IonLabel>
+                { props.answer.name }
+            </IonLabel>
+            <IonRadio slot="start" value={ `ans${props.answer.id}` } />
+        </IonItem>
+    );
+}
+
+const answerItems = mockAnswers.map(answer =>
+    <Answer answer={ answer } />
+);
 
 const Tab1: React.FC = () => {
   const [selected, setSelected] = useState<string>(null!);
@@ -46,34 +85,8 @@ const Tab1: React.FC = () => {
           </IonCard>
 
           <IonList>
-              <IonRadioGroup value={selected} onIonChange={e => setSelected(e.detail.value)}>
-                  <IonItem>
-                      <IonLabel>
-                          Answer 1
-                      </IonLabel>
-                      <IonRadio slot="start" value="ans1" />
-                  </IonItem>
-
-                  <IonItem>
-                      <IonLabel>
-                          Answer 2
-                      </IonLabel>
-                      <IonRadio slot="start" value="ans2" />
-                  </IonItem>
-
-                  <IonItem>
-                      <IonLabel>
-                          Answer 3
-                      </IonLabel>
-                      <IonRadio slot="start" value="ans3" />
-                  </IonItem>
-
-                  <IonItem>
-                      <IonLabel>
-                          Answer 4
-                      </IonLabel>
-                      <IonRadio slot="start" value="ans4" />
-                  </IonItem>
+              <IonRadioGroup value={ selected } onIonChange={e => setSelected(e.detail.value)}>
+                  { answerItems }
               </IonRadioGroup>
           </IonList>
 
