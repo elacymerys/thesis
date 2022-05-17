@@ -1,6 +1,11 @@
+import logging
+
 from fastapi import FastAPI
 
 app = FastAPI()
+
+
+logging.getLogger().setLevel(logging.INFO)
 
 
 @app.get("/")
