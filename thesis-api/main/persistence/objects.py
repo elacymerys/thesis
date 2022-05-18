@@ -2,7 +2,7 @@ from typing import Optional
 
 
 class Category:
-    def __int__(self, id: Optional[int] = None, name: Optional[str] = None, search_word: Optional[str] = None):
+    def __init__(self, id: Optional[int] = None, name: Optional[str] = None, search_word: Optional[str] = None):
         self.id = id
         self.name = name
         self.search_word = search_word
