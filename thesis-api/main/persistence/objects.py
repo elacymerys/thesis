@@ -7,6 +7,10 @@ class Category:
         self.name = name
         self.search_word = search_word
 
+    @staticmethod
+    def from_model(model):
+        return Category(model.id, model.name, model.search_word)
+
     def __repr__(self):
         text = ''
         if self.id is not None:
@@ -23,6 +27,10 @@ class Term:
         self.id = id
         self.name = name
         self.category = category
+
+    @staticmethod
+    def from_model(model):
+        return Term(model.id, model.name, Category.from_model(model.category))
 
     def __repr__(self) -> str:
         text = ''

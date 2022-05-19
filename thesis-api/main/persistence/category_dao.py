@@ -14,4 +14,4 @@ class CategoryDAO:
 
         if categories is None:
             return []
-        return [Category(id=c.id, name=c.name) for c in categories]
+        return [Category.from_model(c) for c in categories]
