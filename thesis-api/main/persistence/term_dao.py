@@ -1,6 +1,6 @@
 from fastapi import Depends
 
-from database import SessionLocal
+from database import SessionLocal, get_db
 from database.models import CategoryModel, TermModel
 from errors import NotFoundException
 
