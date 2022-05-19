@@ -2,17 +2,18 @@ from database.models import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database import get_db
+from database import get_db, USER, PASS, HOST, PORT, NAME
 from api import app
 
 TEST_SQLALCHEMY_DATABASE_URL = 'sqlite://'
-
 test_engine = create_engine(TEST_SQLALCHEMY_DATABASE_URL)
 TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_engine)
 
 
 def get_test_db():
     conn = test_engine.connect()
+    conn.execute("PRAGMA foreign_keys=ON")
+
     transaction = conn.begin()
     db = TestSessionLocal(bind=conn)
     try:
