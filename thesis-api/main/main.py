@@ -1,4 +1,4 @@
-from sqlalchemy.testing.plugin.plugin_base import logging
+import logging
 
 from api import app
 from database import engine as db_engine, NAME as DB_NAME
