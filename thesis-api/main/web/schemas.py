@@ -11,3 +11,13 @@ class CategoryResponse(CategoryBase):
 
 class CategoryListResponse(BaseModel):
     categories: list[CategoryResponse]
+
+
+class QuestionBase(BaseModel):
+    question: str
+    correct: str
+    answers: list[str]
+
+
+class QuestionResponse(QuestionBase):
+    pass

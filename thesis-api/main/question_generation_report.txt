@@ -1,0 +1,234 @@
+
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['wolf', 'tiger', 'leopard', 'lion']
+Correct answer is:  lion
+Definition:
+
+An ***** is an edible fruit produced by an ***** tree (Malus domestica). ***** trees ***** cultivated worldwide and
+***** the most widely grown species in the genus Malus. The tree originated in Central Asia, where its wild ancestor,
+Malus sieversii, is still found today. ***** have been grown for thousands of years in Asia and Europe and were brought
+to North America by European colonists. ***** have religious and mythological significance in many cultures, including
+Norse, Greek, and European Christian tradition..
+
+Answers are:
+['apple', 'potato', 'tree', 'fruit']
+Correct answer is:  apple
+Definition:
+
+An ***** is an edible fruit produced by an ***** tree (Malus domestica). ***** trees ***** cultivated worldwide and
+***** the most widely grown species in the genus Malus. The tree originated in Central Asia, where its wild ancestor,
+Malus sieversii, is still found today. ***** have been grown for thousands of years in Asia and Europe and were brought
+to North America by European colonists. ***** have religious and mythological significance in many cultures, including
+Norse, Greek, and European Christian tradition..
+
+Answers are:
+['vegetable', 'fruit', 'potatoes', 'apple']
+Correct answer is:  apple
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['proportion', 'tiger', 'leopard', 'lion']
+Correct answer is:  lion
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['tiger', 'lion', 'snake', 'wolf']
+Correct answer is:  lion
+Definition:
+
+An ***** is an edible fruit produced by an ***** tree (Malus domestica). ***** trees ***** cultivated worldwide and
+***** the most widely grown species in the genus Malus. The tree originated in Central Asia, where its wild ancestor,
+Malus sieversii, is still found today. ***** have been grown for thousands of years in Asia and Europe and were brought
+to North America by European colonists. ***** have religious and mythological significance in many cultures, including
+Norse, Greek, and European Christian tradition..
+
+Answers are:
+['apple', 'vegetable', 'fruit', 'potato']
+Correct answer is:  apple
+Definition:
+
+An ***** is an edible fruit produced by an ***** tree (Malus domestica). ***** trees ***** cultivated worldwide and
+***** the most widely grown species in the genus Malus. The tree originated in Central Asia, where its wild ancestor,
+Malus sieversii, is still found today. ***** have been grown for thousands of years in Asia and Europe and were brought
+to North America by European colonists. ***** have religious and mythological significance in many cultures, including
+Norse, Greek, and European Christian tradition..
+
+Answers are:
+['fruit', 'vegetable', 'potato', 'apple']
+Correct answer is:  apple
+Definition:
+
+An ***** is an edible fruit produced by an ***** tree (Malus domestica). ***** trees ***** cultivated worldwide and
+***** the most widely grown species in the genus Malus. The tree originated in Central Asia, where its wild ancestor,
+Malus sieversii, is still found today. ***** have been grown for thousands of years in Asia and Europe and were brought
+to North America by European colonists. ***** have religious and mythological significance in many cultures, including
+Norse, Greek, and European Christian tradition..
+
+Answers are:
+['fruit', 'potato', 'bee', 'apple']
+Correct answer is:  apple
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['lion', 'leopard', 'tiger', 'wolf']
+Correct answer is:  lion
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['leopard', 'tiger', 'lion', 'snake']
+Correct answer is:  lion
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['tiger', 'snake', 'leopard', 'lion']
+Correct answer is:  lion
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['lion', 'tiger', 'wolf', 'leopard']
+Correct answer is:  lion
+Definition:
+
+An ***** is an edible fruit produced by an ***** tree (Malus domestica). ***** trees ***** cultivated worldwide and
+***** the most widely grown species in the genus Malus. The tree originated in Central Asia, where its wild ancestor,
+Malus sieversii, is still found today. ***** have been grown for thousands of years in Asia and Europe and were brought
+to North America by European colonists. ***** have religious and mythological significance in many cultures, including
+Norse, Greek, and European Christian tradition..
+
+Answers are:
+['potato', 'vegetable', 'fruit', 'apple']
+Correct answer is:  apple
+Definition:
+
+An ***** is an edible fruit produced by an ***** tree (Malus domestica). ***** trees ***** cultivated worldwide and
+***** the most widely grown species in the genus Malus. The tree originated in Central Asia, where its wild ancestor,
+Malus sieversii, is still found today. ***** have been grown for thousands of years in Asia and Europe and were brought
+to North America by European colonists. ***** have religious and mythological significance in many cultures, including
+Norse, Greek, and European Christian tradition..
+
+Answers are:
+['vegetable', 'fruit', 'potato', 'apple']
+Correct answer is:  apple
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['tiger', 'wolf', 'leopard', 'lion']
+Correct answer is:  lion
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['tiger', 'lion', 'leopard', 'wolf']
+Correct answer is:  lion
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['lion', 'wolf', 'leopard', 'snake']
+Correct answer is:  lion
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['leopard', 'wolf', 'tiger', 'lion']
+Correct answer is:  lion
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['lion', 'tiger', 'wolf', 'snake']
+Correct answer is:  lion
+Definition:
+
+The ***** (Panthera ***** is a large cat of the genus Panthera native to Africa and India. It has a muscular, deep-
+chested body, short, rounded head, round ears, and a hairy tuft at the end of its tail. It is sexually dimorphic; adult
+male ***** are larger than females and have a prominent mane. It is a social species, forming groups called prides. A
+***** pride consists of a few adult males, related females, and cubs. Groups of female ***** usually hunt together,
+preying mostly ***** large ungulates. The ***** is an apex and keystone predator; although some ***** scavenge when
+opportunities occur and have been known to hunt humans, the species typically does not..
+
+Answers are:
+['snake', 'lion', 'tiger', 'cougar']
+Correct answer is:  lion
