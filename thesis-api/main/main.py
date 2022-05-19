@@ -1,19 +1,11 @@
-import logging
+from sqlalchemy.testing.plugin.plugin_base import logging
 
-from fastapi import FastAPI, Depends
-from starlette.status import HTTP_200_OK
+from database import engine as db_engine, NAME as DB_NAME
+from database.models import Base
+from api import app
 
-from services.category_service import CategoryService
-from web.schemas import CategoryListResponse, CategoryResponse
+app = app
 
-app = FastAPI()
+Base.metadata.create_all(db_engine)
 
-
-logging.getLogger().setLevel(logging.INFO)
-
-
-@app.get("/api/categories", status_code=HTTP_200_OK, response_model=CategoryListResponse)
-async def get_categories(service: CategoryService = Depends()):
-    categories = service.get_all()
-    res = [CategoryResponse(id=category.id, name=category.name) for category in categories]
-    return CategoryListResponse(categories=res)
+logging.info(f'Initialize database {DB_NAME}')
