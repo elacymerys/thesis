@@ -6,7 +6,7 @@ from database import get_db
 from database.models import TermModel
 from errors import NotFoundException
 from persistence import term_crud, category_crud
-from persistence.objects import Term, Category
+from persistence.objects import Term
 
 
 class TermService:

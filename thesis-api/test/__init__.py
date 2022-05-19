@@ -1,9 +1,9 @@
-from database.models import Base
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-from database import get_db, USER, PASS, HOST, PORT, NAME
 from api import app
+from database import get_db
+from database.models import Base
 
 TEST_SQLALCHEMY_DATABASE_URL = 'sqlite://'
 test_engine = create_engine(TEST_SQLALCHEMY_DATABASE_URL)
