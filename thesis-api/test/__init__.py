@@ -11,13 +11,17 @@ TestSessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=test_eng
 
 
 def get_test_db():
-    db = TestSessionLocal()
+    conn = test_engine.connect()
+    outer_transaction = conn.begin()
+    db = TestSessionLocal(bind=conn)
     db.execute("PRAGMA foreign_keys=ON")
     try:
         yield db
     finally:
-        db.rollback()
+        outer_transaction.rollback()
         db.close()
+        outer_transaction.close()
+        conn.close()
 
 
 app.dependency_overrides[get_db] = get_test_db
