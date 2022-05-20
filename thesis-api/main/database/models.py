@@ -12,7 +12,9 @@ class CategoryModel(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, unique=True, nullable=False)
+    aaaa_name = Column(String, unique=True, nullable=False)
     search_name = Column(String, unique=True, nullable=False)
+    bbbb_name = Column(String, unique=True, nullable=False)
 
 
 Base.metadata.create_all(engine)
