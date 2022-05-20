@@ -18,7 +18,6 @@ class TermService:
             raise NotFoundException()
 
         term_crud.save_all(self.__db, [TermModel(name=t, category_id=category_id) for t in terms])
-        self.__db.commit()
 
     def get_random(self, category_id: int) -> Term:
         if not category_crud.exists(self.__db, category_id):

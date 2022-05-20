@@ -1,15 +1,12 @@
+from contextlib import contextmanager
+
 from database.models import CategoryModel
 from services.category_service import CategoryService
-from test import test_engine, TestSessionLocal
+from test import get_test_db
 
 
-def test_get_all__returnsAll():
-    conn = test_engine.connect()
-    conn.execute("PRAGMA foreign_keys=ON")
-
-    transaction = conn.begin()
-    db = TestSessionLocal(bind=conn)
-    try:
+def test_get_all__returns_all():
+    with contextmanager(get_test_db)() as db:
         db.add(CategoryModel(name='c1', search_word='c1'))
         db.add(CategoryModel(name='c2', search_word='c2'))
         db.flush()
@@ -19,7 +16,3 @@ def test_get_all__returnsAll():
 
         assert categories[0].name == 'c1'
         assert categories[1].name == 'c2'
-    finally:
-        transaction.rollback()
-        db.close()
-        conn.close()
