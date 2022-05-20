@@ -9,15 +9,13 @@ from persistence.term_dao import TermDAO
 
 
 class TermService:
-    def __init__(self, db: Session, term_dao: TermDAO, category_dao: CategoryDAO):
-        self.__db = db
+    def __init__(self, term_dao: TermDAO, category_dao: CategoryDAO):
         self.__term_dao = term_dao
         self.__category_dao = category_dao
 
     @staticmethod
     def build(db: Session):
         return TermService(
-            db,
             TermDAO(db),
             CategoryDAO(db)
         )
@@ -30,12 +28,7 @@ class TermService:
         terms_names_in_db = map(lambda term: term.name, terms_in_db)
         new_terms = [t for t in terms if t not in terms_names_in_db]
 
-        try:
-            self.__term_dao.save_all_of_category(new_terms, category_id)
-            self.__db.commit()
-        except Exception as e:
-            self.__db.rollback()
-            raise e
+        self.__term_dao.save_all_of_category(new_terms, category_id)
 
     def get_random(self, category_id: int) -> Term:
         terms = self.__term_dao.get_all_of_category(category_id)
