@@ -1,31 +1,39 @@
 from random import randrange
 
-from fastapi import Depends
+from sqlalchemy.orm import Session
 
-from database import get_db
-from database.models import TermModel
 from errors import NotFoundException
-from persistence import term_crud, category_crud
+from persistence.category_dao import CategoryDAO
 from persistence.objects import Term
+from persistence.term_dao import TermDAO
+from services.category_service import CategoryService
 
 
 class TermService:
-    def __init__(self, db=Depends(get_db)):
-        self.__db = db
+    def __init__(self, term_dao: TermDAO, category_dao: CategoryDAO):
+        self.__term_dao = term_dao
+        self.__category_dao = category_dao
+
+    @staticmethod
+    def build(db: Session):
+        return TermService(
+            TermDAO(db),
+            CategoryDAO(db)
+        )
 
     def save_all(self, terms: list[str], category_id: int):
-        if not category_crud.exists(self.__db, category_id):
+        if not self.__category_dao.exists(category_id):
             raise NotFoundException()
 
-        term_crud.save_all(self.__db, [TermModel(name=t, category_id=category_id) for t in terms])
+        terms_in_db = self.__term_dao.get_all_of_category(category_id)
+        terms_names_in_db = map(lambda term: term.name, terms_in_db)
+        new_terms = [t for t in terms if t not in terms_names_in_db]
+
+        self.__term_dao.save_all_of_category(new_terms, category_id)
 
     def get_random(self, category_id: int) -> Term:
-        if not category_crud.exists(self.__db, category_id):
+        terms = self.__term_dao.get_all_of_category(category_id)
+        if not terms:
             raise NotFoundException()
 
-        if not term_crud.exists(self.__db, category_id):
-            raise NotFoundException()
-
-        terms = term_crud.get_all(self.__db, category_id)
-        random_term = terms[randrange(0, len(terms))]
-        return Term.from_model(random_term)
+        return terms[randrange(0, len(terms))]

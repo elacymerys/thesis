@@ -11,7 +11,7 @@ def test_get_all__returns_all():
         db.add(CategoryModel(name='c2', search_word='c2'))
         db.flush()
 
-        service = CategoryService(db)
+        service = CategoryService.build(db)
         categories = service.get_all()
 
         assert categories[0].name == 'c1'

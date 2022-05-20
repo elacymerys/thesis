@@ -1,16 +1,18 @@
 from typing import List
 
-from fastapi import Depends
+from sqlalchemy.orm import Session
 
-from database import get_db
-from persistence import category_crud
+from persistence.category_dao import CategoryDAO
 from persistence.objects import Category
 
 
 class CategoryService:
-    def __init__(self, db=Depends(get_db)):
-        self.__db = db
+    def __init__(self, dao: CategoryDAO):
+        self.__dao = dao
+
+    @staticmethod
+    def build(db: Session):
+        return CategoryService(CategoryDAO(db))
 
     def get_all(self) -> List[Category]:
-        models = category_crud.get_all(self.__db)
-        return [Category.from_model(m) for m in models]
+        return self.__dao.get_all()
