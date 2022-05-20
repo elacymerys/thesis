@@ -20,6 +20,7 @@ class DefinitionProcessingService:
         for sentence in definition_split:
             if current_definition_length + len(sentence) < self.definition_length or len(definition_array) == 0:
                 definition_array.append(sentence)
+                current_definition_length += len(sentence)
             else:
                 break
         self.definition = ".".join(definition_array) + "."

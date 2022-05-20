@@ -17,7 +17,7 @@ class DatamuseWrongAnswerService(WrongAnswersService):
         self.frequency_threshold = 0.25
         self.answer_choice_probability = 0.7
         self.edit_distance_service = EditDistanceService()
-        self.edit_distance_value = 0.75
+        self.edit_distance_value = 2
 
     def get_wrong_answers(self, right_answer: str) -> list[str]:
         related_words = self.api.words(ml=right_answer, md='f')
@@ -43,15 +43,15 @@ class DatamuseWrongAnswerService(WrongAnswersService):
             if (potential_answer["word"] in right_answer) or (right_answer in potential_answer["word"]):
                 continue
             if self.edit_distance_service.edit_distance(potential_answer["word"], right_answer) < \
-                    min(len(right_answer), len(potential_answer["word"])) * self.edit_distance_value:
+                    self.edit_distance_value:
                 continue
-            stop=False
+            stop = False
             for wrong_answer in wrong_answers:
                 if (potential_answer["word"] in wrong_answer) or (wrong_answer in potential_answer["word"]):
                     stop = True
                     break
                 if self.edit_distance_service.edit_distance(potential_answer["word"], wrong_answer) < \
-                        min(len(wrong_answer), len(potential_answer["word"])) * self.edit_distance_value:
+                        self.edit_distance_value:
                     stop = True
                     break
             if not stop:
