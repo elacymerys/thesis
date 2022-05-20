@@ -9,8 +9,8 @@ class DefinitionService(ABC):
 
 
 class WikipediaDefinitionService(DefinitionService):
-    def get_definition(self, word_to_find: str) -> tuple[str, str]:
-        word = wikipedia.search(word_to_find)[0]
+    def get_definition(self, term_to_find: str) -> tuple[str, str]:
+        word = wikipedia.search(term_to_find)[0]
 
         try:
             summary = wikipedia.summary(word, auto_suggest=False, redirect=True)

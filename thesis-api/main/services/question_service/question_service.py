@@ -1,44 +1,42 @@
 import random
 
-from fastapi import Depends
+from sqlalchemy.orm import Session
 
 from persistence.objects import Question
-from persistence.word_dao import WordDAO
 from services.question_service.definition_processing_service import DefinitionProcessingService
 from services.question_service.definition_service import WikipediaDefinitionService
 from services.question_service.wrong_answers_service import DatamuseWrongAnswerService
+from services.term_service import TermService
 
 
 class QuestionService:
-    def __init__(self, dao: WordDAO = Depends(), definition_service: WikipediaDefinitionService = Depends()):
-        self.__dao = dao
+    def __init__(self, term_service: TermService, definition_service: WikipediaDefinitionService):
+        self.term_service = term_service
         self.definition_service = definition_service
 
+    @staticmethod
+    def build(db: Session):
+        return QuestionService(
+            TermService.build(db),
+            WikipediaDefinitionService()
+        )
+
     def create_question(self, category_id: int) -> Question:
-        # pobierz hasła z danej kategorii
-        words = self.__dao.get_words_by_category_id(category_id)
+        term = self.term_service.get_random(category_id)
 
-        # wylosuj jedno hasło
-        right_answer = random.choice(words)
-
-        # wygeneruj definicję dla tego hasła i zagwiazdkuj
-        definition, article_title = self.definition_service.get_definition(right_answer)
-        definition_processing_service = DefinitionProcessingService(definition, right_answer, article_title)
+        definition, article_title = self.definition_service.get_definition(term.name)
+        definition_processing_service = DefinitionProcessingService(definition, term.name, article_title)
         processed_definition = definition_processing_service. \
             standardize_definition_length(). \
             remove_answer_from_definition(). \
             wrap_text(). \
             get_definition()
 
-        # pobierz 3 podobne hasła do odpowiedzi z słownika
-        wrong_answers_service = DatamuseWrongAnswerService()
-        wrong_answers = wrong_answers_service.get_wrong_answers(right_answer)
+        wrong_answers_service = DatamuseWrongAnswerService(self.term_service)
+        wrong_answers = wrong_answers_service.get_wrong_answers(term)
 
-        answers = [right_answer] + wrong_answers
+        answers = [term.name] + wrong_answers
         random.shuffle(answers)
-        # zwróc pytanie
-        question = Question(question=processed_definition, correct=right_answer, answers=answers)
-        # print(question)
-        # with open("./question_generation_report.txt", "a", ) as f:
-        #     f.write(str(question))
+
+        question = Question(question=processed_definition, correct=term.name, answers=answers)
         return question
