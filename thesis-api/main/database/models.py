@@ -1,20 +1,26 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
+from sqlalchemy.orm import relationship, declarative_base
 
-from . import Base, engine
 
-import logging
-
-from config import DBConfig
+Base = declarative_base()
 
 
 class CategoryModel(Base):
-    __tablename__ = "categories"
+    __tablename__ = 'categories'
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, unique=True, nullable=False)
     search_word = Column(String, unique=True, nullable=False)
 
+    terms = relationship('TermModel')
 
-Base.metadata.create_all(engine)
 
-logging.info(f"Initialize database '{DBConfig.NAME}'")
+class TermModel(Base):
+    __tablename__ = 'terms'
+
+    id = Column(Integer, primary_key=True, nullable=False)
+    name = Column(String, unique=True, nullable=False)
+    category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
+
+    category = relationship('CategoryModel', back_populates='terms')
+
