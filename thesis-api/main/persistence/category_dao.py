@@ -12,5 +12,5 @@ class CategoryDAO:
         return self.__db.query(CategoryModel).filter(CategoryModel.id == category_id).count() > 0
 
     def get_all(self) -> list[Category]:
-        models = self.__db.query(CategoryModel).all() or []
+        models = self.__db.query(CategoryModel).all()
         return [Category.from_model(m) for m in models]

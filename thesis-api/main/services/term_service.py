@@ -20,15 +20,15 @@ class TermService:
             CategoryDAO(db)
         )
 
-    def save_all(self, terms: list[str], category_id: int):
+    def save_all(self, term_names: list[str], category_id: int):
         if not self.__category_dao.exists(category_id):
             raise NotFoundException()
 
         terms_in_db = self.__term_dao.get_all_of_category(category_id)
-        terms_names_in_db = map(lambda term: term.name, terms_in_db)
-        new_terms = [t for t in terms if t not in terms_names_in_db]
+        term_names_in_db = [t.name for t in terms_in_db]
+        new_term_names = [t for t in term_names if t not in term_names_in_db]
 
-        self.__term_dao.save_all_of_category(new_terms, category_id)
+        self.__term_dao.save_all_of_category(new_term_names, category_id)
 
     def get_random(self, category_id: int) -> Term:
         terms = self.__term_dao.get_all_of_category(category_id)
