@@ -1,6 +1,7 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship, declarative_base
 
+
 Base = declarative_base()
 
 
@@ -13,7 +14,7 @@ class CategoryModel(Base):
 
     terms = relationship('TermModel')
 
-
+    
 class TermModel(Base):
     __tablename__ = 'terms'
 

@@ -42,7 +42,7 @@ class Term:
             text += f'category: {self.category}'
         return text
 
-
+      
 class Question:
     def __init__(self, question: Optional[str] = None, correct: Optional[str] = None,
                  answers: Optional[list[str]] = None):
