@@ -16,6 +16,6 @@ class TermDAO:
         return [Term.from_model(m) for m in models]
 
     def exists_of_category(self, term: str, category_id: int) -> bool:
-        return self.__db.query(TermModel)\
-                   .filter((TermModel.name == term) & (TermModel.category_id == category_id))\
+        return self.__db.query(TermModel) \
+                   .filter((TermModel.name == term) & (TermModel.category_id == category_id)) \
                    .count() > 0

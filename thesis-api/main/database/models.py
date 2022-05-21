@@ -14,7 +14,7 @@ class CategoryModel(Base):
 
     terms = relationship('TermModel')
 
-
+    
 class TermModel(Base):
     __tablename__ = 'terms'
 
@@ -23,4 +23,3 @@ class TermModel(Base):
     category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
 
     category = relationship('CategoryModel', back_populates='terms')
-

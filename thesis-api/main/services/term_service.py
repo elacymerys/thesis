@@ -36,3 +36,7 @@ class TermService:
             raise NotFoundException()
 
         return terms[randrange(0, len(terms))]
+
+    def term_exists_of_category(self, term: str, category_id: int) -> bool:
+        return self.__term_dao.exists_of_category(term, category_id)
+    
