@@ -44,7 +44,7 @@ class Term:
 
       
 class Question:
-    def __init__(self, question: Optional[str] = None, correct: Optional[str] = None,
+    def __init__(self, question: Optional[str] = None, correct: Optional[Term] = None,
                  answers: Optional[list[str]] = None):
         self.question = question
         self.correct = correct
@@ -58,5 +58,5 @@ class Question:
             text += "Answers are:\n"
             text += str(self.answers)
         if self.correct is not None:
-            text += ("\nCorrect answer is:  " + self.correct)
+            text += ("\nCorrect answer is:  " + self.correct.name)
         return text

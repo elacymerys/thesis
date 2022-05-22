@@ -7,6 +7,7 @@ from services.question_service.definition_processing_service import DefinitionPr
 from services.question_service.definition_service import WikipediaDefinitionService
 from services.question_service.wrong_answers_service import DatamuseWrongAnswerService
 from services.term_service import TermService
+from web.schemas import AnswerRequest
 
 
 class QuestionService:
@@ -38,5 +39,8 @@ class QuestionService:
         answers = [term.name] + wrong_answers
         random.shuffle(answers)
 
-        question = Question(question=processed_definition, correct=term.name, answers=answers)
+        question = Question(question=processed_definition, correct=term, answers=answers)
         return question
+
+    def answer_question(self, answer: AnswerRequest):
+        pass
