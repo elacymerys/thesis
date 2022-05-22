@@ -11,8 +11,22 @@ from services.category_service import CategoryService
 from services.question_service.question_service import QuestionService
 from web.schemas import CategoryListResponse, CategoryResponse, QuestionResponse
 
+from fastapi.middleware.cors import CORSMiddleware
+
 app = FastAPI()
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8080",
+        "http://localhost:8081",
+        "http://localhost:8082",
+        "http://localhost:8100"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 logging.getLogger().setLevel(logging.INFO)
 
