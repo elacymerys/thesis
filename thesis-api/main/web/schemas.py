@@ -15,8 +15,8 @@ class CategoryListResponse(BaseModel):
 
 
 class TermBase(BaseModel):
-    name: str
     id: int
+    name: str
 
 
 class TermResponse(TermBase):

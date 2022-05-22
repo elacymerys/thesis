@@ -9,7 +9,7 @@ from database import get_db
 from errors import NotFoundException
 from services.category_service import CategoryService
 from services.question_service.question_service import QuestionService
-from web.schemas import CategoryListResponse, CategoryResponse, QuestionResponse, AnswerRequest
+from web.schemas import CategoryListResponse, CategoryResponse, QuestionResponse, AnswerRequest, TermResponse
 
 app = FastAPI()
 
@@ -35,7 +35,11 @@ async def get_question(category_id: int, db: Session = Depends(get_db)):
     except NotFoundException:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="wrong category id")
 
-    return QuestionResponse(question=question.question, correct=question.correct, answers=question.answers)
+    return QuestionResponse(
+        question=question.question,
+        correct=TermResponse(id=question.correct.id, name=question.correct.name),
+        answers=question.answers
+    )
 
 
 @app.post("/api/answers", status_code=HTTP_204_NO_CONTENT)
