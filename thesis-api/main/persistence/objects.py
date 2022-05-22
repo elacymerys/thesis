@@ -23,14 +23,16 @@ class Category:
 
 
 class Term:
-    def __init__(self, id: Optional[int] = None, name: Optional[str] = None, category: Optional[Category] = None):
+    def __init__(self, id: Optional[int] = None, name: Optional[str] = None, difficulty: Optional[float] = None,
+                 category: Optional[Category] = None):
         self.id = id
         self.name = name
+        self.difficulty = difficulty
         self.category = category
 
     @staticmethod
     def from_model(model):
-        return Term(model.id, model.name, Category.from_model(model.category))
+        return Term(model.id, model.name, model.difficulty, Category.from_model(model.category))
 
     def __repr__(self) -> str:
         text = ''
