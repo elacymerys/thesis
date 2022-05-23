@@ -43,4 +43,15 @@ class QuestionService:
         return question
 
     def answer_question(self, answer: AnswerRequest):
-        pass
+        term = self.term_service.get_one_by_id(answer.correct_id)
+
+        term.total_answers_counter += 1
+        if answer.is_correct:
+            term.correct_answers_counter += 1
+
+        term.difficulty = (
+                (term.initial_difficulty * 100) +
+                (term.correct_answers_counter / term.total_answers_counter * term.total_answers_counter)
+        ) / (100 + term.total_answers_counter)
+
+        self.term_service.update_difficulty(term)

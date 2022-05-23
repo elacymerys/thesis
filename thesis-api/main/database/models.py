@@ -1,4 +1,4 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Float
+from sqlalchemy import Column, Integer, String, ForeignKey, Float, BigInteger
 from sqlalchemy.orm import relationship, declarative_base
 
 
@@ -20,7 +20,10 @@ class TermModel(Base):
 
     id = Column(Integer, primary_key=True, nullable=False)
     name = Column(String, unique=True, nullable=False)
-    difficulty = Column(Float, nullable=False, default=0.5)
+    initial_difficulty = Column(Float, nullable=False)
+    correct_answers_counter = Column(BigInteger, nullable=False, default=0)
+    total_answers_counter = Column(BigInteger, nullable=False, default=0)
+    difficulty = Column(Float, nullable=False)
     category_id = Column(Integer, ForeignKey('categories.id'), nullable=False)
 
     category = relationship('CategoryModel', back_populates='terms')
