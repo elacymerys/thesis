@@ -10,7 +10,7 @@ class TermDAO:
     def __init__(self, db: Session):
         self.__db = db
 
-    def save_all_of_category(self, terms: list[Term], category_id: int):
+    def save_all(self, terms: list[Term]):
         self.__db.add_all([TermModel(name=t.name, initial_difficulty=t.initial_difficulty,
                                      correct_answers_counter=t.correct_answers_counter,
                                      total_answers_counter=t.total_answers_counter,
@@ -31,7 +31,9 @@ class TermDAO:
         return Term.from_model(model)
 
     def update_difficulty(self, updated_term: Term):
-        model = self.get_one_by_id(updated_term.id)
+        model = self.__db.query(TermModel).filter(TermModel.id == updated_term.id).first()
         model.correct_answers_counter = updated_term.correct_answers_counter
         model.total_answers_counter = updated_term.total_answers_counter
         model.difficulty = updated_term.difficulty
+
+        self.__db.add(model)

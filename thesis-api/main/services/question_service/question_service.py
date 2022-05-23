@@ -51,7 +51,7 @@ class QuestionService:
 
         term.difficulty = (
                 (term.initial_difficulty * 100) +
-                (term.correct_answers_counter / term.total_answers_counter * term.total_answers_counter)
+                term.correct_answers_counter
         ) / (100 + term.total_answers_counter)
 
         self.term_service.update_difficulty(term)

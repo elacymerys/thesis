@@ -6,6 +6,7 @@ from starlette import status
 from starlette.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 
 from database import get_db
+from database.models import TermModel
 from errors import NotFoundException
 from services.category_service import CategoryService
 from services.question_service.question_service import QuestionService
@@ -47,5 +48,8 @@ async def get_question(data: AnswerRequest, db: Session = Depends(get_db)):
     service = QuestionService.build(db)
     try:
         service.answer_question(data)
+        db.commit()
     except NotFoundException:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="wrong term id")
+    finally:
+        db.rollback()
