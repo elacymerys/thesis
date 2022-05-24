@@ -7,6 +7,10 @@ from services.question_service.definition_processing_service import DefinitionPr
 from services.question_service.definition_service import WikipediaDefinitionService
 from services.question_service.wrong_answers_service import DatamuseWrongAnswerService
 from services.term_service import TermService
+from web.schemas import AnswerRequest
+
+
+INITIAL_DIFFICULTY_WEIGHT = 100
 
 
 class QuestionService:
@@ -38,5 +42,19 @@ class QuestionService:
         answers = [term.name] + wrong_answers
         random.shuffle(answers)
 
-        question = Question(question=processed_definition, correct=term.name, answers=answers)
+        question = Question(question=processed_definition, correct=term, answers=answers)
         return question
+
+    def answer_question(self, answer: AnswerRequest):
+        term = self.term_service.get_one_by_id(answer.correct_id)
+
+        term.total_answers_counter += 1
+        if answer.is_correct:
+            term.correct_answers_counter += 1
+
+        term.difficulty = (
+                (term.initial_difficulty * INITIAL_DIFFICULTY_WEIGHT) +
+                term.correct_answers_counter
+        ) / (INITIAL_DIFFICULTY_WEIGHT + term.total_answers_counter)
+
+        self.term_service.update_difficulty(term)
