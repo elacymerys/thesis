@@ -13,7 +13,6 @@ from web.schemas import CategoryListResponse, CategoryResponse, QuestionResponse
 
 app = FastAPI()
 
-
 logging.getLogger().setLevel(logging.INFO)
 
 
@@ -25,6 +24,7 @@ async def get_categories(db: Session = Depends(get_db)):
     res = [CategoryResponse(id=category.id, name=category.name) for category in categories]
 
     return CategoryListResponse(categories=res)
+
 
 @app.get("/api/questions/{category_id}", status_code=HTTP_200_OK, response_model=QuestionResponse)
 async def get_question(category_id: int, db: Session = Depends(get_db)):
