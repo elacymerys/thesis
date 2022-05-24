@@ -25,3 +25,6 @@ class CategoryDAO:
     def get_all(self) -> list[Category]:
         models = self.__db.query(CategoryModel).all()
         return [Category.from_model(m) for m in models]
+
+    def get_one_by_id(self, category_id: int) -> Category:
+        return self.__db.query(CategoryModel).filter(CategoryModel.id == category_id).first()

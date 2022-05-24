@@ -23,14 +23,21 @@ class Category:
 
 
 class Term:
-    def __init__(self, id: Optional[int] = None, name: Optional[str] = None, category: Optional[Category] = None):
+    def __init__(self, id: Optional[int] = None, name: Optional[str] = None, initial_difficulty: Optional[float] = None,
+                correct_answers_counter: Optional[int] = None, total_answers_counter: Optional[int] = None,
+                difficulty: Optional[float] = None, category: Optional[Category] = None):
         self.id = id
         self.name = name
+        self.initial_difficulty = initial_difficulty
+        self.correct_answers_counter = correct_answers_counter
+        self.total_answers_counter = total_answers_counter
+        self.difficulty = difficulty
         self.category = category
 
     @staticmethod
     def from_model(model):
-        return Term(model.id, model.name, Category.from_model(model.category))
+        return Term(model.id, model.name, model.initial_difficulty, model.correct_answers_counter,
+                    model.total_answers_counter, model.difficulty, Category.from_model(model.category))
 
     def __repr__(self) -> str:
         text = ''
@@ -39,12 +46,12 @@ class Term:
         if self.name is not None:
             text += f'name: {self.name}, '
         if self.category is not None:
-            text += f'category: {self.category}'
+            text += f'category: {self.category.name}'
         return text
 
       
 class Question:
-    def __init__(self, question: Optional[str] = None, correct: Optional[str] = None,
+    def __init__(self, question: Optional[str] = None, correct: Optional[Term] = None,
                  answers: Optional[list[str]] = None):
         self.question = question
         self.correct = correct
@@ -58,5 +65,5 @@ class Question:
             text += "Answers are:\n"
             text += str(self.answers)
         if self.correct is not None:
-            text += ("\nCorrect answer is:  " + self.correct)
+            text += ("\nCorrect answer is:  " + self.correct.name)
         return text

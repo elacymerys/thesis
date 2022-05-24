@@ -2,9 +2,11 @@ import logging
 from contextlib import contextmanager
 
 from api import app
+
 from database import engine as db_engine, NAME as DB_NAME, get_db
-from database.models import Base
+from database.models import Base, CategoryModel, TermModel
 from services.category_service import CategoryService
+from services.term_service import TermService
 
 app = app
 
@@ -17,3 +19,8 @@ with contextmanager(get_db)() as db:
     category_service.add_all(fn='../categories.txt')
 
 logging.info(f'Add all categories from file to database {DB_NAME}')
+
+with contextmanager(get_db)() as db:
+    term_service = TermService.build(db)
+    term_service.setup_all()
+    db.commit()
