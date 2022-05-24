@@ -9,6 +9,9 @@ from persistence.term_dao import TermDAO
 from services.category_service import CategoryService
 
 
+REJECTED_PERCENT = 0
+
+
 class TermService:
     def __init__(self, dao: TermDAO, category_service: CategoryService, datamuse: Datamuse):
         self.__dao = dao
@@ -53,16 +56,20 @@ class TermService:
         term_names_in_db = [t.name for t in terms_in_db]
 
         terms_from_api = self.__datamuse.words(ml=category.search_word, md='f', max=1000)
-        new_terms_from_api = [t for t in terms_from_api if t['word'] not in term_names_in_db]
+        for term in terms_from_api:
+            term['tags'][-1] = float(term['tags'][-1][2:])
+
+        terms_from_api.sort(key=lambda t: t['tags'][-1], reverse=True)
+        items_taken = int((1 - (REJECTED_PERCENT / 100)) * len(terms_from_api))
+        terms_from_api = terms_from_api[:items_taken]
+
+        new_terms_from_api = [t for t in terms_from_api
+                              if 'n' in t['tags'] and t['word'] not in term_names_in_db]
 
         if not new_terms_from_api:
             return
 
-        for term in new_terms_from_api:
-            term['tags'][-1] = float(term['tags'][-1][2:])
-
-        frequencies = [t['tags'][-1] for t in new_terms_from_api]
-        max_frequency = max(frequencies)
+        max_frequency = terms_from_api[0]['tags'][-1]
 
         new_terms = [
             Term(

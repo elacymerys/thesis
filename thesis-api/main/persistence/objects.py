@@ -46,7 +46,7 @@ class Term:
         if self.name is not None:
             text += f'name: {self.name}, '
         if self.category is not None:
-            text += f'category: {self.category}'
+            text += f'category: {self.category.name}'
         return text
 
       

@@ -35,4 +35,4 @@ class QuestionResponse(QuestionBase):
 
 class AnswerRequest(BaseModel):
     correct_id: int = Field(alias='correctId')
-    is_correct: str = Field(alias='isCorrect')
+    is_correct: bool = Field(alias='isCorrect')

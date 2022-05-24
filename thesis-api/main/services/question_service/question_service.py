@@ -10,6 +10,9 @@ from services.term_service import TermService
 from web.schemas import AnswerRequest
 
 
+INITIAL_DIFFICULTY_WEIGHT = 100
+
+
 class QuestionService:
     def __init__(self, term_service: TermService, definition_service: WikipediaDefinitionService):
         self.term_service = term_service
@@ -50,8 +53,8 @@ class QuestionService:
             term.correct_answers_counter += 1
 
         term.difficulty = (
-                (term.initial_difficulty * 100) +
+                (term.initial_difficulty * INITIAL_DIFFICULTY_WEIGHT) +
                 term.correct_answers_counter
-        ) / (100 + term.total_answers_counter)
+        ) / (INITIAL_DIFFICULTY_WEIGHT + term.total_answers_counter)
 
         self.term_service.update_difficulty(term)
