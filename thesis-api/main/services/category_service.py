@@ -15,7 +15,7 @@ class CategoryService:
     def build(db: Session):
         return CategoryService(CategoryDAO(db))
 
-    def create_all(self, fn: str):
+    def add_all(self, fn: str):
         with open(fn, mode='r') as csv_file:
             csv_reader = csv.DictReader(csv_file, delimiter=';')
             for row in csv_reader:
