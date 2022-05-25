@@ -1,6 +1,8 @@
 import logging
 from contextlib import contextmanager
 
+from starlette.middleware.cors import CORSMiddleware
+
 from api import app
 
 from database import engine as db_engine, NAME as DB_NAME, get_db
@@ -9,6 +11,16 @@ from services.category_service import CategoryService
 from services.term_service import TermService
 
 app = app
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8100"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 Base.metadata.create_all(db_engine)
 
