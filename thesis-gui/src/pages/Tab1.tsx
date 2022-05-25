@@ -41,17 +41,31 @@ const Tab1: React.FC = () => {
     );
 
     const checkAnswer = () => {
-        if (selected === correct.name) {
-            console.log("CORRECT!");
-        } else {
-            console.log("NOT CORRECT!");
-        }
+        QuestionService.sendAnswer({
+            correctId: correct.id,
+            isCorrect: selected === correct.name
+        })
+            .then(res => {
+                if (res.status !== HttpStatusCode.NO_CONTENT) {
+                    console.log(res.statusText);
+                    return;
+                }
+            })
+            .catch(err => console.log(err));
+
+        getNewQuestion(1);
     }
 
     useEffect(() => {
-        QuestionService.get(1)
+        getNewQuestion(1);
+    }, []);
+
+    const getNewQuestion = (categoryId: number) => {
+        setSelected(null!);
+        QuestionService.get(categoryId)
             .then(res => {
                 if (res.status !== HttpStatusCode.OK) {
+                    console.log(res.statusText);
                     return;
                 }
 
@@ -60,7 +74,7 @@ const Tab1: React.FC = () => {
                 setCorrect(res.data.correct);
             })
             .catch(err => console.log(err));
-    }, []);
+    }
 
   return (
     <IonPage>
