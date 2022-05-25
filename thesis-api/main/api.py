@@ -5,6 +5,7 @@ from sqlalchemy.orm import Session
 from starlette import status
 from starlette.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 
+from config import WebConfig
 from database import get_db
 from database.models import TermModel
 from errors import NotFoundException
@@ -17,7 +18,7 @@ app = FastAPI()
 logging.getLogger().setLevel(logging.INFO)
 
 
-@app.get('/api/categories', status_code=HTTP_200_OK, response_model=CategoryListResponse)
+@app.get(f"{WebConfig.ROUTE_PREFIX}/categories", status_code=HTTP_200_OK, response_model=CategoryListResponse)
 async def get_categories(db: Session = Depends(get_db)):
     service = CategoryService.build(db)
 
@@ -27,7 +28,7 @@ async def get_categories(db: Session = Depends(get_db)):
     return CategoryListResponse(categories=res)
 
 
-@app.get("/api/questions/{category_id}", status_code=HTTP_200_OK, response_model=QuestionResponse)
+@app.get(WebConfig.ROUTE_PREFIX + "/questions/{category_id}", status_code=HTTP_200_OK, response_model=QuestionResponse)
 async def get_question(category_id: int, db: Session = Depends(get_db)):
     service = QuestionService.build(db)
     try:
@@ -42,7 +43,7 @@ async def get_question(category_id: int, db: Session = Depends(get_db)):
     )
 
 
-@app.post("/api/answers", status_code=HTTP_204_NO_CONTENT)
+@app.post(f"{WebConfig.ROUTE_PREFIX}/answers", status_code=HTTP_204_NO_CONTENT)
 async def get_question(data: AnswerRequest, db: Session = Depends(get_db)):
     service = QuestionService.build(db)
     try:
