@@ -11,6 +11,17 @@ class CategoryDAO:
     def exists(self, category_id: int) -> bool:
         return self.__db.query(CategoryModel).filter(CategoryModel.id == category_id).count() > 0
 
+    def exists_with_name(self, category_name: str) -> bool:
+        return self.__db.query(CategoryModel).filter(CategoryModel.name == category_name).count() > 0
+
+    def create(self, category: Category) -> int:
+        category_model = CategoryModel(name=category.name, search_word=category.search_word)
+        self.__db.add(category_model)
+        self.__db.commit()
+
+        self.__db.refresh(category_model)
+        return category_model.id
+
     def get_all(self) -> list[Category]:
         models = self.__db.query(CategoryModel).all()
         return [Category.from_model(m) for m in models]

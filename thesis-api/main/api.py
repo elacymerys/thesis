@@ -14,7 +14,6 @@ from web.schemas import CategoryListResponse, CategoryResponse, QuestionResponse
 
 app = FastAPI()
 
-
 logging.getLogger().setLevel(logging.INFO)
 
 
