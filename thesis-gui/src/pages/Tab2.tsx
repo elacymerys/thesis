@@ -17,26 +17,37 @@ import React, {
     useEffect
 } from "react";
 import CategoryService from "../services/category-service";
-import {HttpStatusCode} from "../utils/http-status-code";
+import { HttpStatusCode } from "../utils/http-status-code";
+import CategoryStorage from "../services/category-storage";
 
-type Category = {
+type CategoryType = {
     id: number,
     name: string
 };
 
-const Category: React.FC<Category> = props => {
+const Category: React.FC<CategoryType> = props => {
     return (
         <IonItem>
             <IonLabel>
                 { props.name }
             </IonLabel>
-            <IonCheckbox slot="start" />
+            <IonCheckbox
+                onIonChange={ e =>
+                    e.detail.checked ? CategoryStorage.add(props.id, props.name) : CategoryStorage.remove(props.id)
+                }
+                slot="start"
+            />
         </IonItem>
     );
 }
 
 const Tab2: React.FC = () => {
-    const [categories, setCategories] = useState<Category[]>([]);
+    const [categories, setCategories] = useState<CategoryType[]>([]);
+
+    const chooseCategories = () => {
+      console.log("Choose categories");
+      console.log(categories);
+    }
 
     useEffect(() => {
         CategoryService.getAll()
@@ -76,7 +87,13 @@ const Tab2: React.FC = () => {
                         { categoryItems }
                     </IonRadioGroup>
                 </IonList>
-                <IonButton expand="block">Choose</IonButton>
+                <IonButton
+                    onClick={chooseCategories}
+                    expand="block"
+                    style={{ marginTop: 20, marginBottom: 30 }}
+                >
+                    Choose
+                </IonButton>
 
             </IonContent>
         </IonPage>
