@@ -3,4 +3,5 @@ class WebConfig:
     CORS_ENABLED = True
     CORS_ORIGINS = [
         "http://localhost:3000",
+        "http://localhost:8100"
     ]
