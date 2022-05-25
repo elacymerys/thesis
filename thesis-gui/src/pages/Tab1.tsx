@@ -10,59 +10,42 @@ import {
     IonToolbar
 } from '@ionic/react';
 import './Tab1.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import QuestionService from "../services/question-service";
+import { HttpStatusCode } from "../utils/http-status-code";
 
-const mockData = {
-    category: "Category",
-    question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore " +
-        "et dolore magna aliqua. Libero nunc consequat.",
-    answers: [
-        {
-            id: 1,
-            name: "Answer 1",
-            correct: true
-        },
-        {
-            id: 2,
-            name: "Answer 2",
-            correct: false
-        },
-        {
-            id: 3,
-            name: "Answer 3",
-            correct: false
-        },
-        {
-            id: 4,
-            name: "Answer 4",
-            correct: false
-        }
-    ]
-};
-
-type AnswerType = {
-    id: number,
-    name: string,
-    correct: boolean
-}
-
-const Answer: React.FC<{ answer: AnswerType }> = props => {
+const Answer: React.FC<{ name: string }> = props => {
     return (
         <IonItem>
             <IonLabel>
-                { props.answer.name }
+                { props.name }
             </IonLabel>
-            <IonRadio slot="start" value={ props.answer.id } />
+            <IonRadio slot="start" value={ props.name } />
         </IonItem>
     );
 }
 
-const answerItems = mockData.answers.map(answer =>
-    <Answer answer={ answer } />
-);
-
 const Tab1: React.FC = () => {
-  const [selected, setSelected] = useState<number>(null!);
+    const [selected, setSelected] = useState<number>(null!);
+    const [question, setQuestion] = useState("");
+    const [answers, setAnswers] = useState<string[]>([]);
+
+    const answerItems = answers.map(answer =>
+        <Answer name={ answer } />
+    );
+
+    useEffect(() => {
+        QuestionService.get(1)
+            .then(res => {
+                if (res.status !== HttpStatusCode.OK) {
+                    return;
+                }
+
+                setQuestion(res.data.question);
+                setAnswers(res.data.answers);
+            })
+            .catch(err => console.log(err));
+    }, []);
 
   return (
     <IonPage>
@@ -81,7 +64,7 @@ const Tab1: React.FC = () => {
           <IonCard>
               <IonCardHeader>
                   <IonCardSubtitle>
-                      { mockData.category }
+                      { "Category" }
                   </IonCardSubtitle>
                   <IonCardTitle>
                       Question X
@@ -89,7 +72,7 @@ const Tab1: React.FC = () => {
               </IonCardHeader>
 
               <IonCardContent style={{ textAlign: "justify" }}>
-                  { mockData.question }
+                  { question.replaceAll('*****', '_____') }
               </IonCardContent>
           </IonCard>
 
@@ -99,7 +82,7 @@ const Tab1: React.FC = () => {
               </IonRadioGroup>
           </IonList>
 
-          <IonButton expand="block">Check</IonButton>
+          <IonButton expand="block" style={{ marginTop: 20, marginBottom: 30 }}>Check</IonButton>
 
       </IonContent>
     </IonPage>
