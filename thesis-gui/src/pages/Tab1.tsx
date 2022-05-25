@@ -14,6 +14,11 @@ import { useEffect, useState } from "react";
 import QuestionService from "../services/question-service";
 import { HttpStatusCode } from "../utils/http-status-code";
 
+type CorrectType = {
+    id: number,
+    name: string
+}
+
 const Answer: React.FC<{ name: string }> = props => {
     return (
         <IonItem>
@@ -26,13 +31,22 @@ const Answer: React.FC<{ name: string }> = props => {
 }
 
 const Tab1: React.FC = () => {
-    const [selected, setSelected] = useState<number>(null!);
+    const [selected, setSelected] = useState<string>(null!);
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState<string[]>([]);
+    const [correct, setCorrect] = useState<CorrectType>(null!);
 
     const answerItems = answers.map(answer =>
         <Answer name={ answer } />
     );
+
+    const checkAnswer = () => {
+        if (selected === correct.name) {
+            console.log("CORRECT!");
+        } else {
+            console.log("NOT CORRECT!");
+        }
+    }
 
     useEffect(() => {
         QuestionService.get(1)
@@ -43,6 +57,7 @@ const Tab1: React.FC = () => {
 
                 setQuestion(res.data.question);
                 setAnswers(res.data.answers);
+                setCorrect(res.data.correct);
             })
             .catch(err => console.log(err));
     }, []);
@@ -82,7 +97,7 @@ const Tab1: React.FC = () => {
               </IonRadioGroup>
           </IonList>
 
-          <IonButton expand="block" style={{ marginTop: 20, marginBottom: 30 }}>Check</IonButton>
+          <IonButton onClick={ checkAnswer } expand="block" style={{ marginTop: 20, marginBottom: 30 }}>Check</IonButton>
 
       </IonContent>
     </IonPage>
