@@ -6,7 +6,7 @@ from config import WebConfig
 from fastapi.middleware.cors import CORSMiddleware
 
 from database import engine as db_engine, NAME as DB_NAME, get_db
-from database.models import Base, CategoryModel, TermModel
+from database.models import Base
 from services.category_service import CategoryService
 from services.term_service import TermService
 

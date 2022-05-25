@@ -7,7 +7,6 @@ from starlette.status import HTTP_200_OK, HTTP_204_NO_CONTENT
 
 from config import WebConfig
 from database import get_db
-from database.models import TermModel
 from errors import NotFoundException
 from services.category_service import CategoryService
 from services.question_service.question_service import QuestionService
