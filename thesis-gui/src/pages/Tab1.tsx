@@ -35,6 +35,7 @@ const Tab1: React.FC = () => {
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState<string[]>([]);
     const [correct, setCorrect] = useState<CorrectType>(null!);
+    const [questionNumber, setQuestionNumber] = useState(0);
 
     const answerItems = answers.map(answer =>
         <Answer name={ answer } />
@@ -61,7 +62,6 @@ const Tab1: React.FC = () => {
     }, []);
 
     const getNewQuestion = (categoryId: number) => {
-        setSelected(null!);
         QuestionService.get(categoryId)
             .then(res => {
                 if (res.status !== HttpStatusCode.OK) {
@@ -72,6 +72,9 @@ const Tab1: React.FC = () => {
                 setQuestion(res.data.question);
                 setAnswers(res.data.answers);
                 setCorrect(res.data.correct);
+
+                setSelected(null!);
+                setQuestionNumber(prev => prev + 1);
             })
             .catch(err => console.log(err));
     }
@@ -96,7 +99,7 @@ const Tab1: React.FC = () => {
                       { "Category" }
                   </IonCardSubtitle>
                   <IonCardTitle>
-                      Question X
+                      { `Question ${questionNumber || ''}` }
                   </IonCardTitle>
               </IonCardHeader>
 
@@ -111,7 +114,13 @@ const Tab1: React.FC = () => {
               </IonRadioGroup>
           </IonList>
 
-          <IonButton onClick={ checkAnswer } expand="block" style={{ marginTop: 20, marginBottom: 30 }}>Check</IonButton>
+          <IonButton
+              onClick={ checkAnswer }
+              expand="block"
+              style={{ marginTop: 20, marginBottom: 30 }}
+          >
+              Check
+          </IonButton>
 
       </IonContent>
     </IonPage>
