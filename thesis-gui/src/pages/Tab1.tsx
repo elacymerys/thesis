@@ -71,7 +71,10 @@ const Tab1: React.FC = () => {
     }, []);
 
     const getNewQuestion = () => {
-        if (CategoryStorage.isEmpty()) return;
+        if (CategoryStorage.isEmpty()) {
+            console.log('Category storage is empty');
+            return;
+        }
 
         const randomCategory = CategoryStorage.getRandom();
         setCategory(randomCategory);
