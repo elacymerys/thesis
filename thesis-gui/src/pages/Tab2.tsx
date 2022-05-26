@@ -45,8 +45,11 @@ const Tab2: React.FC = () => {
     const [categories, setCategories] = useState<CategoryType[]>([]);
 
     const chooseCategories = () => {
-      console.log("Choose categories");
-      console.log(categories);
+        if (CategoryStorage.isEmpty()) {
+            console.log('You have to choose at least one category!');
+            return;
+        }
+        window.location.replace('/tab1');
     }
 
     useEffect(() => {
