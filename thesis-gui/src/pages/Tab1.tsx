@@ -80,7 +80,6 @@ const Tab1: React.FC = () => {
         }
 
         const randomCategory = CategoryStorage.getRandom();
-        setCategory(randomCategory);
 
         QuestionService.get(randomCategory.id)
             .then(res => {
@@ -97,6 +96,8 @@ const Tab1: React.FC = () => {
 
                 setSelected(null!);
                 setQuestionNumber(prev => prev + 1);
+
+                setCategory(randomCategory);
             })
             .catch(err => console.log(err))
             .finally(() => setShowLoading(false));
