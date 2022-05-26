@@ -33,8 +33,13 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import CategoryStorage from "./services/category-storage";
 
 setupIonicReact();
+
+const ProtectedRoute = ({...props}) => {
+  return (CategoryStorage.isEmpty()) ? <Redirect to="/categories" /> : <Route {...props} />;
+};
 
 const App: React.FC = () => (
   <IonApp>
@@ -43,9 +48,9 @@ const App: React.FC = () => (
           <Route exact path="/categories">
             <Tab2 />
           </Route>
-          <Route path="/questions">
+          <ProtectedRoute path="/questions">
             <Tab1 />
-          </Route>
+          </ProtectedRoute>
           <Route exact path="/">
             <Redirect to="/categories" />
           </Route>
