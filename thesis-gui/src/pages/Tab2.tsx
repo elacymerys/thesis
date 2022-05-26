@@ -52,7 +52,7 @@ const Tab2: React.FC = () => {
             return;
         }
 
-        history.push('/tab1');
+        history.push('/questions');
     }
 
     useEffect(() => {
