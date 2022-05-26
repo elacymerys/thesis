@@ -6,7 +6,7 @@ import {
     IonItem,
     IonLabel,
     IonList,
-    IonListHeader,
+    IonListHeader, IonLoading,
     IonPage, IonRadioGroup,
     IonTitle,
     IonToolbar,
@@ -44,6 +44,7 @@ const Category: React.FC<CategoryType> = props => {
 
 const Tab2: React.FC = () => {
     const [categories, setCategories] = useState<CategoryType[]>([]);
+    const [showLoading, setShowLoading] = useState(false);
     const history = useHistory();
 
     const chooseCategories = () => {
@@ -56,6 +57,8 @@ const Tab2: React.FC = () => {
     }
 
     useEffect(() => {
+        setShowLoading(true);
+
         CategoryService.getAll()
             .then(res => {
                 if (res.status !== HttpStatusCode.OK) {
@@ -65,7 +68,8 @@ const Tab2: React.FC = () => {
 
                 setCategories(res.data.categories);
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
+            .finally(() => setShowLoading(false));
     }, []);
 
     const categoryItems = categories.map(category =>
@@ -84,6 +88,11 @@ const Tab2: React.FC = () => {
                         <IonTitle size="large">Tab 2</IonTitle>
                     </IonToolbar>
                 </IonHeader>
+
+                <IonLoading
+                    isOpen={showLoading}
+                    message={'Loading...'}
+                />
 
                 <IonList>
                     <IonRadioGroup>
