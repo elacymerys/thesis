@@ -25,13 +25,14 @@ type CategoryType = {
     name: string
 }
 
-const Answer: React.FC<{ name: string }> = props => {
+const Answer: React.FC<{ name: string, showCorrect: boolean, showWrong: boolean }> = props => {
     return (
-        <IonItem>
-            <IonLabel>
+        <IonItem color={props.showCorrect ? 'correct': (props.showWrong ? 'wrong' : '')}>
+            <IonLabel
+            >
                 { props.name }
             </IonLabel>
-            <IonRadio slot="start" value={ props.name } />
+            <IonRadio slot="start" value={ props.name }  />
         </IonItem>
     );
 }
@@ -44,13 +45,19 @@ const Tab1: React.FC = () => {
     const [answers, setAnswers] = useState<string[]>([]);
     const [correct, setCorrect] = useState<CorrectType>(null!);
     const [showLoading, setShowLoading] = useState(false);
+    const [showResult, setShowResult] = useState(false);
 
     const answerItems = answers.map(answer =>
-        <Answer name={ answer } />
+        <Answer
+            name={ answer }
+            showCorrect={ showResult && answer === correct.name }
+            showWrong={ showResult && answer === selected && answer !== correct.name }
+        />
     );
 
     const checkAnswer = () => {
         console.log(`${selected === correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
+        setShowResult(true);
 
         QuestionService.sendAnswer({
             correctId: correct.id,
@@ -68,12 +75,11 @@ const Tab1: React.FC = () => {
     }
 
     useEffect(() => {
-        getNewQuestion();
+        setShowLoading(true);
+        getNewQuestion()?.finally(() => setShowLoading(false));
     }, []);
 
     const getNewQuestion = () => {
-        setShowLoading(true);
-
         if (CategoryStorage.isEmpty()) {
             console.log('Category storage is empty');
             return;
@@ -81,7 +87,7 @@ const Tab1: React.FC = () => {
 
         const randomCategory = CategoryStorage.getRandom();
 
-        QuestionService.get(randomCategory.id)
+        return QuestionService.get(randomCategory.id)
             .then(res => {
                 if (res.status !== HttpStatusCode.OK) {
                     console.log(res.statusText);
@@ -100,7 +106,9 @@ const Tab1: React.FC = () => {
                 setCategory(randomCategory);
             })
             .catch(err => console.log(err))
-            .finally(() => setShowLoading(false));
+            .finally(() => {
+                setShowResult(false);
+            });
     }
 
   return (
