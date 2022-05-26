@@ -32,7 +32,8 @@ class DatamuseWrongAnswerService(WrongAnswersService):
 
         related_nouns_frequency_sorted = sorted(related_nouns, key=lambda frequency: frequency["tags"][-1])
         minimum_frequency_threshold = related_nouns_frequency_sorted[
-            int(len(related_nouns_frequency_sorted) * self.frequency_threshold)]["tags"][-1]
+            int(len(related_nouns_frequency_sorted) * self.frequency_threshold)]["tags"][-1] \
+            if len(related_nouns_frequency_sorted) > 0 else 0
 
         wrong_answers = []
 
