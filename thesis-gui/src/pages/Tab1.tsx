@@ -4,92 +4,143 @@ import {
     IonCardHeader,
     IonCardSubtitle, IonCardTitle,
     IonContent,
-    IonHeader, IonItem, IonLabel, IonList,
+    IonHeader, IonItem, IonLabel, IonList, IonLoading,
     IonPage, IonRadio, IonRadioGroup,
     IonTitle,
     IonToolbar
 } from '@ionic/react';
 import './Tab1.css';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import QuestionService from "../services/question-service";
+import { HttpStatusCode } from "../utils/http-status-code";
+import CategoryStorage from "../services/category-storage";
 
-const mockData = {
-    category: "Category",
-    question: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore " +
-        "et dolore magna aliqua. Libero nunc consequat.",
-    answers: [
-        {
-            id: 1,
-            name: "Answer 1",
-            correct: true
-        },
-        {
-            id: 2,
-            name: "Answer 2",
-            correct: false
-        },
-        {
-            id: 3,
-            name: "Answer 3",
-            correct: false
-        },
-        {
-            id: 4,
-            name: "Answer 4",
-            correct: false
-        }
-    ]
-};
-
-type AnswerType = {
+type CorrectType = {
     id: number,
-    name: string,
-    correct: boolean
+    name: string
 }
 
-const Answer: React.FC<{ answer: AnswerType }> = props => {
+type CategoryType = {
+    id: number,
+    name: string
+}
+
+const Answer: React.FC<{ name: string, showCorrect: boolean, showWrong: boolean }> = props => {
     return (
-        <IonItem>
+        <IonItem color={props.showCorrect ? 'correct': (props.showWrong ? 'wrong' : '')}>
             <IonLabel>
-                { props.answer.name }
+                { props.name }
             </IonLabel>
-            <IonRadio slot="start" value={ props.answer.id } />
+            <IonRadio slot="start" value={ props.name }  />
         </IonItem>
     );
 }
 
-const answerItems = mockData.answers.map(answer =>
-    <Answer answer={ answer } />
-);
-
 const Tab1: React.FC = () => {
-  const [selected, setSelected] = useState<number>(null!);
+    const [selected, setSelected] = useState<string>(null!);
+    const [questionNumber, setQuestionNumber] = useState(0);
+    const [category, setCategory] = useState<CategoryType>(null!);
+    const [question, setQuestion] = useState("");
+    const [answers, setAnswers] = useState<string[]>([]);
+    const [correct, setCorrect] = useState<CorrectType>(null!);
+    const [showLoading, setShowLoading] = useState(false);
+    const [showResult, setShowResult] = useState(false);
+
+    const answerItems = answers.map(answer =>
+        <Answer
+            name={ answer }
+            showCorrect={ showResult && answer === correct.name }
+            showWrong={ showResult && answer === selected && answer !== correct.name }
+        />
+    );
+
+    const checkAnswer = () => {
+        console.log(`${selected === correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
+        setShowResult(true);
+
+        QuestionService.sendAnswer({
+            correctId: correct.id,
+            isCorrect: selected === correct.name
+        })
+            .then(res => {
+                if (res.status !== HttpStatusCode.NO_CONTENT) {
+                    console.log(res.statusText);
+                    return;
+                }
+            })
+            .catch(err => console.log(err));
+
+        getNewQuestion();
+    }
+
+    useEffect(() => {
+        setShowLoading(true);
+        getNewQuestion()?.finally(() => setShowLoading(false));
+    }, []);
+
+    const getNewQuestion = () => {
+        if (CategoryStorage.isEmpty()) {
+            console.log('Category storage is empty');
+            return;
+        }
+
+        const randomCategory = CategoryStorage.getRandom();
+
+        return QuestionService.get(randomCategory.id)
+            .then(res => {
+                if (res.status !== HttpStatusCode.OK) {
+                    console.log(res.statusText);
+                    return;
+                }
+
+                console.log(`Correct answer: ${res.data.correct.name}`)
+
+                setQuestion(res.data.question);
+                setAnswers(res.data.answers);
+                setCorrect(res.data.correct);
+
+                setSelected(null!);
+                setQuestionNumber(prev => prev + 1);
+
+                setCategory(randomCategory);
+            })
+            .catch(err => console.log(err))
+            .finally(() => {
+                setShowResult(false);
+            });
+    }
 
   return (
     <IonPage>
       <IonHeader>
         <IonToolbar>
-          <IonTitle>Tab 1</IonTitle>
+          <IonTitle>Questions</IonTitle>
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <IonLoading
+            isOpen={showLoading}
+            message={'Loading...'}
+        />
+
         <IonHeader collapse="condense">
           <IonToolbar>
-            <IonTitle size="large">Tab 1</IonTitle>
+            <IonTitle size="large">Questions</IonTitle>
           </IonToolbar>
         </IonHeader>
 
           <IonCard>
               <IonCardHeader>
                   <IonCardSubtitle>
-                      { mockData.category }
+                      { `Category ${!!category ? category.name : ''}` }
                   </IonCardSubtitle>
                   <IonCardTitle>
-                      Question X
+                      { `Question ${questionNumber || ''}` }
                   </IonCardTitle>
               </IonCardHeader>
 
               <IonCardContent style={{ textAlign: "justify" }}>
-                  { mockData.question }
+                  { question.replaceAll('*****', '_____') }
               </IonCardContent>
           </IonCard>
 
@@ -99,7 +150,13 @@ const Tab1: React.FC = () => {
               </IonRadioGroup>
           </IonList>
 
-          <IonButton expand="block">Check</IonButton>
+          <IonButton
+              onClick={ checkAnswer }
+              expand="block"
+              style={{ marginTop: 20, marginBottom: 30 }}
+          >
+              Check
+          </IonButton>
 
       </IonContent>
     </IonPage>

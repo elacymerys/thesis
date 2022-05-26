@@ -1,6 +1,8 @@
 import logging
 from contextlib import contextmanager
 
+from starlette.middleware.cors import CORSMiddleware
+
 from api import app
 from config import WebConfig
 from fastapi.middleware.cors import CORSMiddleware
@@ -19,6 +21,16 @@ if WebConfig.CORS_ENABLED:
         allow_headers=["*"],
     )
 
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[
+        "http://localhost:8100"
+    ],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 Base.metadata.create_all(db_engine)
 
