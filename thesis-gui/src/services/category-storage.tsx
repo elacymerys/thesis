@@ -10,6 +10,17 @@ class CategoryStorage {
         CategoryStorage.categoriesChosen.delete(id);
         console.log(this.categoriesChosen);
     }
+
+    static getRandom() {
+        const categoryIds = Array.from(this.categoriesChosen.keys());
+        const categoryId = categoryIds[Math.floor(Math.random() * categoryIds.length)];
+        return { id: categoryId, name: this.categoriesChosen.get(categoryId)! }
+    }
+
+    static isEmpty() {
+        const categoryIds = Array.from(this.categoriesChosen.keys());
+        return !categoryIds.length;
+    }
 }
 
 export default CategoryStorage;

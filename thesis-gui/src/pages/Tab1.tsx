@@ -13,8 +13,14 @@ import './Tab1.css';
 import { useEffect, useState } from "react";
 import QuestionService from "../services/question-service";
 import { HttpStatusCode } from "../utils/http-status-code";
+import CategoryStorage from "../services/category-storage";
 
 type CorrectType = {
+    id: number,
+    name: string
+}
+
+type CategoryType = {
     id: number,
     name: string
 }
@@ -32,16 +38,19 @@ const Answer: React.FC<{ name: string }> = props => {
 
 const Tab1: React.FC = () => {
     const [selected, setSelected] = useState<string>(null!);
+    const [questionNumber, setQuestionNumber] = useState(0);
+    const [category, setCategory] = useState<CategoryType>(null!);
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState<string[]>([]);
     const [correct, setCorrect] = useState<CorrectType>(null!);
-    const [questionNumber, setQuestionNumber] = useState(0);
 
     const answerItems = answers.map(answer =>
         <Answer name={ answer } />
     );
 
     const checkAnswer = () => {
+        console.log(`${selected === correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
+
         QuestionService.sendAnswer({
             correctId: correct.id,
             isCorrect: selected === correct.name
@@ -54,20 +63,27 @@ const Tab1: React.FC = () => {
             })
             .catch(err => console.log(err));
 
-        getNewQuestion(1);
+        getNewQuestion();
     }
 
     useEffect(() => {
-        getNewQuestion(1);
+        getNewQuestion();
     }, []);
 
-    const getNewQuestion = (categoryId: number) => {
-        QuestionService.get(categoryId)
+    const getNewQuestion = () => {
+        if (CategoryStorage.isEmpty()) return;
+
+        const randomCategory = CategoryStorage.getRandom();
+        setCategory(randomCategory);
+
+        QuestionService.get(randomCategory.id)
             .then(res => {
                 if (res.status !== HttpStatusCode.OK) {
                     console.log(res.statusText);
                     return;
                 }
+
+                console.log(`Correct answer: ${res.data.correct.name}`)
 
                 setQuestion(res.data.question);
                 setAnswers(res.data.answers);
@@ -96,7 +112,7 @@ const Tab1: React.FC = () => {
           <IonCard>
               <IonCardHeader>
                   <IonCardSubtitle>
-                      { "Category" }
+                      { `Category ${!!category ? category.name : ''}` }
                   </IonCardSubtitle>
                   <IonCardTitle>
                       { `Question ${questionNumber || ''}` }
