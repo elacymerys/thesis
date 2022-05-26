@@ -19,6 +19,7 @@ import React, {
 import CategoryService from "../services/category-service";
 import { HttpStatusCode } from "../utils/http-status-code";
 import CategoryStorage from "../services/category-storage";
+import { useHistory } from "react-router";
 
 type CategoryType = {
     id: number,
@@ -43,13 +44,15 @@ const Category: React.FC<CategoryType> = props => {
 
 const Tab2: React.FC = () => {
     const [categories, setCategories] = useState<CategoryType[]>([]);
+    const history = useHistory();
 
     const chooseCategories = () => {
         if (CategoryStorage.isEmpty()) {
             console.log('You have to choose at least one category!');
             return;
         }
-        window.location.replace('/tab1');
+
+        history.push('/tab1');
     }
 
     useEffect(() => {
