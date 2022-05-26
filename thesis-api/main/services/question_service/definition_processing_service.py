@@ -51,11 +51,11 @@ class DefinitionProcessingService:
             if distances_to_right_answer[word] > censor_value:
                 if word in self.answer or self.answer in word or \
                         word in self.article_title or self.article_title in word:
-                    summary_censored.append("*****")
+                    summary_censored.append("_____")
                 else:
                     summary_censored.append(word)
             else:
-                summary_censored.append("*****")
+                summary_censored.append("_____")
         self.definition = " ".join(summary_censored)
         return self
 
