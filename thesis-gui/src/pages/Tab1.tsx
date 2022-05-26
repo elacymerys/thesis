@@ -4,7 +4,7 @@ import {
     IonCardHeader,
     IonCardSubtitle, IonCardTitle,
     IonContent,
-    IonHeader, IonItem, IonLabel, IonList,
+    IonHeader, IonItem, IonLabel, IonList, IonLoading,
     IonPage, IonRadio, IonRadioGroup,
     IonTitle,
     IonToolbar
@@ -43,6 +43,7 @@ const Tab1: React.FC = () => {
     const [question, setQuestion] = useState("");
     const [answers, setAnswers] = useState<string[]>([]);
     const [correct, setCorrect] = useState<CorrectType>(null!);
+    const [showLoading, setShowLoading] = useState(false);
 
     const answerItems = answers.map(answer =>
         <Answer name={ answer } />
@@ -71,6 +72,8 @@ const Tab1: React.FC = () => {
     }, []);
 
     const getNewQuestion = () => {
+        setShowLoading(true);
+
         if (CategoryStorage.isEmpty()) {
             console.log('Category storage is empty');
             return;
@@ -95,7 +98,8 @@ const Tab1: React.FC = () => {
                 setSelected(null!);
                 setQuestionNumber(prev => prev + 1);
             })
-            .catch(err => console.log(err));
+            .catch(err => console.log(err))
+            .finally(() => setShowLoading(false));
     }
 
   return (
@@ -106,6 +110,11 @@ const Tab1: React.FC = () => {
         </IonToolbar>
       </IonHeader>
       <IonContent fullscreen>
+        <IonLoading
+            isOpen={showLoading}
+            message={'Loading...'}
+        />
+
         <IonHeader collapse="condense">
           <IonToolbar>
             <IonTitle size="large">Tab 1</IonTitle>
