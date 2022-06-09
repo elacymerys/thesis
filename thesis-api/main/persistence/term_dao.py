@@ -1,5 +1,6 @@
 from typing import Optional
 
+from sqlalchemy import and_
 from sqlalchemy.orm import Session
 
 from database.models import TermModel
@@ -29,6 +30,12 @@ class TermDAO:
     def get_one_by_id(self, term_id: int) -> Optional[Term]:
         model = self.__db.query(TermModel).filter(TermModel.id == term_id).first()
         return Term.from_model(model)
+
+    def get_close_to_difficulty(self, category_id: int, difficulty: float, difficulty_span: float) -> list[Term]:
+        models = self.__db.query(TermModel).filter(and_(TermModel.category_id == category_id,
+                                                   difficulty - difficulty_span < TermModel.difficulty,
+                                                   TermModel.difficulty < difficulty + difficulty_span)).all()
+        return [Term.from_model(m) for m in models]
 
     def update_difficulty(self, updated_term: Term):
         model = self.__db.query(TermModel).filter(TermModel.id == updated_term.id).first()

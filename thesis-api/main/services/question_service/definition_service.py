@@ -1,6 +1,12 @@
 from abc import ABC, abstractmethod
 import wikipedia as wikipedia
 
+import warnings
+
+warnings.catch_warnings()
+
+warnings.simplefilter("ignore")
+
 
 class DefinitionService(ABC):
     @abstractmethod
@@ -15,7 +21,10 @@ class WikipediaDefinitionService(DefinitionService):
         try:
             summary = wikipedia.summary(word, auto_suggest=False, redirect=True)
         except wikipedia.DisambiguationError as e:
-            summary = wikipedia.summary(e.options[0], auto_suggest=False)
+            try:
+                summary = wikipedia.summary(e.options[0], auto_suggest=False)
+            except wikipedia.DisambiguationError as e:
+                summary = wikipedia.summary(e.options[0], auto_suggest=True)
         if len(summary.split('\n')[0]) < 200:
             return "\n".join(summary.split('\n')[0:2]), word
         else:

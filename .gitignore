@@ -3,6 +3,7 @@ __pycache__
 .pytest_cache
 
 thesis-api/venv
+thesis-api/env
 thesis-api/.idea
 
 thesis-gui/node_modules

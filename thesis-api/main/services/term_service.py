@@ -1,3 +1,4 @@
+import random
 from random import randrange
 
 from datamuse import Datamuse
@@ -10,6 +11,8 @@ from services.category_service import CategoryService
 
 
 REJECTED_PERCENT = 0
+DIFFICULTY_LEVEL_SPAN_INCREASE = 0.1
+DIFFICULTY_LEVEL_STARTING_SPAN = 0.1
 
 
 class TermService:
@@ -44,6 +47,17 @@ class TermService:
             raise NotFoundException()
 
         return term
+
+    def get_term_close_to_difficulty(self, category_id: int, difficulty: float) -> Term:
+        difficulty_span = DIFFICULTY_LEVEL_STARTING_SPAN
+        while True:
+            if difficulty_span > 1:
+                raise NotFoundException()
+            terms_in_db = self.__dao.get_close_to_difficulty(category_id, difficulty, difficulty_span)
+            if terms_in_db:
+                return random.choice(terms_in_db)
+            else:
+                difficulty_span += DIFFICULTY_LEVEL_SPAN_INCREASE
 
     def term_exists_of_category(self, term: str, category_id: int) -> bool:
         return self.__dao.exists_of_category(term, category_id)

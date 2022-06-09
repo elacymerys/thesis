@@ -2,7 +2,8 @@ import random
 
 from sqlalchemy.orm import Session
 
-from persistence.objects import Question
+from errors import WrongDifficultyException
+from persistence.objects import Question, Term
 from services.question_service.definition_processing_service import DefinitionProcessingService
 from services.question_service.definition_service import WikipediaDefinitionService
 from services.question_service.wrong_answers_service import DatamuseWrongAnswerService
@@ -27,7 +28,29 @@ class QuestionService:
 
     def create_question(self, category_id: int) -> Question:
         term = self.term_service.get_random(category_id)
+        return self.__create_question(term)
 
+    def answer_question(self, answer: AnswerRequest):
+        term = self.term_service.get_one_by_id(answer.correct_id)
+
+        term.total_answers_counter += 1
+        if answer.is_correct:
+            term.correct_answers_counter += 1
+
+        term.difficulty = (
+                (term.initial_difficulty * INITIAL_DIFFICULTY_WEIGHT) +
+                term.correct_answers_counter
+        ) / (INITIAL_DIFFICULTY_WEIGHT + term.total_answers_counter)
+
+        self.term_service.update_difficulty(term)
+
+    def create_question_with_given_difficulty(self, category_id: int, difficulty: float) -> Question:
+        if difficulty < 0 or difficulty > 1:
+            raise WrongDifficultyException()
+        term = self.term_service.get_term_close_to_difficulty(category_id, difficulty)
+        return self.__create_question(term)
+
+    def __create_question(self, term: Term) -> Question:
         definition, article_title = self.definition_service.get_definition(term.name)
         definition_processing_service = DefinitionProcessingService(definition, term.name, article_title)
         processed_definition = definition_processing_service. \
@@ -44,17 +67,3 @@ class QuestionService:
 
         question = Question(question=processed_definition, correct=term, answers=answers)
         return question
-
-    def answer_question(self, answer: AnswerRequest):
-        term = self.term_service.get_one_by_id(answer.correct_id)
-
-        term.total_answers_counter += 1
-        if answer.is_correct:
-            term.correct_answers_counter += 1
-
-        term.difficulty = (
-                (term.initial_difficulty * INITIAL_DIFFICULTY_WEIGHT) +
-                term.correct_answers_counter
-        ) / (INITIAL_DIFFICULTY_WEIGHT + term.total_answers_counter)
-
-        self.term_service.update_difficulty(term)
