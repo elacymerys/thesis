@@ -1,7 +1,5 @@
 from __future__ import annotations
 import textwrap
-import re
-
 from services.question_service.edit_distance_service import EditDistanceService
 
 
