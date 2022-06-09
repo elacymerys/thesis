@@ -67,6 +67,8 @@ class TermService:
 
     def __setup_one(self, category: Category):
         terms_in_db = self.__dao.get_all_of_category(category.id)
+        if len(terms_in_db) >= 1000:
+            return
         term_names_in_db = [t.name for t in terms_in_db]
 
         terms_from_api = self.__datamuse.words(ml=category.search_word, md='f', max=1000)
@@ -82,6 +84,8 @@ class TermService:
 
         if not new_terms_from_api:
             return
+
+        new_terms_from_api = new_terms_from_api[:min(len(new_terms_from_api), 1000 - len(terms_in_db))]
 
         max_frequency = terms_from_api[0]['tags'][-1]
 
