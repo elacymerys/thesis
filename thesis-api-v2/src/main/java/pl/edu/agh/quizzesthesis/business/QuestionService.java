@@ -15,14 +15,19 @@ public class QuestionService {
 
     private final TermService termService;
     private final DefinitionService definitionService;
+    private final DefinitionProcessingService definitionProcessingService;
+    private final WrongAnswerService wrong_answers_service;
 
     public QuestionResponse generateQuestion(int categoryId) {
         var term = termService.getRandom(categoryId);
         var definitionArticle = definitionService.getDefinition(term.getName());
+        String processedDefinition = definitionProcessingService
+                .startProcessing(definitionArticle.definition(), term.getName(), definitionArticle.articleTitle())
+                .standardizeDefinitionLength()
+                .removeAnswerFromDefinition()
+                .getDefinition();
 
 
-//        definition, article_title = self.definition_service.get_definition(term.name)
-//        definition_processing_service = DefinitionProcessingService(definition, term.name, article_title)
 //        processed_definition = definition_processing_service. \
 //        standardize_definition_length(). \
 //        remove_answer_from_definition(). \

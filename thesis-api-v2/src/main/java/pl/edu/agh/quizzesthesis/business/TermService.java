@@ -32,4 +32,8 @@ public class TermService {
         var page = termRepository.findAll(PageRequest.of(randomTerm, SINGLE_TERM_PAGE_SIZE));
         return page.getContent().get(0);
     }
+
+    public boolean existsOfCategory(String termName, int categoryId) {
+        return termRepository.existsByNameAndCategoryId(termName, categoryId);
+    }
 }
