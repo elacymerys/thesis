@@ -2,8 +2,11 @@ package pl.edu.agh.quizzesthesis.business;
 
 import com.szadowsz.datamuse.DatamuseClient;
 import com.szadowsz.datamuse.DatamuseException;
+import com.szadowsz.datamuse.DatamuseParam;
+import com.szadowsz.datamuse.WordResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 
 import java.io.IOException;
@@ -27,9 +30,15 @@ public class WrongAnswerService {
     private final EditDistanceService editDistanceService;
     private final TermService termService;
 
-    public List<String> getWrongAnswers(Term rightAnswerTerm) throws DatamuseException, IOException {
+    public List<String> getWrongAnswers(Term rightAnswerTerm) {
         String rightAnswer = rightAnswerTerm.getName();
-        var relatedWords = datamuseClient.meansLike(rightAnswerTerm.getName(), Map.of(Code.MD, META_FLAG_F));
+        List<WordResult> relatedWords;
+        try {
+            relatedWords = datamuseClient.meansLike(rightAnswerTerm.getName(), Map.of(Code.MD, META_FLAG_F));
+        } catch (DatamuseException | IOException e) {
+            throw new ExternalServiceException("Error while querying Datamuse", e);
+        }
+
         var relatedNounsSorted = relatedWords.stream()
                 .filter(word -> word.getTags().contains("n") && !word.getTags().contains("syn"))
                 .map(word -> new WordFrequency(word.getWord(), Float.parseFloat(word.getTags().get(word.getTags().size() - 1).substring(2))))

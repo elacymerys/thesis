@@ -2,6 +2,7 @@ package pl.edu.agh.quizzesthesis;
 
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.opencsv.CSVReader;
 import com.szadowsz.datamuse.DatamuseClient;
 import io.github.fastily.jwiki.core.Wiki;
 import org.springframework.context.annotation.Bean;

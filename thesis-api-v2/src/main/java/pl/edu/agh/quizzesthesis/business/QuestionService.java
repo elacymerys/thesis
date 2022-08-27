@@ -2,11 +2,14 @@ package pl.edu.agh.quizzesthesis.business;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.CategoryResponse;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionResponse;
 import pl.edu.agh.quizzesthesis.business.mapper.CategoryMapper;
+import pl.edu.agh.quizzesthesis.business.mapper.TermMapper;
 import pl.edu.agh.quizzesthesis.data.CategoryRepository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,8 +19,10 @@ public class QuestionService {
     private final TermService termService;
     private final DefinitionService definitionService;
     private final DefinitionProcessingService definitionProcessingService;
-    private final WrongAnswerService wrong_answers_service;
+    private final WrongAnswerService wrongAnswerService;
+    private final TermMapper termMapper;
 
+    @Transactional
     public QuestionResponse generateQuestion(int categoryId) {
         var term = termService.getRandom(categoryId);
         var definitionArticle = definitionService.getDefinition(term.getName());
@@ -27,21 +32,11 @@ public class QuestionService {
                 .removeAnswerFromDefinition()
                 .getDefinition();
 
+        var wrongAnswers = wrongAnswerService.getWrongAnswers(term);
+        var answers = new ArrayList<String>();
+        answers.add(term.getName());
+        answers.addAll(wrongAnswers);
 
-//        processed_definition = definition_processing_service. \
-//        standardize_definition_length(). \
-//        remove_answer_from_definition(). \
-//        wrap_text(). \
-//        get_definition()
-//
-//        wrong_answers_service = DatamuseWrongAnswerService(self.term_service)
-//        wrong_answers = wrong_answers_service.get_wrong_answers(term)
-//
-//        answers = [term.name] + wrong_answers
-//        random.shuffle(answers)
-//
-//        question = Question(question=processed_definition, correct=term, answers=answers)
-//        return question
-        return null;
+        return new QuestionResponse(processedDefinition, termMapper.entityToResponse(term), answers);
     }
 }
