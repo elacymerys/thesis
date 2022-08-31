@@ -6,6 +6,7 @@ import com.opencsv.CSVReader;
 import com.opencsv.CSVReaderBuilder;
 import com.opencsv.exceptions.CsvException;
 import lombok.AllArgsConstructor;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.CategoryResponse;
@@ -15,7 +16,9 @@ import pl.edu.agh.quizzesthesis.data.CategoryRepository;
 import pl.edu.agh.quizzesthesis.data.entity.Category;
 
 import javax.annotation.PostConstruct;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.List;
@@ -37,6 +40,10 @@ public class CategoryService {
                 .toList();
     }
 
+    public List<Category> getAll() {
+        return categoryRepository.findAll();
+    }
+
     @PostConstruct
     @Transactional
     public void addAll() {
@@ -45,7 +52,8 @@ public class CategoryService {
 
         CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
         try (
-                var reader = Files.newBufferedReader(Path.of(FILE_PATH));
+
+                var reader = new BufferedReader(new InputStreamReader(new ClassPathResource("categories.txt").getInputStream()));
                 CSVReader csvReader = new CSVReaderBuilder(reader)
                         .withSkipLines(1)
                         .withCSVParser(parser)

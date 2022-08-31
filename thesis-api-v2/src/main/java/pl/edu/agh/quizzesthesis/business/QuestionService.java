@@ -10,6 +10,7 @@ import pl.edu.agh.quizzesthesis.business.mapper.TermMapper;
 import pl.edu.agh.quizzesthesis.data.CategoryRepository;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -36,6 +37,7 @@ public class QuestionService {
         var answers = new ArrayList<String>();
         answers.add(term.getName());
         answers.addAll(wrongAnswers);
+        Collections.shuffle(answers);
 
         return new QuestionResponse(processedDefinition, termMapper.entityToResponse(term), answers);
     }

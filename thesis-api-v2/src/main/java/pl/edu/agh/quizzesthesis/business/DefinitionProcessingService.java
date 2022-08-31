@@ -160,7 +160,7 @@ public class DefinitionProcessingService {
                                 word.startsWith(articleTitle) || articleTitle.startsWith(word) &&
                                 word.length() > 2 && !EXCEPTIONAL_WORDS.contains(word)) {
                             summaryCensored.add("____");
-                        } else if (!distancesToRightAnswer.containsKey(word) && distancesToRightAnswer.get(word) <= 1) {
+                        } else if (distancesToRightAnswer.containsKey(word) && distancesToRightAnswer.get(word) <= 1) {
                             summaryCensored.add("____");
                         } else {
                             summaryCensored.add(word);

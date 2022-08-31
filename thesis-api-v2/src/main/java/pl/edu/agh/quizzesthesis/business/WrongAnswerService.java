@@ -6,6 +6,7 @@ import com.szadowsz.datamuse.DatamuseParam;
 import com.szadowsz.datamuse.WordResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import pl.edu.agh.quizzesthesis.business.TermService.WordFrequency;
 import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 
@@ -42,11 +43,11 @@ public class WrongAnswerService {
         var relatedNounsSorted = relatedWords.stream()
                 .filter(word -> word.getTags().contains("n") && !word.getTags().contains("syn"))
                 .map(word -> new WordFrequency(word.getWord(), Float.parseFloat(word.getTags().get(word.getTags().size() - 1).substring(2))))
-                .sorted((wf1, wf2) -> Float.compare(wf1.frequency, wf2.frequency))
+                .sorted((wf1, wf2) -> Float.compare(wf1.frequency(), wf2.frequency()))
                 .toList();
 
         float minimumFrequencyThreshold = relatedNounsSorted.size() > 0
-                ? relatedNounsSorted.get((int) (relatedNounsSorted.size() * FREQUENCY_THRESHOLD)).frequency
+                ? relatedNounsSorted.get((int) (relatedNounsSorted.size() * FREQUENCY_THRESHOLD)).frequency()
                 : 0;
 
         var wrongAnswers = new ArrayList<String>();
@@ -54,35 +55,35 @@ public class WrongAnswerService {
             if (wrongAnswers.size() == 3) {
                 break;
             }
-            if (potentialAnswer.frequency < minimumFrequencyThreshold) {
+            if (potentialAnswer.frequency() < minimumFrequencyThreshold) {
                 continue;
             }
             if (random.nextFloat(1.0f) > ANSWER_CHOICE_PROBABILITY) {
                 continue;
             }
-            if (rightAnswer.contains(potentialAnswer.word) || (potentialAnswer.word.contains(rightAnswer))) {
+            if (rightAnswer.contains(potentialAnswer.word()) || (potentialAnswer.word().contains(rightAnswer))) {
                 continue;
             }
-            if (editDistanceService.editDistance(potentialAnswer.word, rightAnswer) < EDIT_DISTANCE) {
+            if (editDistanceService.editDistance(potentialAnswer.word(), rightAnswer) < EDIT_DISTANCE) {
                 continue;
             }
 
             boolean stop = false;
             for (String wrongAnswer : wrongAnswers) {
-                if (wrongAnswer.contains(potentialAnswer.word) || (potentialAnswer.word.contains(wrongAnswer))) {
+                if (wrongAnswer.contains(potentialAnswer.word()) || (potentialAnswer.word().contains(wrongAnswer))) {
                     stop = true;
                     break;
                 }
-                if (editDistanceService.editDistance(potentialAnswer.word, wrongAnswer) < EDIT_DISTANCE) {
+                if (editDistanceService.editDistance(potentialAnswer.word(), wrongAnswer) < EDIT_DISTANCE) {
                     stop = true;
                     break;
                 }
             }
-            if (!termService.existsOfCategory(potentialAnswer.word, rightAnswerTerm.getCategory().getId())){
+            if (!termService.existsOfCategory(potentialAnswer.word(), rightAnswerTerm.getCategory().getId())){
                 continue;
             }
             if (!stop){
-                wrongAnswers.add(potentialAnswer.word);
+                wrongAnswers.add(potentialAnswer.word());
             }
         }
 
@@ -91,13 +92,11 @@ public class WrongAnswerService {
                 if (wrongAnswers.size() == 3) {
                     break;
                 }
-                if (potentialAnswer.frequency > minimumFrequencyThreshold && !wrongAnswers.contains(potentialAnswer.word)) {
-                    wrongAnswers.add(potentialAnswer.word);
+                if (potentialAnswer.frequency() > minimumFrequencyThreshold && !wrongAnswers.contains(potentialAnswer.word())) {
+                    wrongAnswers.add(potentialAnswer.word());
                 }
             }
         }
         return wrongAnswers;
     }
-
-    private record WordFrequency(String word, float frequency) {}
 }

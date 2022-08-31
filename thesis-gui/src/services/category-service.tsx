@@ -3,7 +3,7 @@ import { CategoryResponse } from "../responses/category-response";
 
 class CategoryService {
     static async getAll() {
-        return await HttpService.get<CategoryResponse>('/categories');
+        return await HttpService.get<CategoryResponse[]>('/categories');
     }
 }
 
