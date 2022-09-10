@@ -23,6 +23,7 @@ const SignUp: React.FC = () => {
                 <IonInput type="text" required placeholder="Nickname" />
                 <IonInput type="email" required placeholder="Email" />
                 <IonInput type="password" required placeholder="Password" />
+                <IonInput type="password" required placeholder="Repeat Password" />
                 <IonButton expand="full">Sign Up</IonButton>
                 <IonRouterLink href="/auth/sign-in">Already have an account? Sign in</IonRouterLink>
             </IonContent>
