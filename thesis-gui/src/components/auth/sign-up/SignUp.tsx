@@ -20,6 +20,7 @@ const SignUp: React.FC = () => {
                         <IonTitle size="large">Sign Up</IonTitle>
                     </IonToolbar>
                 </IonHeader>
+                <IonInput type="text" required placeholder="Nickname" />
                 <IonInput type="email" required placeholder="Email" />
                 <IonInput type="password" required placeholder="Password" />
                 <IonButton expand="full">Sign Up</IonButton>
