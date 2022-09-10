@@ -34,6 +34,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import CategoryStorage from "./services/category-storage";
+import SignUp from "./components/auth/sign-up/SignUp";
 
 setupIonicReact();
 
@@ -45,6 +46,9 @@ const App: React.FC = () => (
   <IonApp>
     <IonReactRouter>
         <IonRouterOutlet>
+          <Route exact path="/auth/sign-up">
+            <SignUp />
+          </Route>
           <Route exact path="/categories">
             <Tab2 />
           </Route>
