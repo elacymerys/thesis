@@ -1,14 +1,14 @@
 import HttpService from "./http-service";
 import { QuestionResponse } from "../responses/question-response";
-import { AnswerRequest } from "../requests/answer-request";
+import {TermDifficultyUpdateRequest} from "../requests/term-difficulty-update-request";
 
 class QuestionService {
     static async get(categoryId: number) {
-        return await HttpService.get<QuestionResponse>(`/questions/${categoryId}`);
+        return await HttpService.get<QuestionResponse>(`/categories/${categoryId}/questions`);
     }
 
-    static async sendAnswer(body: AnswerRequest) {
-        return await HttpService.post<AnswerRequest>('/answers', body);
+    static async sendAnswer(termId: number, body: TermDifficultyUpdateRequest) {
+        return await HttpService.patch<TermDifficultyUpdateRequest>(`/terms/${termId}`, body);
     }
 }
 

@@ -66,7 +66,7 @@ const Tab2: React.FC = () => {
                     return;
                 }
 
-                setCategories(res.data.categories);
+                setCategories(res.data);
             })
             .catch(err => console.log(err))
             .finally(() => setShowLoading(false));

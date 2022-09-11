@@ -58,10 +58,7 @@ const Tab1: React.FC = () => {
         console.log(`${selected === correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
         setShowResult(true);
 
-        QuestionService.sendAnswer({
-            correctId: correct.id,
-            isCorrect: selected === correct.name
-        })
+        QuestionService.sendAnswer(correct.id, { answerCorrect: selected === correct.name })
             .then(res => {
                 if (res.status !== HttpStatusCode.NO_CONTENT) {
                     console.log(res.statusText);
