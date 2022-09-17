@@ -1,9 +1,7 @@
 package pl.edu.agh.quizzesthesis.data.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -28,6 +26,8 @@ public class Term {
     private Long correctAnswersCounter;
     private Long totalAnswersCounter;
     private Float difficulty;
+    private String pictureURL;
+    private String authorName;
 
     @ManyToOne
     private Category category;

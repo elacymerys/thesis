@@ -19,4 +19,6 @@ public interface TermRepository extends PagingAndSortingRepository<Term, Integer
     int countByCategoryId(int categoryId);
 
     Page<Term> findPageByCategoryId(PageRequest pageRequest, int categoryId);
+
+    Term findOneByCategoryIdAndId(int categoryId, int id);
 }

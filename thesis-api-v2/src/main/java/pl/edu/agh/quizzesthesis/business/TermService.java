@@ -3,12 +3,12 @@ package pl.edu.agh.quizzesthesis.business;
 import com.szadowsz.datamuse.DatamuseClient;
 import com.szadowsz.datamuse.DatamuseException;
 import com.szadowsz.datamuse.DatamuseParam;
-import com.szadowsz.datamuse.WordResult;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.TermDifficultyUpdateRequest;
+import pl.edu.agh.quizzesthesis.api.dto.TermPictureUpdateRequest;
 import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
 import pl.edu.agh.quizzesthesis.business.exception.NotFoundException;
 import pl.edu.agh.quizzesthesis.data.TermRepository;
@@ -62,6 +62,11 @@ public class TermService {
     }
 
     @Transactional
+    public Term getWithDifficulty(int categoryId, int difficulty){
+        return getRandom(categoryId);
+    }
+
+    @Transactional
     public void updateTermDifficulty(int termId, TermDifficultyUpdateRequest request) {
         var term = termRepository.findById(termId)
                 .orElseThrow(() -> new NotFoundException("Cannot find term with id %d".formatted(termId)));
@@ -76,6 +81,16 @@ public class TermService {
                         (INITIAL_DIFFICULTY_WEIGHT + term.getTotalAnswersCounter())
         );
 
+        termRepository.save(term);
+    }
+
+    @Transactional
+    public void updateTermPicture(int termId, TermPictureUpdateRequest request) {
+        var term = termRepository.findById(termId)
+                .orElseThrow(() -> new NotFoundException("Cannot find term with id %d".formatted(termId)));
+
+        term.setPictureURL(request.pictureURL());
+        term.setAuthorName(request.authorName());
         termRepository.save(term);
     }
 
@@ -120,6 +135,8 @@ public class TermService {
         var newTermsFromApi = termsFromApi.stream()
                 .filter(term -> !termNamesAlreadyPersisted.contains(term.word()))
                 .toList();
+        System.out.println(termsAlreadyPersisted.size());
+        System.out.println(newTermsFromApi.size());
 
         if (newTermsFromApi.isEmpty()) {
             return;
@@ -136,6 +153,8 @@ public class TermService {
                         0L,
                         0L,
                         word.frequency() / maxFrequency,
+                        null,
+                        null,
                         category
                 ))
                 .toList();
