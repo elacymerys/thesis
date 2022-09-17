@@ -36,7 +36,7 @@ public class UnsplashApiService {
         String responseBody = responseSpec.bodyToMono(String.class).block();
         JSONObject jsonResponse = new JSONObject(responseBody);
         String pictureURL = jsonResponse.getJSONArray("results")
-                .getJSONObject(0).getJSONObject("urls").getString("regular");
+                .getJSONObject(0).getJSONObject("urls").getString("raw");
         String authorName = jsonResponse.getJSONArray("results")
                 .getJSONObject(0).getJSONObject("user").getString("name");
         term.setPictureURL(pictureURL);

@@ -135,6 +135,8 @@ public class TermService {
         var newTermsFromApi = termsFromApi.stream()
                 .filter(term -> !termNamesAlreadyPersisted.contains(term.word()))
                 .toList();
+        System.out.println(termsAlreadyPersisted.size());
+        System.out.println(newTermsFromApi.size());
 
         if (newTermsFromApi.isEmpty()) {
             return;
