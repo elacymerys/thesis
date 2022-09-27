@@ -4,31 +4,29 @@ import {
     IonContent, IonHeader, IonInput,
     IonPage, IonRouterLink, IonTitle, IonToolbar,
 } from "@ionic/react";
-import './SignUp.css';
+import './SignIn.css';
 
-const SignUp: React.FC = () => {
+const SignIn: React.FC = () => {
     return (
         <IonPage>
             <IonHeader>
                 <IonToolbar>
-                    <IonTitle>Sign Up</IonTitle>
+                    <IonTitle>Sign In</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding">
                 <IonHeader collapse="condense">
                     <IonToolbar>
-                        <IonTitle size="large">Sign Up</IonTitle>
+                        <IonTitle size="large">Sign In</IonTitle>
                     </IonToolbar>
                 </IonHeader>
-                <IonInput type="text" required placeholder="Nickname" />
-                <IonInput type="email" required placeholder="Email" />
+                <IonInput type="text" required placeholder="Login" />
                 <IonInput type="password" required placeholder="Password" />
-                <IonInput type="password" required placeholder="Repeat Password" />
-                <IonButton expand="full">Sign Up</IonButton>
-                <IonRouterLink href="/auth/sign-in">Already have an account? Sign In</IonRouterLink>
+                <IonButton expand="full">Sign In</IonButton>
+                <IonRouterLink href="/auth/sign-up">Don't have an account? Sign Up</IonRouterLink>
             </IonContent>
         </IonPage>
     );
 };
 
-export default SignUp;
+export default SignIn;
