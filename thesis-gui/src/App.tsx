@@ -35,6 +35,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import CategoryStorage from "./services/category-storage";
 import SignUp from "./components/auth/sign-up/SignUp";
+import SignIn from "./components/auth/sign-in/SignIn";
 
 setupIonicReact();
 
@@ -48,6 +49,9 @@ const App: React.FC = () => (
         <IonRouterOutlet>
           <Route exact path="/auth/sign-up">
             <SignUp />
+          </Route>
+          <Route exact path="/auth/sign-in">
+            <SignIn />
           </Route>
           <Route exact path="/categories">
             <Tab2 />
