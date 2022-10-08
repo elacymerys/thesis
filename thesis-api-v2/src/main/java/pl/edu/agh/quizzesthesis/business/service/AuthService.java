@@ -9,11 +9,10 @@ import pl.edu.agh.quizzesthesis.api.dto.SignInRequest;
 import pl.edu.agh.quizzesthesis.api.dto.SignUpRequest;
 import pl.edu.agh.quizzesthesis.api.dto.UserResponse;
 import pl.edu.agh.quizzesthesis.business.exception.AuthTokenInvalidException;
-import pl.edu.agh.quizzesthesis.business.exception.ConflictException;
 import pl.edu.agh.quizzesthesis.business.exception.UnknownUserException;
 import pl.edu.agh.quizzesthesis.business.mapper.UserMapper;
-import pl.edu.agh.quizzesthesis.data.entity.User;
 import pl.edu.agh.quizzesthesis.data.repository.UserRepository;
+import pl.edu.agh.quizzesthesis.data.entity.User;
 
 import static java.util.stream.Collectors.toUnmodifiableMap;
 
@@ -28,21 +27,7 @@ public class AuthService {
     private final UserMapper mapper;
 
     @Transactional
-    public UserResponse getUser(int id) {
-        var user = userRepository.findById(id).orElseThrow(() -> new UnknownUserException("Cannot find user by id " + id));
-        return mapper.entityToResponse(user);
-    }
-
-    @Transactional
     public UserAuthTriple signUp(SignUpRequest request) {
-        if (userRepository.existsByNick(request.nick())) {
-            throw new ConflictException("User with nick %s already exists".formatted(request.nick()));
-        }
-
-        if (userRepository.existsByEmail(request.email())) {
-            throw new ConflictException("User with email %s already exists".formatted(request.email()));
-        }
-
         var emptyCounters = categoryService.getAll().stream()
                 .collect(toUnmodifiableMap(category -> category, category -> 0L));
 
