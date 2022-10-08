@@ -3,6 +3,8 @@ package pl.edu.agh.quizzesthesis.data;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.repository.PagingAndSortingRepository;
+import org.springframework.transaction.annotation.Transactional;
+import pl.edu.agh.quizzesthesis.data.entity.Category;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 
 import java.util.Set;
@@ -17,5 +19,6 @@ public interface TermRepository extends PagingAndSortingRepository<Term, Integer
 
     Page<Term> findPageByCategoryId(PageRequest pageRequest, int categoryId);
 
-    Term findOneByCategoryIdAndId(int categoryId, int id);
+    @Transactional
+    void deleteAllByCategory(Category category);
 }
