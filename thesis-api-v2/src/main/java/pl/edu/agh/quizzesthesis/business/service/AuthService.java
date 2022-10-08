@@ -27,6 +27,12 @@ public class AuthService {
     private final UserMapper mapper;
 
     @Transactional
+    public UserResponse getUser(int id) {
+        var user = userRepository.findById(id).orElseThrow(() -> new UnknownUserException("Cannot find user by id " + id));
+        return mapper.entityToResponse(user);
+    }
+
+    @Transactional
     public UserAuthTriple signUp(SignUpRequest request) {
         var emptyCounters = categoryService.getAll().stream()
                 .collect(toUnmodifiableMap(category -> category, category -> 0L));
