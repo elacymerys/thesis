@@ -38,11 +38,6 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public Clock clock() {
-        return Clock.systemUTC();
-    }
-
-    @Bean
     public Algorithm accessTokenAlgorithm(@Value("${jwt.access-token.secret}") String accessTokenSecret) {
         return Algorithm.HMAC256(accessTokenSecret);
     }
@@ -53,11 +48,18 @@ public class BeanConfiguration {
     }
 
     @Bean
-    public PasswordEncoder passwordEncoder(@Value("${argon2.salt-length}") int saltLength,
-                                           @Value("${argon2.hash-length}") int hashLength,
-                                           @Value("${argon2.parallelism}") int parallelism,
-                                           @Value("${argon2.memory}") int memory,
-                                           @Value("${argon2.iterations}") int iterations) {
+    public Clock jwtClock() {
+        return Clock.systemUTC();
+    }
+
+    @Bean
+    public PasswordEncoder passwordEncoder(
+            @Value("${argon2.salt-length}") int saltLength,
+            @Value("${argon2.hash-length}") int hashLength,
+            @Value("${argon2.parallelism}") int parallelism,
+            @Value("${argon2.memory}") int memory,
+            @Value("${argon2.iterations}") int iterations
+    ) {
         return new Argon2PasswordEncoder(saltLength, hashLength, parallelism, memory, iterations);
     }
 }

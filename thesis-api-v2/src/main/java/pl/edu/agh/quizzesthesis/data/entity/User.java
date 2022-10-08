@@ -8,7 +8,6 @@ import lombok.Setter;
 import javax.persistence.Column;
 import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,13 +35,13 @@ public class User {
 
     private String passwordHash;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     private Map<Category, Long> correctAnswersCounter;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     private Map<Category, Long> totalAnswersCounter;
 
-    @ElementCollection(fetch = FetchType.EAGER)
+    @ElementCollection
     private Map<Category, Float> categoryRanks;
 
     @Override
