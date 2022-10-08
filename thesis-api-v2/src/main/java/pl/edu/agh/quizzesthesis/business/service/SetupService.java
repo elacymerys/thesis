@@ -10,11 +10,11 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.business.exception.InternalServiceException;
+import pl.edu.agh.quizzesthesis.data.entity.Category;
+import pl.edu.agh.quizzesthesis.data.entity.User;
 import pl.edu.agh.quizzesthesis.data.repository.CategoryRepository;
 import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
 import pl.edu.agh.quizzesthesis.data.repository.UserRepository;
-import pl.edu.agh.quizzesthesis.data.entity.Category;
-import pl.edu.agh.quizzesthesis.data.entity.User;
 
 import javax.annotation.PostConstruct;
 import java.io.BufferedReader;

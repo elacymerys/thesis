@@ -12,5 +12,9 @@ public interface UserRepository extends CrudRepository<User, Integer> {
     @Query("SELECT u FROM User u WHERE u.nick = ?1 OR u.email = ?1")
     Optional<User> findOneByNickOrEmail(String nickOrEmail);
 
+    boolean existsByNick(String nick);
+
+    boolean existsByEmail(String email);
+
     List<User> findAll();
 }

@@ -13,9 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.quizzesthesis.api.dto.SignInRequest;
 import pl.edu.agh.quizzesthesis.api.dto.SignUpRequest;
 import pl.edu.agh.quizzesthesis.api.dto.UserResponse;
+import pl.edu.agh.quizzesthesis.business.Current;
 import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
 import pl.edu.agh.quizzesthesis.business.service.AuthService;
-import pl.edu.agh.quizzesthesis.business.Current;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
