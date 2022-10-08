@@ -4,7 +4,7 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
-import pl.edu.agh.quizzesthesis.business.service.JwtService;
+import pl.edu.agh.quizzesthesis.data.entity.User;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 
-import static pl.edu.agh.quizzesthesis.SecurityConfig.ACCESS_TOKEN_COOKIE_NAME;
+import static pl.edu.agh.quizzesthesis.ApiSecurityConfig.ACCESS_TOKEN_COOKIE_NAME;
 
 @Component
 public class JwtAuthFilter extends OncePerRequestFilter {
@@ -46,7 +46,7 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 .findAny();
     }
 
-    private void setAuthentication(UserAuthDetails user) {
+    private void setAuthentication(User user) {
         SecurityContextHolder.getContext().setAuthentication(
                 new UsernamePasswordAuthenticationToken(user, null, List.of())
         );
