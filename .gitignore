@@ -27,3 +27,11 @@ thesis-gui/yarn-debug.log*
 thesis-gui/yarn-error.log*
 
 thesis-gui/.eslintcache
+
+HELP.md
+target/
+!.mvn/wrapper/maven-wrapper.jar
+!**/src/main/**/target/
+!**/src/test/**/target/
+
+thesis-api-v2/build
