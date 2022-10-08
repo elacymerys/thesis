@@ -1,11 +1,11 @@
-package pl.edu.agh.quizzesthesis.business;
+package pl.edu.agh.quizzesthesis.business.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.CategoryResponse;
 import pl.edu.agh.quizzesthesis.business.mapper.CategoryMapper;
-import pl.edu.agh.quizzesthesis.data.CategoryRepository;
+import pl.edu.agh.quizzesthesis.data.repository.CategoryRepository;
 import pl.edu.agh.quizzesthesis.data.entity.Category;
 
 import java.util.List;

@@ -1,12 +1,11 @@
-package pl.edu.agh.quizzesthesis.business;
+package pl.edu.agh.quizzesthesis.business.service;
 
 import com.szadowsz.datamuse.DatamuseClient;
 import com.szadowsz.datamuse.DatamuseException;
-import com.szadowsz.datamuse.DatamuseParam;
 import com.szadowsz.datamuse.WordResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.quizzesthesis.business.TermService.WordFrequency;
+import pl.edu.agh.quizzesthesis.business.service.TermService.WordFrequency;
 import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 

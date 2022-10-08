@@ -1,4 +1,4 @@
-package pl.edu.agh.quizzesthesis.business;
+package pl.edu.agh.quizzesthesis.business.service;
 
 import com.szadowsz.datamuse.DatamuseClient;
 import com.szadowsz.datamuse.DatamuseException;
@@ -11,7 +11,7 @@ import pl.edu.agh.quizzesthesis.api.dto.TermDifficultyUpdateRequest;
 import pl.edu.agh.quizzesthesis.api.dto.TermPictureUpdateRequest;
 import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
 import pl.edu.agh.quizzesthesis.business.exception.NotFoundException;
-import pl.edu.agh.quizzesthesis.data.TermRepository;
+import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
 import pl.edu.agh.quizzesthesis.data.entity.Category;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 

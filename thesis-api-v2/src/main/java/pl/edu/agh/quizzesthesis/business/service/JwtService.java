@@ -1,4 +1,4 @@
-package pl.edu.agh.quizzesthesis.business;
+package pl.edu.agh.quizzesthesis.business.service;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.JWTVerifier.BaseVerification;
@@ -8,7 +8,7 @@ import com.auth0.jwt.interfaces.JWTVerifier;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.quizzesthesis.data.entity.User;
+import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
 
 import java.time.Clock;
 import java.time.Duration;
@@ -42,43 +42,42 @@ public class JwtService {
         this.clock = clock;
     }
 
-    public String createAccessToken(User user) {
+    public String createAccessToken(UserAuthDetails user) {
         return createToken(user, accessTokenAlgorithm, accessTokenDuration);
     }
 
-    public String createRefreshToken(User user) {
+    public String createRefreshToken(UserAuthDetails user) {
         return createToken(user, refreshTokenAlgorithm, refreshTokenDuration);
     }
 
-    public Optional<User> verifyAccessToken(String token) {
+    public Optional<UserAuthDetails> verifyAccessToken(String token) {
         return verifyToken(token, accessTokenVerifier);
     }
 
-    public Optional<User> verifyRefreshToken(String token) {
+    public Optional<UserAuthDetails> verifyRefreshToken(String token) {
         return verifyToken(token, refreshTokenVerifier);
     }
 
-    private String createToken(User user, Algorithm algorithm, Duration duration) {
+    private String createToken(UserAuthDetails user, Algorithm algorithm, Duration duration) {
         return JWT.create()
-                .withSubject(user.getNick())
-                .withClaim(USER_ID_CLAIM, user.getId())
+                .withSubject(user.nick())
+                .withClaim(USER_ID_CLAIM, user.id())
                 .withExpiresAt(getDateFromNow(duration))
                 .sign(algorithm);
     }
 
-    private Optional<User> verifyToken(String token, JWTVerifier jwtVerifier) {
+    private Optional<UserAuthDetails> verifyToken(String token, JWTVerifier jwtVerifier) {
         try {
             var decodedToken = jwtVerifier.verify(token);
 
-            var user = new User();
-            user.setId(decodedToken.getClaim(USER_ID_CLAIM).asInt());
-            user.setNick(decodedToken.getSubject());
+            Integer id = decodedToken.getClaim(USER_ID_CLAIM).asInt();
+            String nick = decodedToken.getSubject();
 
-            if (user.getId() == null || user.getNick() == null) {
+            if (id == null || nick == null) {
                 return Optional.empty();
             }
 
-            return Optional.of(user);
+            return Optional.of(new UserAuthDetails(id, nick));
         } catch (JWTVerificationException e) {
             return Optional.empty();
         }

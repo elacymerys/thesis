@@ -1,4 +1,4 @@
-package pl.edu.agh.quizzesthesis.business;
+package pl.edu.agh.quizzesthesis.business.service;
 
 import com.opencsv.CSVParser;
 import com.opencsv.CSVParserBuilder;
@@ -10,9 +10,9 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.business.exception.InternalServiceException;
-import pl.edu.agh.quizzesthesis.data.CategoryRepository;
-import pl.edu.agh.quizzesthesis.data.TermRepository;
-import pl.edu.agh.quizzesthesis.data.UserRepository;
+import pl.edu.agh.quizzesthesis.data.repository.CategoryRepository;
+import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
+import pl.edu.agh.quizzesthesis.data.repository.UserRepository;
 import pl.edu.agh.quizzesthesis.data.entity.Category;
 import pl.edu.agh.quizzesthesis.data.entity.User;
 

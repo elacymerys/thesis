@@ -1,4 +1,4 @@
-package pl.edu.agh.quizzesthesis.api;
+package pl.edu.agh.quizzesthesis.api.controller;
 
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;

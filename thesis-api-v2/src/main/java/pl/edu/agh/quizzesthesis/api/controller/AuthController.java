@@ -1,6 +1,5 @@
-package pl.edu.agh.quizzesthesis.api;
+package pl.edu.agh.quizzesthesis.api.controller;
 
-import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.quizzesthesis.api.dto.SignInRequest;
 import pl.edu.agh.quizzesthesis.api.dto.SignUpRequest;
 import pl.edu.agh.quizzesthesis.api.dto.UserResponse;
-import pl.edu.agh.quizzesthesis.business.AuthService;
+import pl.edu.agh.quizzesthesis.business.service.AuthService;
 import pl.edu.agh.quizzesthesis.business.Current;
 import pl.edu.agh.quizzesthesis.business.mapper.UserMapper;
 import pl.edu.agh.quizzesthesis.data.entity.User;
@@ -25,8 +24,8 @@ import javax.validation.Valid;
 import java.net.URI;
 import java.time.Duration;
 
-import static pl.edu.agh.quizzesthesis.ApiSecurityConfig.ACCESS_TOKEN_COOKIE_NAME;
-import static pl.edu.agh.quizzesthesis.ApiSecurityConfig.REFRESH_TOKEN_COOKIE_NAME;
+import static pl.edu.agh.quizzesthesis.SecurityConfig.ACCESS_TOKEN_COOKIE_NAME;
+import static pl.edu.agh.quizzesthesis.SecurityConfig.REFRESH_TOKEN_COOKIE_NAME;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -59,7 +58,7 @@ public class AuthController {
         setAuthTokensCookies(response, userAuthTriple);
 
         return ResponseEntity.created(URI.create("/api/auth/users"))
-                .body(userAuthTriple.getLeft());
+                .body(userAuthTriple.userResponse());
     }
 
     @PostMapping("/access-token")
@@ -67,7 +66,7 @@ public class AuthController {
         var userAuthTriple = authService.signIn(request);
         setAuthTokensCookies(response, userAuthTriple);
 
-        return userAuthTriple.getLeft();
+        return userAuthTriple.userResponse();
     }
 
     @PostMapping("/refresh-token")
@@ -77,12 +76,12 @@ public class AuthController {
         var userAuthTriple = authService.refreshTokens(refreshToken);
         setAuthTokensCookies(response, userAuthTriple);
 
-        return userAuthTriple.getLeft();
+        return userAuthTriple.userResponse();
     }
 
-    private void setAuthTokensCookies(HttpServletResponse response, Triple<UserResponse, String, String> userAuthTriple) {
-        response.addCookie(generateAccessTokenCookie(userAuthTriple.getMiddle()));
-        response.addCookie(generateRefreshTokenCookie(userAuthTriple.getRight()));
+    private void setAuthTokensCookies(HttpServletResponse response, AuthService.UserAuthTriple userAuthTriple) {
+        response.addCookie(generateAccessTokenCookie(userAuthTriple.accessToken()));
+        response.addCookie(generateRefreshTokenCookie(userAuthTriple.refreshToken()));
     }
 
     private Cookie generateAccessTokenCookie(String accessToken) {
