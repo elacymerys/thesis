@@ -1,13 +1,14 @@
 package pl.edu.agh.quizzesthesis.data;
 
 import org.springframework.data.repository.CrudRepository;
-import org.springframework.stereotype.Repository;
 import pl.edu.agh.quizzesthesis.data.entity.Category;
 
+import java.util.Collection;
 import java.util.List;
 
-@Repository
 public interface CategoryRepository extends CrudRepository<Category, Integer> {
+
+    List<Category> saveAll(Collection<Category> categories);
 
     List<Category> findAll();
 }
