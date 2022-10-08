@@ -11,9 +11,9 @@ import pl.edu.agh.quizzesthesis.api.dto.TermDifficultyUpdateRequest;
 import pl.edu.agh.quizzesthesis.api.dto.TermPictureUpdateRequest;
 import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
 import pl.edu.agh.quizzesthesis.business.exception.NotFoundException;
+import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
 import pl.edu.agh.quizzesthesis.data.entity.Category;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
-import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
