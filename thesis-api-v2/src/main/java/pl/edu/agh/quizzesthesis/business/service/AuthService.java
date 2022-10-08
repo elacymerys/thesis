@@ -1,7 +1,6 @@
-package pl.edu.agh.quizzesthesis.business;
+package pl.edu.agh.quizzesthesis.business.service;
 
 import lombok.AllArgsConstructor;
-import org.apache.commons.lang3.tuple.Triple;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,8 +9,9 @@ import pl.edu.agh.quizzesthesis.api.dto.SignInRequest;
 import pl.edu.agh.quizzesthesis.api.dto.SignUpRequest;
 import pl.edu.agh.quizzesthesis.api.dto.UserResponse;
 import pl.edu.agh.quizzesthesis.business.exception.AuthTokenInvalidException;
+import pl.edu.agh.quizzesthesis.business.exception.UnknownUserException;
 import pl.edu.agh.quizzesthesis.business.mapper.UserMapper;
-import pl.edu.agh.quizzesthesis.data.UserRepository;
+import pl.edu.agh.quizzesthesis.data.repository.UserRepository;
 import pl.edu.agh.quizzesthesis.data.entity.User;
 
 import static java.util.stream.Collectors.toUnmodifiableMap;
@@ -27,7 +27,7 @@ public class AuthService {
     private final UserMapper mapper;
 
     @Transactional
-    public Triple<UserResponse, String, String> signUp(SignUpRequest request) {
+    public UserAuthTriple signUp(SignUpRequest request) {
         var emptyCounters = categoryService.getAll().stream()
                 .collect(toUnmodifiableMap(category -> category, category -> 0L));
 
@@ -43,11 +43,10 @@ public class AuthService {
                                                       emptyCategoryRanks));
 
         return createUserAuthTriple(user);
-
     }
 
     @Transactional
-    public Triple<UserResponse, String, String> signIn(SignInRequest request) {
+    public UserAuthTriple signIn(SignInRequest request) {
         var user = userRepository.findOneByNickOrEmail(request.login()).orElseThrow(() -> new BadCredentialsException("Wrong login"));
 
         if (!passwordEncoder.matches(request.password(), user.getPasswordHash())) {
@@ -57,14 +56,22 @@ public class AuthService {
         return createUserAuthTriple(user);
     }
 
-    public Triple<UserResponse, String, String> refreshTokens(String refreshToken) {
-        var user = jwtService.verifyRefreshToken(refreshToken).orElseThrow(() -> new AuthTokenInvalidException("Invalid refresh token"));
+    public UserAuthTriple refreshTokens(String refreshToken) {
+        var userAuthDetails = jwtService.verifyRefreshToken(refreshToken)
+                .orElseThrow(() -> new AuthTokenInvalidException("Invalid refresh token"));
+
+        var user = userRepository.findById(userAuthDetails.id())
+                .orElseThrow(() -> new UnknownUserException("Cannot find user " + userAuthDetails.nick()));
+
         return createUserAuthTriple(user);
     }
 
-    private Triple<UserResponse, String, String> createUserAuthTriple(User user) {
-        return Triple.of(mapper.entityToResponse(user),
-                jwtService.createAccessToken(user),
-                jwtService.createRefreshToken(user));
+    private UserAuthTriple createUserAuthTriple(User user) {
+        var userAuthDetails = mapper.entityToAuthDetails(user);
+        return new UserAuthTriple(mapper.entityToResponse(user),
+                                  jwtService.createAccessToken(userAuthDetails),
+                                  jwtService.createRefreshToken(userAuthDetails));
     }
+
+    public record UserAuthTriple(UserResponse userResponse, String accessToken, String refreshToken) {}
 }

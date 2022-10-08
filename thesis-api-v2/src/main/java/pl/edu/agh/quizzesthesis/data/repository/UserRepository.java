@@ -1,4 +1,4 @@
-package pl.edu.agh.quizzesthesis.data;
+package pl.edu.agh.quizzesthesis.data.repository;
 
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
