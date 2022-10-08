@@ -5,8 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.CategoryResponse;
 import pl.edu.agh.quizzesthesis.business.mapper.CategoryMapper;
-import pl.edu.agh.quizzesthesis.data.repository.CategoryRepository;
 import pl.edu.agh.quizzesthesis.data.entity.Category;
+import pl.edu.agh.quizzesthesis.data.repository.CategoryRepository;
 
 import java.util.List;
 

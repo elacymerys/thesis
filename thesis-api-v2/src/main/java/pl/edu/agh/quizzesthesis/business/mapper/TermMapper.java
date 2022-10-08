@@ -1,9 +1,7 @@
 package pl.edu.agh.quizzesthesis.business.mapper;
 
 import org.springframework.stereotype.Component;
-import pl.edu.agh.quizzesthesis.api.dto.CategoryResponse;
 import pl.edu.agh.quizzesthesis.api.dto.TermResponse;
-import pl.edu.agh.quizzesthesis.data.entity.Category;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 
 @Component
