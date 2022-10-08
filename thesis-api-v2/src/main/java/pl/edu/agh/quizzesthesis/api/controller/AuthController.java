@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.quizzesthesis.api.dto.SignInRequest;
 import pl.edu.agh.quizzesthesis.api.dto.SignUpRequest;
 import pl.edu.agh.quizzesthesis.api.dto.UserResponse;
-import pl.edu.agh.quizzesthesis.business.service.AuthService;
 import pl.edu.agh.quizzesthesis.business.Current;
-import pl.edu.agh.quizzesthesis.business.mapper.UserMapper;
-import pl.edu.agh.quizzesthesis.data.entity.User;
+import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
+import pl.edu.agh.quizzesthesis.business.service.AuthService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -32,23 +31,20 @@ import static pl.edu.agh.quizzesthesis.SecurityConfig.REFRESH_TOKEN_COOKIE_NAME;
 public class AuthController {
 
     private final AuthService authService;
-    private final UserMapper userMapper;
     private final Duration accessTokenDuration;
     private final Duration refreshTokenDuration;
 
     public AuthController(AuthService authService,
-                          UserMapper userMapper,
                           @Value("${jwt.access-token.duration}") Duration accessTokenDuration,
                           @Value("${jwt.refresh-token.duration}") Duration refreshTokenDuration) {
         this.authService = authService;
-        this.userMapper = userMapper;
         this.accessTokenDuration = accessTokenDuration;
         this.refreshTokenDuration = refreshTokenDuration;
     }
 
     @GetMapping("/users/current")
-    public UserResponse getCurrentUser(@Current User user) {
-        return userMapper.entityToResponse(user);
+    public UserResponse getCurrentUser(@Current UserAuthDetails userAuthDetails) {
+        return authService.getUser(userAuthDetails.id());
     }
 
     @PostMapping("/users")
@@ -70,8 +66,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public UserResponse refreshTokens(@Valid @RequestBody SignInRequest request,
-                                      @CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, defaultValue = "") String refreshToken,
+    public UserResponse refreshTokens(@CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, defaultValue = "") String refreshToken,
                                       HttpServletResponse response) {
         var userAuthTriple = authService.refreshTokens(refreshToken);
         setAuthTokensCookies(response, userAuthTriple);
