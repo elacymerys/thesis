@@ -5,4 +5,19 @@ spring:
     password: password_test
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
+
+jwt:
+  access-token:
+    duration: PT5M
+    secret: test_access_token_secret
+  refresh-token:
+    duration: PT10M
+    secret: test_refresh_token_secret
+
+argon2:
+  salt-length: 32
+  hash-length: 16
+  parallelism: 1
+  memory: 16
+  iterations: 1
