@@ -5,9 +5,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.DefinitionQuestionResponse;
 import pl.edu.agh.quizzesthesis.api.dto.PictureQuestionResponse;
-import pl.edu.agh.quizzesthesis.api.dto.TermWithPictureResponse;
+import pl.edu.agh.quizzesthesis.business.mapper.PictureMapper;
 import pl.edu.agh.quizzesthesis.business.mapper.TermMapper;
-import pl.edu.agh.quizzesthesis.business.mapper.TermWithPictureMapper;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 
 import java.util.ArrayList;
@@ -24,7 +23,7 @@ public class QuestionService {
     private final WrongAnswerService wrongAnswerService;
     private final UnsplashApiService unsplashApiService;
     private final TermMapper termMapper;
-    private final TermWithPictureMapper termWithPictureMapper;
+    private final PictureMapper pictureMapper;
 
     @Transactional
     public DefinitionQuestionResponse generateDefinitionQuestion(int categoryId, Integer difficulty) {
@@ -48,11 +47,12 @@ public class QuestionService {
         var term = difficulty == null ?
                 termService.getRandom(categoryId) : termService.getWithDifficulty(categoryId, difficulty);
 
-        var termWithPicture = unsplashApiService.getPicture(term);
+        var pictureWithAuthor = unsplashApiService.getPicture(term);
 
         var answers = prepareAnswers(term);
 
-        return new PictureQuestionResponse(termWithPictureMapper.entityToResponse(termWithPicture), answers);
+        return new PictureQuestionResponse(pictureMapper.entityToResponse(term),
+                termMapper.entityToResponse(pictureWithAuthor), answers);
     }
 
     private List<String> prepareAnswers(Term term) {
