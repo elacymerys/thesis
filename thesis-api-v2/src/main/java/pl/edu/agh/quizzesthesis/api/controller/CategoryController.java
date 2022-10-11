@@ -1,11 +1,11 @@
-package pl.edu.agh.quizzesthesis.api;
+package pl.edu.agh.quizzesthesis.api.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.quizzesthesis.api.dto.CategoryResponse;
-import pl.edu.agh.quizzesthesis.business.CategoryService;
+import pl.edu.agh.quizzesthesis.business.service.CategoryService;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package pl.edu.agh.quizzesthesis.business;
+package pl.edu.agh.quizzesthesis.business.service;
 
 import me.xuender.unidecode.Unidecode;
 import org.springframework.stereotype.Service;
