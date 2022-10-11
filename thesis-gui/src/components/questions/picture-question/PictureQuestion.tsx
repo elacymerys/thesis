@@ -4,17 +4,22 @@ import {
     IonCardHeader,
     IonCardSubtitle, IonCardTitle,
     IonContent,
-    IonHeader, IonItem, IonLabel, IonList, IonLoading,
-    IonPage, IonRadio, IonRadioGroup,
+    IonHeader, IonImg, IonItem, IonLabel, IonList, IonLoading,
+    IonPage, IonRadio, IonRadioGroup, IonThumbnail,
     IonTitle,
     IonToolbar
 } from '@ionic/react';
 import './PictureQuestion.css';
 import { useEffect, useState } from "react";
-import QuestionService from "../../../services/question-service";
+import PictureQuestionService from "../../../services/picture-question-service";
 import { HttpStatusCode } from "../../../utils/http-status-code";
 import CategoryStorage from "../../../services/category-storage";
 
+
+type QuestionType = {
+    pictureURL: string,
+    authorName: string
+}
 
 type CorrectType = {
     id: number,
@@ -41,7 +46,7 @@ const PictureQuestion: React.FC = () => {
     const [selected, setSelected] = useState<string>(null!);
     const [questionNumber, setQuestionNumber] = useState(0);
     const [category, setCategory] = useState<CategoryType>(null!);
-    const [question, setQuestion] = useState("");
+    const [question, setQuestion] = useState<QuestionType>(null!);
     const [answers, setAnswers] = useState<string[]>([]);
     const [correct, setCorrect] = useState<CorrectType>(null!);
     const [showLoading, setShowLoading] = useState(false);
@@ -59,7 +64,7 @@ const PictureQuestion: React.FC = () => {
         console.log(`${selected === correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
         setShowResult(true);
 
-        QuestionService.sendAnswer(correct.id, { answerCorrect: selected === correct.name })
+        PictureQuestionService.sendAnswer(correct.id, { answerCorrect: selected === correct.name })
             .then(res => {
                 if (res.status !== HttpStatusCode.NO_CONTENT) {
                     console.log(res.statusText);
@@ -84,7 +89,7 @@ const PictureQuestion: React.FC = () => {
 
         const randomCategory = CategoryStorage.getRandom();
 
-        return QuestionService.get(randomCategory.id)
+        return PictureQuestionService.get(randomCategory.id)
             .then(res => {
                 if (res.status !== HttpStatusCode.OK) {
                     console.log(res.statusText);
@@ -128,7 +133,18 @@ const PictureQuestion: React.FC = () => {
                 </IonHeader>
 
                 <IonCard>
-                    <img src={ question } />
+                    {/*<IonItem>*/}
+                    {/*    <IonThumbnail>*/}
+                    {/*        <IonImg src={ question.pictureURL } />*/}
+                    {/*    </IonThumbnail>*/}
+                    {/*    <IonLabel>*/}
+                    {/*        { `Author: ${question.authorName}` }*/}
+                    {/*    </IonLabel>*/}
+                    {/*</IonItem>*/}
+                    <img src={ question.pictureURL } />
+                    <p>
+                        { `Author: ${question.authorName}` }
+                    </p>
 
                     <IonCardHeader>
                         <IonCardSubtitle>
