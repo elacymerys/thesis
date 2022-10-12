@@ -44,7 +44,7 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
     }
 
     @ExceptionHandler({UnsplashException.class})
-    public ResponseEntity<TextResponse> handleNotFound(UnsplashException e) {
+    public ResponseEntity<TextResponse> handleUnsplash(UnsplashException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new TextResponse(e.getMessage()));
