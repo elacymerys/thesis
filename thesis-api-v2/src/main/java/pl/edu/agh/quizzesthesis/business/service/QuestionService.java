@@ -1,4 +1,4 @@
-package pl.edu.agh.quizzesthesis.business;
+package pl.edu.agh.quizzesthesis.business.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
