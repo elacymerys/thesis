@@ -83,8 +83,9 @@ public class TermService {
     }
 
     private void setupOne(final Category category) {
+        int noOfRecords = category.getNoOfRecords();
         var termsAlreadyPersisted = termRepository.findAllByCategoryId(category.getId());
-        if (termsAlreadyPersisted.size() >= 1000) {
+        if (termsAlreadyPersisted.size() >= noOfRecords) {
             return;
         }
 
@@ -98,13 +99,14 @@ public class TermService {
                     category.getSearchWord(),
                     Map.of(
                             DatamuseParam.Code.MD, META_FLAG_F,
-                            DatamuseParam.Code.MAX, "1000"
+                            DatamuseParam.Code.MAX, String.valueOf(noOfRecords)
                     )
             ).stream()
                     .filter(word -> word.getTags().contains("n") && !word.getTags().contains("syn"))
                     .map(word -> new WordFrequency(word.getWord(), Float.parseFloat(word.getTags().get(word.getTags().size() - 1).substring(2))))
-                    .sorted((wf1, wf2) -> Float.compare(wf2.frequency(), wf1.frequency()))
                     .toList();
+                    // .sorted((wf1, wf2) -> Float.compare(wf2.frequency(), wf1.frequency()))
+
         } catch (DatamuseException | IOException e) {
             throw new ExternalServiceException("Cannot load terms from Datamuse", e);
         }
@@ -124,7 +126,7 @@ public class TermService {
             return;
         }
 
-        newTermsFromApi = newTermsFromApi.subList(0, min(newTermsFromApi.size(), 1000 - termsAlreadyPersisted.size()));
+        newTermsFromApi = newTermsFromApi.subList(0, min(newTermsFromApi.size(), noOfRecords - termsAlreadyPersisted.size()));
         float maxFrequency = termsFromApi.get(0).frequency();
 
         var termsToSave = newTermsFromApi.stream()

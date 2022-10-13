@@ -49,7 +49,7 @@ public class SetupService {
                         .build()
         ) {
             var categoriesInFile = csvReader.readAll().stream()
-                    .map(categoryRow -> new Category(null, categoryRow[0], categoryRow[1]))
+                    .map(categoryRow -> new Category(null, categoryRow[0], categoryRow[1],Integer.valueOf(categoryRow[2])))
                     .toList();
 
             var categoriesToPersist = categoriesInFile.stream()

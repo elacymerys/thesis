@@ -1,4 +1,5 @@
-name;search_word
-animals;types of animals
-herbs;types of herbs
-parts of human body;parts of human body
+name;search_word;quantity
+animals;types of animals;125
+herbs;types of herbs;150
+parts of human body;parts of human body;90
+types of cars;types of cars;150
