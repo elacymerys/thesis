@@ -1,20 +1,37 @@
-import axios, { AxiosInstance } from "axios";
+import {HttpStatusCode} from "../utils/http-status-code";
 
-class HttpService {
-    private static axiosInstance: AxiosInstance = axios.create({
-        baseURL: 'http://127.0.0.1:8080/api'
-    });
+export const httpService = {
+    request(path: string, method: string, body?: any) {
+        return fetch(
+            `/api/${path}`,
+            {
+                method: method,
+                headers: { 'Content-Type': 'application/json; charset=utf-8' },
+                credentials: 'include',
+                body: body && JSON.stringify(body)
+            }
+        ).then(res => {
+            if (res.ok) {
+                return res.status === HttpStatusCode.NO_CONTENT ? undefined : res.json();
+            } else {
+                return Promise.reject({ apiStatusCode: res.status });
+            }
+        });
+    },
 
-    static async get<ResponseType>(path: string) {
-        return await HttpService.axiosInstance.get<ResponseType>(path);
-    }
+    get<ResponseType>(path: string): Promise<ResponseType> {
+        return this.request(path, 'GET');
+    },
 
-    static async post<RequestType>(path: string, body: RequestType) {
-        return await HttpService.axiosInstance.post<RequestType>(path, body);
-    }
+    post<RequestType, ResponseType>(path: string, body: RequestType): Promise<ResponseType> {
+        return this.request(path, 'POST', body);
+    },
 
-    static async patch<RequestType>(path: string, body: RequestType) {
-        return await HttpService.axiosInstance.patch<RequestType>(path, body);
-    }}
+    patch<RequestType, ResponseType>(path: string, body: RequestType): Promise<ResponseType> {
+        return this.request(path, 'PATCH', body);
+    },
 
-export default HttpService;
+    delete<RequestType, ResponseType>(path: string, body: RequestType): Promise<ResponseType> {
+        return this.request(path, 'DELETE', body);
+    },
+};

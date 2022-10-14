@@ -68,5 +68,6 @@
   "devDependencies": {
     "@capacitor/cli": "3.5.1"
   },
-  "description": "An Ionic project"
+  "description": "An Ionic project",
+  "proxy": "http://localhost:8080"
 }

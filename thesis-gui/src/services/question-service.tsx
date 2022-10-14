@@ -1,15 +1,13 @@
-import HttpService from "./http-service";
-import { QuestionResponse } from "../responses/question-response";
-import {TermDifficultyUpdateRequest} from "../requests/term-difficulty-update-request";
+import { Question } from "../types/question";
+import {TermDifficultyUpdateRequest} from "../types/term-difficulty-update-request";
+import {httpService} from "./http-service";
 
-class QuestionService {
-    static async get(categoryId: number) {
-        return await HttpService.get<QuestionResponse>(`/categories/${categoryId}/questions`);
+export const questionService = {
+    get(categoryId: number) {
+        return httpService.get<Question>(`categories/${categoryId}/questions`);
+    },
+
+    sendAnswer(termId: number, body: TermDifficultyUpdateRequest) {
+        return httpService.patch<TermDifficultyUpdateRequest, any>(`terms/${termId}`, body);
     }
-
-    static async sendAnswer(termId: number, body: TermDifficultyUpdateRequest) {
-        return await HttpService.patch<TermDifficultyUpdateRequest>(`/terms/${termId}`, body);
-    }
-}
-
-export default QuestionService;
+};

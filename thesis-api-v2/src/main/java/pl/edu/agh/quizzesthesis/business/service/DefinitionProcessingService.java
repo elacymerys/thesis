@@ -65,7 +65,7 @@ public class DefinitionProcessingService {
 
         public DefinitionProcessing removeAnswerFromDefinition() {
             String text = definition;
-            if (text.charAt(text.length() - 2) == '.') {
+            if (text.length() > 1 && text.charAt(text.length() - 2) == '.') {
                 text = text.substring(0, text.length() - 1);
             }
             text = text.replace("  ", " ");
