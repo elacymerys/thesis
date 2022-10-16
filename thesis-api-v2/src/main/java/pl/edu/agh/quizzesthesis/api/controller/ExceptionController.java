@@ -10,6 +10,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 import pl.edu.agh.quizzesthesis.api.dto.TextResponse;
 import pl.edu.agh.quizzesthesis.business.exception.ConflictException;
 import pl.edu.agh.quizzesthesis.business.exception.NotFoundException;
+import pl.edu.agh.quizzesthesis.business.exception.UnsplashException;
 
 @ControllerAdvice
 public class ExceptionController extends ResponseEntityExceptionHandler {
@@ -37,6 +38,13 @@ public class ExceptionController extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler({NotFoundException.class})
     public ResponseEntity<TextResponse> handleNotFound(NotFoundException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new TextResponse(e.getMessage()));
+    }
+
+    @ExceptionHandler({UnsplashException.class})
+    public ResponseEntity<TextResponse> handleUnsplash(UnsplashException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new TextResponse(e.getMessage()));
