@@ -6,7 +6,7 @@ import {
     IonTitle,
     IonToolbar
 } from '@ionic/react';
-import './Quizz.css';
+import './Quiz.css';
 import { useEffect, useState } from "react";
 import QuestionService from "../../services/question-service";
 import { HttpStatusCode } from "../../utils/http-status-code";
@@ -20,7 +20,7 @@ import PictureQuestionCard from "../question-cards/picture-question-card/Picture
 import { AdditionalInfoType } from "../../types/additional-info-type";
 
 
-const Quizz: React.FC = () => {
+const Quiz: React.FC = () => {
     const [selected, setSelected] = useState<string>(null!);
     const [questionNumber, setQuestionNumber] = useState(0);
     const [category, setCategory] = useState<CategoryType>(null!);
@@ -150,4 +150,4 @@ const Quizz: React.FC = () => {
     );
 };
 
-export default Quizz;
+export default Quiz;
