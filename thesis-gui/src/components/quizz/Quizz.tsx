@@ -1,54 +1,34 @@
 import {
     IonButton,
-    IonCard, IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle, IonCardTitle,
     IonContent,
-    IonHeader, IonImg, IonItem, IonLabel, IonList, IonLoading,
-    IonPage, IonRadio, IonRadioGroup, IonThumbnail,
+    IonHeader, IonList, IonLoading,
+    IonPage, IonRadioGroup,
     IonTitle,
     IonToolbar
 } from '@ionic/react';
-import './PictureQuestion.css';
+import './Quizz.css';
 import { useEffect, useState } from "react";
-import PictureQuestionService from "../../../services/picture-question-service";
-import { HttpStatusCode } from "../../../utils/http-status-code";
-import CategoryStorage from "../../../services/category-storage";
+import QuestionService from "../../services/question-service";
+import { HttpStatusCode } from "../../utils/http-status-code";
+import CategoryStorage from "../../services/category-storage";
+import { CategoryType } from "../../types/category-type";
+import { CorrectType } from "../../types/correct-type";
+import Answer from "../answer/Answer";
+import DefinitionQuestionCard from "../question-cards/definition-question-card/DefinitionQuestionCard";
+import { QuestionType } from "../../utils/question-type";
+import PictureQuestionCard from "../question-cards/picture-question-card/PictureQuestionCard";
+import {AdditionalInfoType} from "../../types/additional-info-type";
 
 
-type QuestionType = {
-    pictureURL: string,
-    authorName: string
-}
-
-type CorrectType = {
-    id: number,
-    name: string
-}
-
-type CategoryType = {
-    id: number,
-    name: string
-}
-
-const Answer: React.FC<{ name: string, showCorrect: boolean, showWrong: boolean }> = props => {
-    return (
-        <IonItem color={props.showCorrect ? 'correct': (props.showWrong ? 'wrong' : '')}>
-            <IonLabel>
-                { props.name }
-            </IonLabel>
-            <IonRadio slot="start" value={ props.name }  />
-        </IonItem>
-    );
-}
-
-const PictureQuestion: React.FC = () => {
+const Quizz: React.FC = () => {
     const [selected, setSelected] = useState<string>(null!);
     const [questionNumber, setQuestionNumber] = useState(0);
     const [category, setCategory] = useState<CategoryType>(null!);
-    const [question, setQuestion] = useState<QuestionType>(null!);
+    const [question, setQuestion] = useState<string>(null!);
     const [answers, setAnswers] = useState<string[]>([]);
     const [correct, setCorrect] = useState<CorrectType>(null!);
+    const [type, setType] = useState<number>(null!)
+    const [additionalInfo, setAdditionalInfo] = useState<AdditionalInfoType>(null!)
     const [showLoading, setShowLoading] = useState(false);
     const [showResult, setShowResult] = useState(false);
 
@@ -64,7 +44,7 @@ const PictureQuestion: React.FC = () => {
         console.log(`${selected === correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
         setShowResult(true);
 
-        PictureQuestionService.sendAnswer(correct.id, { answerCorrect: selected === correct.name })
+        QuestionService.sendAnswer(correct.id, { answerCorrect: selected === correct.name })
             .then(res => {
                 if (res.status !== HttpStatusCode.NO_CONTENT) {
                     console.log(res.statusText);
@@ -89,7 +69,7 @@ const PictureQuestion: React.FC = () => {
 
         const randomCategory = CategoryStorage.getRandom();
 
-        return PictureQuestionService.get(randomCategory.id)
+        return QuestionService.get(randomCategory.id)
             .then(res => {
                 if (res.status !== HttpStatusCode.OK) {
                     console.log(res.statusText);
@@ -101,6 +81,9 @@ const PictureQuestion: React.FC = () => {
                 setQuestion(res.data.question);
                 setAnswers(res.data.answers);
                 setCorrect(res.data.correct);
+
+                setType(res.data.type);
+                setAdditionalInfo(res.data.additionalInfo);
 
                 setSelected(null!);
                 setQuestionNumber(prev => prev + 1);
@@ -122,8 +105,8 @@ const PictureQuestion: React.FC = () => {
             </IonHeader>
             <IonContent fullscreen>
                 <IonLoading
-                    isOpen={showLoading}
-                    message={'Loading...'}
+                    isOpen={ showLoading }
+                    message={ 'Loading...' }
                 />
 
                 <IonHeader collapse="condense">
@@ -132,33 +115,21 @@ const PictureQuestion: React.FC = () => {
                     </IonToolbar>
                 </IonHeader>
 
-                <IonCard>
-                    {/*<IonItem>*/}
-                    {/*    <IonThumbnail>*/}
-                    {/*        <IonImg src={ question.pictureURL } />*/}
-                    {/*    </IonThumbnail>*/}
-                    {/*    <IonLabel>*/}
-                    {/*        { `Author: ${question.authorName}` }*/}
-                    {/*    </IonLabel>*/}
-                    {/*</IonItem>*/}
-                    <img src={ question.pictureURL } />
-                    <p>
-                        { `Author: ${question.authorName}` }
-                    </p>
-
-                    <IonCardHeader>
-                        <IonCardSubtitle>
-                            { `Category ${!!category ? category.name : ''}` }
-                        </IonCardSubtitle>
-                        <IonCardTitle>
-                            { `Question ${questionNumber || ''}` }
-                        </IonCardTitle>
-                    </IonCardHeader>
-
-                    <IonCardContent>
-                        What is shown in the picture above?
-                    </IonCardContent>
-                </IonCard>
+                {
+                    type === QuestionType.DEFINITION &&
+                    <DefinitionQuestionCard
+                        question={ question }
+                        questionNumber={ questionNumber }
+                        category={ category }
+                    /> ||
+                    type === QuestionType.PICTURE &&
+                    <PictureQuestionCard
+                        question={ question }
+                        questionNumber={ questionNumber }
+                        category={ category }
+                        additionalInfo={ additionalInfo }
+                    />
+                }
 
                 <IonList>
                     <IonRadioGroup value={ selected } onIonChange={e => setSelected(e.detail.value)}>
@@ -179,4 +150,4 @@ const PictureQuestion: React.FC = () => {
     );
 };
 
-export default PictureQuestion;
+export default Quizz;

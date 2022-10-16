@@ -36,7 +36,7 @@ import './theme/variables.css';
 import CategoryStorage from "./services/category-storage";
 import SignUp from "./components/auth/sign-up/SignUp";
 import SignIn from "./components/auth/sign-in/SignIn";
-import PictureQuestion from "./components/questions/picture-question/PictureQuestion";
+import PictureQuestionCard from "./components/question-cards/picture-question-card/PictureQuestionCard";
 
 setupIonicReact();
 
@@ -61,7 +61,7 @@ const App: React.FC = () => (
             <Tab1 />
           </ProtectedRoute>
           <Route exact path="/">
-            <PictureQuestion />
+            <Redirect to="/categories" />
           </Route>
         </IonRouterOutlet>
     </IonReactRouter>
