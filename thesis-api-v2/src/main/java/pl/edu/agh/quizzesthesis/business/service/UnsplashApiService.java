@@ -1,10 +1,11 @@
 package pl.edu.agh.quizzesthesis.business.service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import org.jetbrains.annotations.NotNull;
-import org.json.JSONException;
-import org.json.JSONObject;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClient.ResponseSpec;
 import pl.edu.agh.quizzesthesis.api.dto.PictureWithAuthorResponse;
@@ -17,9 +18,12 @@ import static pl.edu.agh.quizzesthesis.Credentials.UNSPLASH_API_KEY;
 @Service
 @AllArgsConstructor
 public class UnsplashApiService {
+
     private final TermService termService;
     private final WebClient unsplashApiClient;
-    
+    private final ObjectMapper objectMapper;
+
+    @Transactional
     public Term getPicture(Term term) {
         if (term.getPictureURL() != null) {
             return term;
@@ -31,10 +35,10 @@ public class UnsplashApiService {
     }
 
     private void getFromUnsplash(Term term) {
-        ResponseSpec responseSpec = getResponseSpec(term.getName());
-        String responseBody = responseSpec.bodyToMono(String.class).block();
+        var responseSpec = getResponseSpec(term.getName());
+        var responseBody = responseSpec.bodyToMono(String.class).block();
 
-        PictureWithAuthorResponse fromResponse = getFromResponse(responseBody);
+        var fromResponse = getFromResponse(responseBody);
         term.setPictureURL(fromResponse.pictureURL());
         term.setAuthorName(fromResponse.authorName());
     }
@@ -51,19 +55,27 @@ public class UnsplashApiService {
                 .retrieve();
     }
 
-    private PictureWithAuthorResponse getFromResponse(String responseBody){
+    private PictureWithAuthorResponse getFromResponse(String responseBody) {
         String pictureURL;
         String authorName;
         try {
-            JSONObject jsonResponse = new JSONObject(responseBody);
-            pictureURL = jsonResponse.getJSONArray("results")
-                    .getJSONObject(0).getJSONObject("urls").getString("regular");
-            authorName = jsonResponse.getJSONArray("results")
-                    .getJSONObject(0).getJSONObject("user").getString("name");
-        } catch (JSONException e) {
+            pictureURL = objectMapper
+                    .readTree(responseBody)
+                    .get("results")
+                    .get(0)
+                    .get("urls")
+                    .get("regular")
+                    .asText();
+            authorName = objectMapper
+                    .readTree(responseBody)
+                    .get("results")
+                    .get(0)
+                    .get("user")
+                    .get("name")
+                    .asText();
+        } catch (JsonProcessingException e) {
             throw new UnsplashException("Error getting data from Unsplash");
         }
         return new PictureWithAuthorResponse(pictureURL, authorName);
     }
-
 }
