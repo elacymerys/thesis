@@ -17,7 +17,7 @@ import Answer from "../answer/Answer";
 import DefinitionQuestionCard from "../question-cards/definition-question-card/DefinitionQuestionCard";
 import { QuestionType } from "../../utils/question-type";
 import PictureQuestionCard from "../question-cards/picture-question-card/PictureQuestionCard";
-import {AdditionalInfoType} from "../../types/additional-info-type";
+import { AdditionalInfoType } from "../../types/additional-info-type";
 
 
 const Quizz: React.FC = () => {
