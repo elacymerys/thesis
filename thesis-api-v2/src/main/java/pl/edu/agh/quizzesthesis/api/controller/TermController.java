@@ -1,4 +1,4 @@
-package pl.edu.agh.quizzesthesis.api;
+package pl.edu.agh.quizzesthesis.api.controller;
 
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.PatchMapping;
@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.quizzesthesis.api.dto.TermDifficultyUpdateRequest;
-import pl.edu.agh.quizzesthesis.business.TermService;
+import pl.edu.agh.quizzesthesis.business.service.TermService;
 
 import static pl.edu.agh.quizzesthesis.App.API_URL_PREFIX;
 

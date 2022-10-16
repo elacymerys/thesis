@@ -1,7 +1,6 @@
 package pl.edu.agh.quizzesthesis.data.entity;
 
 import lombok.*;
-import org.springframework.boot.context.properties.bind.DefaultValue;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;

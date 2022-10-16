@@ -1,22 +1,19 @@
-package pl.edu.agh.quizzesthesis.business;
+package pl.edu.agh.quizzesthesis.business.service;
 
 import com.szadowsz.datamuse.DatamuseClient;
 import com.szadowsz.datamuse.DatamuseException;
-import com.szadowsz.datamuse.DatamuseParam;
 import com.szadowsz.datamuse.WordResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import pl.edu.agh.quizzesthesis.business.TermService.WordFrequency;
 import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
+import pl.edu.agh.quizzesthesis.business.service.TermService.WordFrequency;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
-import static com.szadowsz.datamuse.DatamuseParam.*;
+import static com.szadowsz.datamuse.DatamuseParam.Code;
+import static com.szadowsz.datamuse.DatamuseParam.META_FLAG_F;
 
 @Service
 @AllArgsConstructor
@@ -31,7 +28,16 @@ public class WrongAnswerService {
     private final EditDistanceService editDistanceService;
     private final TermService termService;
 
-    public List<String> getWrongAnswers(Term rightAnswerTerm) {
+    public List<String> prepareAnswers(Term term) {
+        var wrongAnswers = getWrongAnswers(term);
+        var answers = new ArrayList<String>();
+        answers.add(term.getName());
+        answers.addAll(wrongAnswers);
+        Collections.shuffle(answers);
+        return answers;
+    }
+
+    private List<String> getWrongAnswers(Term rightAnswerTerm) {
         String rightAnswer = rightAnswerTerm.getName();
         List<WordResult> relatedWords;
         try {
