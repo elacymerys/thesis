@@ -7,7 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.quizzesthesis.api.dto.DefinitionQuestionResponse;
 import pl.edu.agh.quizzesthesis.api.dto.PictureQuestionResponse;
-import pl.edu.agh.quizzesthesis.business.service.QuestionService;
+import pl.edu.agh.quizzesthesis.business.service.DefinitionQuestionService;
+import pl.edu.agh.quizzesthesis.business.service.PictureQuestionService;
 
 import static pl.edu.agh.quizzesthesis.App.API_URL_PREFIX;
 
@@ -16,15 +17,16 @@ import static pl.edu.agh.quizzesthesis.App.API_URL_PREFIX;
 @AllArgsConstructor
 public class QuestionController {
 
-    private final QuestionService questionService;
+    private final DefinitionQuestionService definitionQuestionService;
+    private final PictureQuestionService pictureQuestionService;
 
     @GetMapping("/definition/random")
     public DefinitionQuestionResponse getRandomDefinitionQuestion(@PathVariable int categoryId) {
-        return questionService.generateDefinitionQuestion(categoryId, null);
+        return definitionQuestionService.generateQuestion(categoryId, null);
     }
 
     @GetMapping("/picture/random")
     public PictureQuestionResponse getRandomPictureQuestion(@PathVariable int categoryId) {
-        return questionService.generatePictureQuestion(categoryId, null);
+        return pictureQuestionService.generateQuestion(categoryId, null);
     }
 }
