@@ -3,22 +3,24 @@ package pl.edu.agh.quizzesthesis.business.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import pl.edu.agh.quizzesthesis.api.dto.DefinitionQuestionResponse;
+import pl.edu.agh.quizzesthesis.api.dto.QuestionResponse;
+import pl.edu.agh.quizzesthesis.business.mapper.AdditionalInfoMapper;
 import pl.edu.agh.quizzesthesis.business.mapper.TermMapper;
 
 @Service
 @AllArgsConstructor
-public class DefinitionQuestionService implements QuestionService<DefinitionQuestionResponse>{
+public class DefinitionQuestionService implements QuestionService<QuestionResponse>{
 
     private final TermService termService;
     private final DefinitionService definitionService;
     private final DefinitionProcessingService definitionProcessingService;
     private final WrongAnswerService wrongAnswerService;
     private final TermMapper termMapper;
+    private final AdditionalInfoMapper additionalInfoMapper;
 
     @Override
     @Transactional
-    public DefinitionQuestionResponse generateQuestion(int categoryId, Integer difficulty) {
+    public QuestionResponse generateQuestion(int categoryId, Integer difficulty) {
         var term = difficulty == null ?
                 termService.getRandom(categoryId) : termService.getWithDifficulty(categoryId, difficulty);
 
@@ -31,6 +33,7 @@ public class DefinitionQuestionService implements QuestionService<DefinitionQues
 
         var answers = wrongAnswerService.prepareAnswers(term);
 
-        return new DefinitionQuestionResponse(processedDefinition, termMapper.entityToResponse(term), answers);
+        return new QuestionResponse(0, processedDefinition, termMapper.entityToResponse(term), answers,
+                additionalInfoMapper.entityToResponse(null));
     }
 }
