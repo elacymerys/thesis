@@ -105,7 +105,6 @@ public class TermService {
                     .filter(word -> word.getTags().contains("n") && !word.getTags().contains("syn"))
                     .map(word -> new WordFrequency(word.getWord(), Float.parseFloat(word.getTags().get(word.getTags().size() - 1).substring(2))))
                     .toList();
-                    // .sorted((wf1, wf2) -> Float.compare(wf2.frequency(), wf1.frequency()))
 
         } catch (DatamuseException | IOException e) {
             throw new ExternalServiceException("Cannot load terms from Datamuse", e);
