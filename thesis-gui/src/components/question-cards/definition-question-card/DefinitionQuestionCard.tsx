@@ -12,7 +12,7 @@ const DefinitionQuestionCard: React.FC<{ question: string, questionNumber: numbe
         <IonCard>
             <IonCardHeader>
                 <IonCardSubtitle>
-                    { `Category ${!!props.category ? props.category.name : ''}` }
+                    { `Category: ${!!props.category ? props.category.name : ''}` }
                 </IonCardSubtitle>
                 <IonCardTitle>
                     { `Question ${props.questionNumber || ''}` }

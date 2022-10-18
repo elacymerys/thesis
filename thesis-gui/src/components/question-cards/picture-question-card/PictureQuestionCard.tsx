@@ -1,7 +1,7 @@
 import {
     IonCard, IonCardContent,
     IonCardHeader,
-    IonCardSubtitle, IonCardTitle, IonImg, IonItem, IonLabel, IonThumbnail
+    IonCardSubtitle, IonCardTitle, IonItem, IonNote
 } from '@ionic/react';
 import './PictureQuestionCard.css';
 import { CategoryType } from "../../../types/category-type";
@@ -11,23 +11,16 @@ import { AdditionalInfoType } from "../../../types/additional-info-type";
 const PictureQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType, additionalInfo: AdditionalInfoType }> = props => {
     return (
         <IonCard>
-            {/*<IonItem>*/}
-            {/*    <IonThumbnail>*/}
-            {/*        <IonImg src={ props.question.pictureURL } />*/}
-            {/*    </IonThumbnail>*/}
-            {/*    <IonLabel>*/}
-            {/*        { `Author: ${props.question.authorName}` }*/}
-            {/*    </IonLabel>*/}
-            {/*</IonItem>*/}
-
             <img src={ props.question } />
-            <p>
-                { `Author: ${props.additionalInfo.authorName}` }
-            </p>
+            <IonItem lines="none">
+                <IonNote>
+                    { `Author: ${props.additionalInfo.authorName}` }
+                </IonNote>
+            </IonItem>
 
             <IonCardHeader>
                 <IonCardSubtitle>
-                    { `Category ${!!props.category ? props.category.name : ''}` }
+                    { `Category: ${!!props.category ? props.category.name : ''}` }
                 </IonCardSubtitle>
                 <IonCardTitle>
                     { `Question ${props.questionNumber || ''}` }
