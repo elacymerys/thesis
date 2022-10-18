@@ -3,3 +3,6 @@ animals;types of animals;125
 herbs;types of herbs;150
 parts of human body;parts of human body;90
 types of cars;types of cars;150
+mountains;mount everest;150
+rivers;amazon river;150
+islands;luzon;150
