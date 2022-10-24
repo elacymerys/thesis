@@ -9,7 +9,7 @@ import pl.edu.agh.quizzesthesis.business.mapper.TermMapper;
 
 @Service
 @AllArgsConstructor
-public class DefinitionQuestionService implements QuestionService<QuestionResponse>{
+public class DefinitionQuestionService implements QuestionService {
 
     private final TermService termService;
     private final DefinitionService definitionService;
@@ -17,6 +17,7 @@ public class DefinitionQuestionService implements QuestionService<QuestionRespon
     private final WrongAnswerService wrongAnswerService;
     private final TermMapper termMapper;
     private final AdditionalInfoMapper additionalInfoMapper;
+    private static final int definitionQuestionTypeId = 0;
 
     @Override
     @Transactional
@@ -33,7 +34,7 @@ public class DefinitionQuestionService implements QuestionService<QuestionRespon
 
         var answers = wrongAnswerService.prepareAnswers(term);
 
-        return new QuestionResponse(0, processedDefinition, termMapper.entityToResponse(term), answers,
-                additionalInfoMapper.entityToResponse(null));
+        return new QuestionResponse(definitionQuestionTypeId, processedDefinition, termMapper.entityToResponse(term),
+                answers, additionalInfoMapper.entityToResponse(null));
     }
 }
