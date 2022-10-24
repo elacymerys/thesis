@@ -9,12 +9,13 @@ import pl.edu.agh.quizzesthesis.business.mapper.TermMapper;
 
 @Service
 @AllArgsConstructor
-public class PictureQuestionService implements QuestionService<QuestionResponse> {
+public class PictureQuestionService implements QuestionService {
     private final TermService termService;
     private final UnsplashApiService unsplashApiService;
     private final WrongAnswerService wrongAnswerService;
     private final AdditionalInfoMapper additionalInfoMapper;
     private final TermMapper termMapper;
+    private static final int pictureQuestionTypeId = 1;
 
     @Override
     @Transactional
@@ -26,7 +27,7 @@ public class PictureQuestionService implements QuestionService<QuestionResponse>
 
         var answers = wrongAnswerService.prepareAnswers(term);
 
-        return new QuestionResponse(1, term.getPictureURL(),
+        return new QuestionResponse(pictureQuestionTypeId, term.getPictureURL(),
                 termMapper.entityToResponse(pictureWithAuthor), answers, additionalInfoMapper.entityToResponse(term));
     }
 }

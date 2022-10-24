@@ -1,9 +1,10 @@
 package pl.edu.agh.quizzesthesis.business.service;
 
 import org.springframework.transaction.annotation.Transactional;
+import pl.edu.agh.quizzesthesis.api.dto.QuestionResponse;
 
-public interface QuestionService<T> {
+public interface QuestionService {
 
     @Transactional
-    T generateQuestion(int categoryId, Integer difficulty);
+    QuestionResponse generateQuestion(int categoryId, Integer difficulty);
 }
