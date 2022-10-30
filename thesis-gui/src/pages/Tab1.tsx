@@ -1,163 +1,98 @@
 import {
     IonButton,
-    IonCard, IonCardContent,
-    IonCardHeader,
-    IonCardSubtitle, IonCardTitle,
     IonContent,
-    IonHeader, IonItem, IonLabel, IonList, IonLoading,
-    IonPage, IonRadio, IonRadioGroup,
+    IonHeader,
+    IonLabel,
+    IonList,
+    IonListHeader, IonLoading,
+    IonPage, IonRadioGroup,
     IonTitle,
-    IonToolbar
+    IonToolbar,
 } from '@ionic/react';
-import './Tab1.css';
-import { useEffect, useState } from "react";
-import QuestionService from "../services/question-service";
+import './Tab2.css';
+import React, {
+    useState,
+    useEffect
+} from "react";
+import CategoryService from "../services/category-service";
 import { HttpStatusCode } from "../utils/http-status-code";
 import CategoryStorage from "../services/category-storage";
+import { useHistory } from "react-router";
+import { CategoryType } from "../types/category-type";
+import Category from "../components/category/Category";
 
-type CorrectType = {
-    id: number,
-    name: string
-}
 
-type CategoryType = {
-    id: number,
-    name: string
-}
-
-const Answer: React.FC<{ name: string, showCorrect: boolean, showWrong: boolean }> = props => {
-    return (
-        <IonItem color={props.showCorrect ? 'correct': (props.showWrong ? 'wrong' : '')}>
-            <IonLabel>
-                { props.name }
-            </IonLabel>
-            <IonRadio slot="start" value={ props.name }  />
-        </IonItem>
-    );
-}
-
-const Tab1: React.FC = () => {
-    const [selected, setSelected] = useState<string>(null!);
-    const [questionNumber, setQuestionNumber] = useState(0);
-    const [category, setCategory] = useState<CategoryType>(null!);
-    const [question, setQuestion] = useState("");
-    const [answers, setAnswers] = useState<string[]>([]);
-    const [correct, setCorrect] = useState<CorrectType>(null!);
+const Tab2: React.FC = () => {
+    const [categories, setCategories] = useState<CategoryType[]>([]);
     const [showLoading, setShowLoading] = useState(false);
-    const [showResult, setShowResult] = useState(false);
+    const history = useHistory();
 
-    const answerItems = answers.map(answer =>
-        <Answer
-            name={ answer }
-            showCorrect={ showResult && answer === correct.name }
-            showWrong={ showResult && answer === selected && answer !== correct.name }
-        />
-    );
+    const chooseCategories = () => {
+        if (CategoryStorage.isEmpty()) {
+            console.log('You have to choose at least one category!');
+            return;
+        }
 
-    const checkAnswer = () => {
-        console.log(`${selected === correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
-        setShowResult(true);
-
-        QuestionService.sendAnswer(correct.id, { answerCorrect: selected === correct.name })
-            .then(res => {
-                if (res.status !== HttpStatusCode.NO_CONTENT) {
-                    console.log(res.statusText);
-                    return;
-                }
-            })
-            .catch(err => console.log(err));
-
-        getNewQuestion();
+        history.push('/questions');
     }
 
     useEffect(() => {
         setShowLoading(true);
-        getNewQuestion()?.finally(() => setShowLoading(false));
-    }, []);
 
-    const getNewQuestion = () => {
-        if (CategoryStorage.isEmpty()) {
-            console.log('Category storage is empty');
-            return;
-        }
-
-        const randomCategory = CategoryStorage.getRandom();
-
-        return QuestionService.get(randomCategory.id)
+        CategoryService.getAll()
             .then(res => {
                 if (res.status !== HttpStatusCode.OK) {
                     console.log(res.statusText);
                     return;
                 }
 
-                console.log(`Correct answer: ${res.data.correct.name}`)
-
-                setQuestion(res.data.question);
-                setAnswers(res.data.answers);
-                setCorrect(res.data.correct);
-
-                setSelected(null!);
-                setQuestionNumber(prev => prev + 1);
-
-                setCategory(randomCategory);
+                setCategories(res.data);
             })
             .catch(err => console.log(err))
-            .finally(() => {
-                setShowResult(false);
-            });
-    }
+            .finally(() => setShowLoading(false));
+    }, []);
 
-  return (
-    <IonPage>
-      <IonHeader>
-        <IonToolbar>
-          <IonTitle>Questions</IonTitle>
-        </IonToolbar>
-      </IonHeader>
-      <IonContent fullscreen>
-        <IonLoading
-            isOpen={showLoading}
-            message={'Loading...'}
-        />
+    const categoryItems = categories.map(category =>
+        <Category id={ category.id } name={ category.name } />);
 
-        <IonHeader collapse="condense">
-          <IonToolbar>
-            <IonTitle size="large">Questions</IonTitle>
-          </IonToolbar>
-        </IonHeader>
+    return (
+        <IonPage>
+            <IonHeader>
+                <IonToolbar>
+                    <IonTitle>Categories</IonTitle>
+                </IonToolbar>
+            </IonHeader>
+            <IonContent fullscreen>
+                <IonHeader collapse="condense">
+                    <IonToolbar>
+                        <IonTitle size="large">Categories</IonTitle>
+                    </IonToolbar>
+                </IonHeader>
 
-          <IonCard>
-              <IonCardHeader>
-                  <IonCardSubtitle>
-                      { `Category ${!!category ? category.name : ''}` }
-                  </IonCardSubtitle>
-                  <IonCardTitle>
-                      { `Question ${questionNumber || ''}` }
-                  </IonCardTitle>
-              </IonCardHeader>
+                <IonLoading
+                    isOpen={ showLoading }
+                    message={ 'Loading...' }
+                />
 
-              <IonCardContent style={{ textAlign: "justify" }}>
-                  { question.replaceAll('*****', '_____') }
-              </IonCardContent>
-          </IonCard>
+                <IonList>
+                    <IonRadioGroup>
+                        <IonListHeader>
+                            <IonLabel>Categories</IonLabel>
+                        </IonListHeader>
+                        { categoryItems }
+                    </IonRadioGroup>
+                </IonList>
+                <IonButton
+                    onClick={ chooseCategories }
+                    expand="block"
+                    style={{ marginTop: 20, marginBottom: 30 }}
+                >
+                    Choose
+                </IonButton>
 
-          <IonList>
-              <IonRadioGroup value={ selected } onIonChange={e => setSelected(e.detail.value)}>
-                  { answerItems }
-              </IonRadioGroup>
-          </IonList>
-
-          <IonButton
-              onClick={ checkAnswer }
-              expand="block"
-              style={{ marginTop: 20, marginBottom: 30 }}
-          >
-              Check
-          </IonButton>
-
-      </IonContent>
-    </IonPage>
-  );
+            </IonContent>
+        </IonPage>
+    );
 };
 
-export default Tab1;
+export default Tab2;

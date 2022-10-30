@@ -1,8 +1,9 @@
+import { CorrectType } from "../types/correct-type";
+
 export interface QuestionResponse {
+    type: number,
     question: string,
-    correct: {
-        id: number,
-        name: string
-    },
-    answers: string[]
+    correct: CorrectType,
+    answers: string[],
+    authorName: string
 }

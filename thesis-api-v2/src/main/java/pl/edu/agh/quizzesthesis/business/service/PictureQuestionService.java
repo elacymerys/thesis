@@ -4,7 +4,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.PictureQuestionResponse;
-import pl.edu.agh.quizzesthesis.business.mapper.PictureMapper;
 import pl.edu.agh.quizzesthesis.business.mapper.TermMapper;
 
 @Service
@@ -13,8 +12,8 @@ public class PictureQuestionService implements QuestionService<PictureQuestionRe
     private final TermService termService;
     private final UnsplashApiService unsplashApiService;
     private final WrongAnswerService wrongAnswerService;
-    private final PictureMapper pictureMapper;
     private final TermMapper termMapper;
+    private static final int pictureQuestionTypeId = 1;
 
     @Override
     @Transactional
@@ -26,7 +25,7 @@ public class PictureQuestionService implements QuestionService<PictureQuestionRe
 
         var answers = wrongAnswerService.prepareAnswers(term);
 
-        return new PictureQuestionResponse(pictureMapper.entityToResponse(term),
-                termMapper.entityToResponse(pictureWithAuthor), answers);
+        return new PictureQuestionResponse(pictureQuestionTypeId, term.getPictureURL(),
+                termMapper.entityToResponse(pictureWithAuthor), answers, term.getAuthorName());
     }
 }

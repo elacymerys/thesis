@@ -8,13 +8,14 @@ import pl.edu.agh.quizzesthesis.business.mapper.TermMapper;
 
 @Service
 @AllArgsConstructor
-public class DefinitionQuestionService implements QuestionService<DefinitionQuestionResponse>{
+public class DefinitionQuestionService implements QuestionService<DefinitionQuestionResponse> {
 
     private final TermService termService;
     private final DefinitionService definitionService;
     private final DefinitionProcessingService definitionProcessingService;
     private final WrongAnswerService wrongAnswerService;
     private final TermMapper termMapper;
+    private static final int definitionQuestionTypeId = 0;
 
     @Override
     @Transactional
@@ -31,6 +32,7 @@ public class DefinitionQuestionService implements QuestionService<DefinitionQues
 
         var answers = wrongAnswerService.prepareAnswers(term);
 
-        return new DefinitionQuestionResponse(processedDefinition, termMapper.entityToResponse(term), answers);
+        return new DefinitionQuestionResponse(definitionQuestionTypeId, processedDefinition,
+                termMapper.entityToResponse(term), answers);
     }
 }

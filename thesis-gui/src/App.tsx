@@ -36,6 +36,8 @@ import './theme/variables.css';
 import CategoryStorage from "./services/category-storage";
 import SignUp from "./components/auth/sign-up/SignUp";
 import SignIn from "./components/auth/sign-in/SignIn";
+import PictureQuestionCard from "./components/question-cards/picture-question-card/PictureQuestionCard";
+import Quiz from "./components/quiz/Quiz";
 
 setupIonicReact();
 
@@ -54,10 +56,10 @@ const App: React.FC = () => (
             <SignIn />
           </Route>
           <Route exact path="/categories">
-            <Tab2 />
+            <Tab1 />
           </Route>
           <ProtectedRoute path="/questions">
-            <Tab1 />
+            <Quiz />
           </ProtectedRoute>
           <Route exact path="/">
             <Redirect to="/categories" />
