@@ -5,16 +5,16 @@ import {
 } from '@ionic/react';
 import './PictureQuestionCard.css';
 import { CategoryType } from "../../../types/category-type";
-import { AdditionalInfoType } from "../../../types/additional-info-type";
 
 
-const PictureQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType, additionalInfo: AdditionalInfoType }> = props => {
+const PictureQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType,
+    authorName: string }> = props => {
     return (
         <IonCard>
-            <img src={ props.question } />
+            <img src={ props.question } alt="" />
             <IonItem lines="none">
                 <IonNote>
-                    { `Author: ${props.additionalInfo.authorName}` }
+                    { `Author: ${props.authorName}` }
                 </IonNote>
             </IonItem>
 

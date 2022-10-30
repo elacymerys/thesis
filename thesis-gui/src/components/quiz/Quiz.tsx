@@ -17,7 +17,6 @@ import Answer from "../answer/Answer";
 import DefinitionQuestionCard from "../question-cards/definition-question-card/DefinitionQuestionCard";
 import { QuestionType } from "../../utils/question-type";
 import PictureQuestionCard from "../question-cards/picture-question-card/PictureQuestionCard";
-import { AdditionalInfoType } from "../../types/additional-info-type";
 
 
 const Quiz: React.FC = () => {
@@ -28,7 +27,7 @@ const Quiz: React.FC = () => {
     const [answers, setAnswers] = useState<string[]>([]);
     const [correct, setCorrect] = useState<CorrectType>(null!);
     const [type, setType] = useState<number>(null!)
-    const [additionalInfo, setAdditionalInfo] = useState<AdditionalInfoType>(null!)
+    const [authorName, setAuthorName] = useState<string>(null!)
     const [showLoading, setShowLoading] = useState(false);
     const [showResult, setShowResult] = useState(false);
 
@@ -83,7 +82,7 @@ const Quiz: React.FC = () => {
                 setCorrect(res.data.correct);
 
                 setType(res.data.type);
-                setAdditionalInfo(res.data.additionalInfo);
+                setAuthorName(res.data.authorName);
 
                 setSelected(null!);
                 setQuestionNumber(prev => prev + 1);
@@ -116,19 +115,19 @@ const Quiz: React.FC = () => {
                 </IonHeader>
 
                 {
-                    type === QuestionType.DEFINITION &&
+                    ( type === QuestionType.DEFINITION &&
                     <DefinitionQuestionCard
                         question={ question }
                         questionNumber={ questionNumber }
                         category={ category }
-                    /> ||
-                    type === QuestionType.PICTURE &&
+                    /> ) ||
+                    ( type === QuestionType.PICTURE &&
                     <PictureQuestionCard
                         question={ question }
                         questionNumber={ questionNumber }
                         category={ category }
-                        additionalInfo={ additionalInfo }
-                    />
+                        authorName={ authorName }
+                    /> )
                 }
 
                 <IonList>
