@@ -5,6 +5,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.TermDifficultyUpdateRequest;
+import pl.edu.agh.quizzesthesis.api.dto.TermPictureUpdateRequest;
 import pl.edu.agh.quizzesthesis.business.exception.NotFoundException;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
@@ -37,6 +38,11 @@ public class TermService {
     }
 
     @Transactional
+    public Term getWithDifficulty(int categoryId, int difficulty){
+        return getRandom(categoryId);
+    }
+
+    @Transactional
     public void updateTermDifficulty(int termId, TermDifficultyUpdateRequest request) {
         var term = termRepository.findById(termId)
                 .orElseThrow(() -> new NotFoundException("Cannot find term with id %d".formatted(termId)));
@@ -51,6 +57,16 @@ public class TermService {
                         (INITIAL_DIFFICULTY_WEIGHT + term.getTotalAnswersCounter())
         );
 
+        termRepository.save(term);
+    }
+
+    @Transactional
+    public void updateTermPicture(int termId, TermPictureUpdateRequest request) {
+        var term = termRepository.findById(termId)
+                .orElseThrow(() -> new NotFoundException("Cannot find term with id %d".formatted(termId)));
+
+        term.setPictureURL(request.pictureURL());
+        term.setAuthorName(request.authorName());
         termRepository.save(term);
     }
 

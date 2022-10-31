@@ -4,10 +4,10 @@ import {IonReactRouter} from '@ionic/react-router';
 import React, {FC, useCallback} from "react";
 import {SignUp} from "./components/auth/sign-up/SignUp";
 import {SignIn} from "./components/auth/sign-in/SignIn";
-import {useUserContext} from "./context/UserContext";
 import {ErrorPage} from "./components/common/ErrorPage";
 import {CategorySelect} from "./components/category/CategorySelect";
 import {DefinitionQuestion} from "./components/question/DefinitionQuestion";
+import {useUserContext} from "./context/UserContext";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';

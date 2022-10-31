@@ -10,6 +10,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.argon2.Argon2PasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.reactive.function.client.WebClient;
 
 import java.time.Clock;
 import java.util.Random;
@@ -25,6 +26,11 @@ public class BeanConfiguration {
     @Bean
     public DatamuseClient datamuseClient() {
         return new DatamuseClient();
+    }
+
+    @Bean
+    public WebClient unsplashApiClient(){
+        return WebClient.create("https://api.unsplash.com");
     }
 
     @Bean
