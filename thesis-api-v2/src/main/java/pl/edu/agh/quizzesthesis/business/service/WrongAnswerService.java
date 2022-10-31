@@ -79,7 +79,7 @@ public class WrongAnswerService {
                     break;
                 }
             }
-            if (!termService.existsOfCategory(potentialAnswer.word(), rightAnswerTerm.getCategory().getId())){
+            if (!termService.existsOfCategory(potentialAnswer.word(), rightAnswerTerm.getSearchPhrase().getCategory().getId())){
                 continue;
             }
             if (!stop){

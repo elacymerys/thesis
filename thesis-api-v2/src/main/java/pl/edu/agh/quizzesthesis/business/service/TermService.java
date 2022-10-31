@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.TermDifficultyUpdateRequest;
 import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
 import pl.edu.agh.quizzesthesis.business.exception.NotFoundException;
-import pl.edu.agh.quizzesthesis.data.entity.Category;
+import pl.edu.agh.quizzesthesis.data.entity.SearchPhrase;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
 
@@ -35,19 +35,19 @@ public class TermService {
     private static final int SINGLE_TERM_PAGE_SIZE = 1;
 
     private final TermRepository termRepository;
-    private final CategoryService categoryService;
+    private final SearchPhraseService searchPhraseService;
     private final DatamuseClient datamuseClient;
     private final Random random;
 
     @PostConstruct
     @Transactional
     public void setupAll() {
-        categoryService.getAll().forEach(this::setupOne);
+        searchPhraseService.getAll().forEach(this::setupOne);
     }
 
     @Transactional
     public Term getRandom(int categoryId) {
-        int termCounter = (int) termRepository.countByCategoryId(categoryId);
+        int termCounter = termRepository.countByCategoryId(categoryId);
         if (termCounter == 0) {
             throw new NotFoundException("There are no terms for category %d".formatted(categoryId));
         }
@@ -82,10 +82,11 @@ public class TermService {
         return termRepository.existsByNameAndCategoryId(termName, categoryId);
     }
 
-    private void setupOne(final Category category) {
-        int noOfRecords = category.getNoOfRecords();
-        var termsAlreadyPersisted = termRepository.findAllByCategoryId(category.getId());
-        if (termsAlreadyPersisted.size() >= noOfRecords) {
+    private void setupOne(final SearchPhrase searchPhrase) {
+        int noOfRecords = searchPhrase.getNoOfRecords();
+        var termsAlreadyPersisted = termRepository.findAllByCategoryId(searchPhrase.getCategory().getId());
+        var numberOfTermsBySearchPhrase = termRepository.countBySearchPhraseId(searchPhrase.getId());
+        if (numberOfTermsBySearchPhrase >= noOfRecords) {
             return;
         }
 
@@ -96,7 +97,7 @@ public class TermService {
         List<WordFrequency> termsFromApi = null;
         try {
             termsFromApi = datamuseClient.meansLike(
-                    category.getSearchWord(),
+                            searchPhrase.getSearchWord(),
                     Map.of(
                             DatamuseParam.Code.MD, META_FLAG_F,
                             DatamuseParam.Code.MAX, String.valueOf(noOfRecords)
@@ -125,7 +126,7 @@ public class TermService {
             return;
         }
 
-        newTermsFromApi = newTermsFromApi.subList(0, min(newTermsFromApi.size(), noOfRecords - termsAlreadyPersisted.size()));
+        newTermsFromApi = newTermsFromApi.subList(0, min(newTermsFromApi.size(), noOfRecords - numberOfTermsBySearchPhrase));
         float maxFrequency = termsFromApi.get(0).frequency();
 
         var termsToSave = newTermsFromApi.stream()
@@ -136,7 +137,8 @@ public class TermService {
                         0L,
                         0L,
                         word.frequency() / maxFrequency,
-                        category
+                        searchPhrase,
+                        searchPhrase.getCategory()
                 ))
                 .toList();
 

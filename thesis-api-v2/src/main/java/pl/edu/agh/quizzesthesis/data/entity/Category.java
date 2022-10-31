@@ -22,8 +22,6 @@ public class Category {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
     private String name;
-    private String searchWord;
-    private Integer noOfRecords;
 
     @Override
     public boolean equals(Object o) {
