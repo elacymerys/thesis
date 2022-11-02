@@ -3,7 +3,7 @@ import {
     IonAvatar,
     IonCard, IonCardContent, IonCardSubtitle, IonCardTitle,
     IonContent,
-    IonHeader,
+    IonHeader, IonItem, IonLabel, IonList,
     IonPage,
     IonTitle,
     IonToolbar
@@ -29,21 +29,52 @@ const UserInfo: React.FC = () => {
     );
 }
 
+const Ranking = () => {
+  return (
+      <IonCard>
+          <IonCardContent>
+              <IonCardTitle style={{ textAlign: "center" }}>
+                  My Ranking
+              </IonCardTitle>
+              <IonList lines="full">
+                  <IonItem>
+                      <IonLabel slot="start">Category 1</IonLabel>
+                      <IonLabel slot="end">0.78455</IonLabel>
+                  </IonItem>
+                  <IonItem>
+                      <IonLabel>Category 2</IonLabel>
+                      <IonLabel slot="end">0.74855</IonLabel>
+                  </IonItem>
+                  <IonItem>
+                      <IonLabel>Category 3</IonLabel>
+                      <IonLabel slot="end">0.53470</IonLabel>
+                  </IonItem>
+                  <IonItem lines="none">
+                      <IonLabel>Category 4</IonLabel>
+                      <IonLabel slot="end">0.29475</IonLabel>
+                  </IonItem>
+              </IonList>
+          </IonCardContent>
+      </IonCard>
+  );
+}
+
 const MyAccount: React.FC = () => {
     return (
         <IonPage>
             <IonHeader>
-                <IonToolbar>
+                <IonToolbar style={{ textAlign: "center" }}>
                     <IonTitle>My Account</IonTitle>
                 </IonToolbar>
             </IonHeader>
             <IonContent className="ion-padding">
                 <IonHeader collapse="condense">
-                    <IonToolbar>
-                        <IonTitle size="large">My Account</IonTitle>
+                    <IonToolbar style={{ textAlign: "center" }}>
+                        <IonTitle>My Account</IonTitle>
                     </IonToolbar>
                 </IonHeader>
                 <UserInfo />
+                <Ranking />
             </IonContent>
         </IonPage>
     );
