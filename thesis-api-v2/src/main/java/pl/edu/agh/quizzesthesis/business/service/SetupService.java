@@ -33,7 +33,6 @@ public class SetupService {
     private static final String SEARCH_PHRASES_FILE_PATH = "search_phrases.txt";
     private final CategoryRepository categoryRepository;
     private final SearchPhraseRepository searchPhraseRepository;
-
     private final TermRepository termRepository;
     private final UserRepository userRepository;
 
@@ -46,16 +45,15 @@ public class SetupService {
                 .collect(Collectors.toMap(SearchPhrase::getSearchWord, searchPhrase -> searchPhrase));
         CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
         try (
-                var reader = new BufferedReader(new InputStreamReader(new ClassPathResource(CATEGORIES_FILE_PATH).getInputStream()));
-                CSVReader csvReader = new CSVReaderBuilder(reader)
+                var categoriesReader = new BufferedReader(new InputStreamReader(new ClassPathResource(CATEGORIES_FILE_PATH).getInputStream()));
+                CSVReader csvReader = new CSVReaderBuilder(categoriesReader)
                         .withSkipLines(1)
-                        .withCSVParser(parser)
                         .build();
-                var reader2 = new BufferedReader(new InputStreamReader(new ClassPathResource(SEARCH_PHRASES_FILE_PATH).getInputStream()));
-                CSVReader csvReader2 = new CSVReaderBuilder(reader2)
-                .withSkipLines(1)
-                .withCSVParser(parser)
-                .build()
+                var searchPhraseReader = new BufferedReader(new InputStreamReader(new ClassPathResource(SEARCH_PHRASES_FILE_PATH).getInputStream()));
+                CSVReader csvReader2 = new CSVReaderBuilder(searchPhraseReader)
+                    .withSkipLines(1)
+                    .withCSVParser(parser)
+                    .build()
         ) {
             var categoriesInFile = csvReader.readAll().stream()
                     .map(categoryRow -> new Category(null, categoryRow[0]))
