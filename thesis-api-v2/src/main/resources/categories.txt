@@ -1,7 +1,6 @@
 name
 animals
 cars
-herbs
+plants
 parts of human body
-types of cars
 geography
