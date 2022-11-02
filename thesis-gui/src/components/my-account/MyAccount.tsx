@@ -1,6 +1,6 @@
 import React from "react";
 import {
-    IonAvatar,
+    IonAvatar, IonButton,
     IonCard, IonCardContent, IonCardSubtitle, IonCardTitle,
     IonContent,
     IonHeader, IonItem, IonLabel, IonList,
@@ -24,6 +24,9 @@ const UserInfo: React.FC = () => {
                         nick@example.com
                     </IonCardSubtitle>
                 </IonCardContent>
+                <IonButton expand="block">
+                    Sign Out
+                </IonButton>
             </IonCardContent>
         </IonCard>
     );
