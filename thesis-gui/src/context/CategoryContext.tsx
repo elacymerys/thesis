@@ -11,6 +11,7 @@ type CategoryContextType = {
     categories: Category[],
     chosenCategories: Category[],
     getCategories: () => void,
+    getRandom: () => Category | undefined,
     chooseCategories: (categories: Category[]) => void,
 };
 
@@ -18,6 +19,7 @@ const CATEGORY_CONTEXT_INIT_STATE: CategoryContextType = {
     loadingState: 'LOADING',
     categories: [],
     chosenCategories: [],
+    getRandom: () => undefined,
     getCategories: () => {},
     chooseCategories: () => {}
 };
@@ -54,8 +56,12 @@ export const CategoryContextProvider: FC = ({ children }) => {
         setChosenCategories(categories);
     };
 
+    const getRandom = () => chosenCategories.length === 0
+        ? undefined
+        : chosenCategories[Math.floor(Math.random() * chosenCategories.length)];
+
     return (
-        <CategoryContext.Provider value={{ loadingState, categories, chosenCategories, getCategories, chooseCategories }}>
+        <CategoryContext.Provider value={{ loadingState, categories, chosenCategories, getRandom, getCategories, chooseCategories }}>
             {children}
         </CategoryContext.Provider>
     )

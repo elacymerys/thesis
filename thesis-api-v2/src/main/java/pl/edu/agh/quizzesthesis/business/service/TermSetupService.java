@@ -74,6 +74,8 @@ public class TermSetupService {
                         0L,
                         0L,
                         word.frequency() / maxFrequency,
+                        null,
+                        null,
                         category
                 ))
                 .toList();

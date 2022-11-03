@@ -7,7 +7,7 @@ import './PictureQuestionCard.css';
 import { CategoryType } from "../../../types/category-type";
 
 
-const PictureQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType,
+export const PictureQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType,
     authorName: string }> = props => {
     return (
         <IonCard>
@@ -33,5 +33,3 @@ const PictureQuestionCard: React.FC<{ question: string, questionNumber: number, 
         </IonCard>
     );
 };
-
-export default PictureQuestionCard;

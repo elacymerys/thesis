@@ -1,12 +1,12 @@
 import { httpService } from "./http-service";
-import QuestionTypeService from "./question-type-service";
+import {questionTypeService} from "./question-type-service";
 import { QuestionType } from "../utils/question-type";
 import {TermDifficultyUpdateRequest} from "../types/term-difficulty-update-request";
-import {QuestionResponse} from "../types/question";
+import {QuestionResponse} from "../types/question-response";
 
 export const questionService = {
     get(categoryId: number) {
-        const questionType = QuestionTypeService.getRandom();
+        const questionType = questionTypeService.getRandom();
         if (questionType == QuestionType.DEFINITION) {
             return definitionQuestionService.get(categoryId);
         } else {

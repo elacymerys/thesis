@@ -5,5 +5,5 @@ export interface QuestionResponse {
     question: string,
     correct: CorrectType,
     answers: string[],
-    authorName: string
+    authorName?: string
 }

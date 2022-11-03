@@ -13,7 +13,7 @@ import {
 } from '@ionic/react';
 import './PictureQuestion4.css';
 
-const PictureQuestion4: React.FC = () => {
+export const PictureQuestion4: React.FC = () => {
     return (
         <IonPage>
             <IonHeader>
@@ -72,5 +72,3 @@ const PictureQuestion4: React.FC = () => {
         </IonPage>
     );
 };
-
-export default PictureQuestion4;

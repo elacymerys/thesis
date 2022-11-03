@@ -1,12 +1,11 @@
 import {Redirect, Route} from 'react-router-dom';
-import {IonApp, IonHeader, IonItem, IonLoading, IonRouterOutlet, IonToolbar, setupIonicReact} from '@ionic/react';
+import {IonApp, IonLoading, IonRouterOutlet, setupIonicReact} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import React, {FC, useCallback} from "react";
 import {SignUp} from "./components/auth/sign-up/SignUp";
 import {SignIn} from "./components/auth/sign-in/SignIn";
 import {ErrorPage} from "./components/common/ErrorPage";
 import {CategorySelect} from "./components/category/CategorySelect";
-import {DefinitionQuestion} from "./components/question/DefinitionQuestion";
 import {useUserContext} from "./context/UserContext";
 
 /* Core CSS required for Ionic components to work properly */
@@ -27,6 +26,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import {Quiz} from "./components/quiz/Quiz";
 
 setupIonicReact();
 
@@ -57,7 +57,7 @@ const App: FC = () => {
                         <CategorySelect/>
                     </AuthRoute>
                     <AuthRoute path="/questions">
-                        <DefinitionQuestion/>
+                        <Quiz/>
                     </AuthRoute>
                     <Route exact path="/error-page">
                         <ErrorPage/>
