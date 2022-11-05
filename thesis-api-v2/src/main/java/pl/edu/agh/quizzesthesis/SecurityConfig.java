@@ -8,10 +8,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.stereotype.Component;
 import pl.edu.agh.quizzesthesis.business.JwtAuthFilter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 @Configuration
 @EnableWebSecurity
@@ -22,6 +30,7 @@ public class SecurityConfig {
     public static final String REFRESH_TOKEN_COOKIE_NAME = "REFRESH_TOKEN";
 
     private final JwtAuthFilter jwtFilter;
+    private final AuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
     public AuthenticationManager authenticationManager() {
@@ -39,14 +48,17 @@ public class SecurityConfig {
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
+                .exceptionHandling().authenticationEntryPoint(authenticationEntryPoint)
+                .and()
                 .formLogin().disable()
                 .httpBasic().disable()
                 .authorizeRequests()
                 // TODO protect endpoints after authentication on frontend finished
-                //.antMatchers("/api/auth/access-token").permitAll()
-                //.antMatchers("/api/auth/refresh-token").permitAll()
-                //.antMatchers("/api/auth/users").permitAll()
-                //.antMatchers("/api/**").authenticated()
+                .antMatchers("/api/auth/access-token").permitAll()
+                .antMatchers("/api/auth/refresh-token").permitAll()
+                .antMatchers("/api/auth/users").permitAll()
+                .antMatchers("/api/auth/users/current").authenticated()
+                .antMatchers("/api/**").authenticated()
                 .anyRequest().permitAll() // static files at '/'
                 .and()
                 .build();

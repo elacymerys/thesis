@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CookieValue;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,6 +48,12 @@ public class AuthController {
         return authService.getUser(userAuthDetails.id());
     }
 
+    @DeleteMapping("/users/current")
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void signOut(HttpServletResponse response) {
+        clearAuthTokens(response);
+    }
+
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponse> signUp(@Valid @RequestBody SignUpRequest request, HttpServletResponse response) {
@@ -74,14 +81,20 @@ public class AuthController {
         return userAuthTriple.userResponse();
     }
 
-    private void setAuthTokensCookies(HttpServletResponse response, AuthService.UserAuthTriple userAuthTriple) {
-        response.addCookie(generateAccessTokenCookie(userAuthTriple.accessToken()));
-        response.addCookie(generateRefreshTokenCookie(userAuthTriple.refreshToken()));
+    private void clearAuthTokens(HttpServletResponse response) {
+        response.addCookie(generateAccessTokenCookie("", true));
+        response.addCookie(generateRefreshTokenCookie("", true));
     }
 
-    private Cookie generateAccessTokenCookie(String accessToken) {
+    private void setAuthTokensCookies(HttpServletResponse response, AuthService.UserAuthTriple userAuthTriple) {
+        response.addCookie(generateAccessTokenCookie(userAuthTriple.accessToken(), false));
+        response.addCookie(generateRefreshTokenCookie(userAuthTriple.refreshToken(), false));
+    }
+
+    private Cookie generateAccessTokenCookie(String accessToken, boolean clear) {
         var accessTokenCookie = new Cookie(ACCESS_TOKEN_COOKIE_NAME, accessToken);
-        accessTokenCookie.setMaxAge((int) accessTokenDuration.toSeconds());
+        accessTokenCookie.setMaxAge(clear ? 0 : (int) accessTokenDuration.toSeconds());
+        accessTokenCookie.setPath("/api");
         accessTokenCookie.setHttpOnly(true);
         // TODO: uncomment after HTTPS added
         // accessTokenCookie.setSecure(true);
@@ -89,9 +102,9 @@ public class AuthController {
         return accessTokenCookie;
     }
 
-    private Cookie generateRefreshTokenCookie(String refreshToken) {
+    private Cookie generateRefreshTokenCookie(String refreshToken, boolean clear) {
         var refreshTokenCookie = new Cookie(REFRESH_TOKEN_COOKIE_NAME, refreshToken);
-        refreshTokenCookie.setMaxAge((int) refreshTokenDuration.toSeconds());
+        refreshTokenCookie.setMaxAge(clear ? 0 : (int) refreshTokenDuration.toSeconds());
         refreshTokenCookie.setPath("/api/auth/refresh-token");
         refreshTokenCookie.setHttpOnly(true);
         // TODO: uncomment after HTTPS added
