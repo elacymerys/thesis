@@ -8,7 +8,7 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
-import pl.edu.agh.quizzesthesis.data.entity.Category;
+import pl.edu.agh.quizzesthesis.data.entity.SearchPhrase;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
 
@@ -30,23 +30,27 @@ public class TermSetupService {
     private static final int REJECTED_PERCENT = 0;
 
     private final TermRepository termRepository;
-    private final CategoryService categoryService;
+    private final SearchPhraseService searchPhraseService;
     private final DatamuseClient datamuseClient;
 
     @PostConstruct
     @Transactional
     public void setupAll() {
-        categoryService.getAll().forEach(this::setupOne);
+        searchPhraseService.getAll().forEach(this::setupOne);
     }
 
-    private void setupOne(final Category category) {
-        var termsAlreadyPersisted = termRepository.findAllByCategoryId(category.getId());
-        if (termsAlreadyPersisted.size() >= 1000) {
+    private void setupOne(final SearchPhrase searchPhrase) {
+        var numberOfRecords = searchPhrase.getNumberOfRecords();
+
+        var termsAlreadyPersisted = termRepository.findAllByCategoryId(searchPhrase.getCategory().getId());
+
+        var numberOfTermsBySearchPhrase = termRepository.countBySearchPhraseId(searchPhrase.getId());
+        if (numberOfTermsBySearchPhrase >= numberOfRecords) {
             return;
         }
 
         var termNamesAlreadyPersisted = getTermNamesAlreadyPersisted(termsAlreadyPersisted);
-        var termsFromApi = getTermsFromApi(category);
+        var termsFromApi = getTermsFromApi(searchPhrase);
 
         if (termsFromApi.isEmpty()) {
             return;
@@ -59,13 +63,13 @@ public class TermSetupService {
             return;
         }
 
-        newTermsFromApi = getNewTermsFromApiTaken(termsAlreadyPersisted, newTermsFromApi);
+        newTermsFromApi = getNewTermsFromApiTaken(numberOfTermsBySearchPhrase, newTermsFromApi, searchPhrase);
         float maxFrequency = termsFromApi.get(0).frequency();
 
-        termRepository.saveAll(getTermsToSave(category, newTermsFromApi, maxFrequency));
+        termRepository.saveAll(getTermsToSave(searchPhrase, newTermsFromApi, maxFrequency));
     }
 
-    private List<Term> getTermsToSave(Category category, List<WordFrequency> newTermsFromApi, float maxFrequency) {
+    private List<Term> getTermsToSave(SearchPhrase searchPhrase, List<WordFrequency> newTermsFromApi, float maxFrequency) {
         return newTermsFromApi.stream()
                 .map(word -> new Term(
                         null,
@@ -76,13 +80,14 @@ public class TermSetupService {
                         word.frequency() / maxFrequency,
                         null,
                         null,
-                        category
+                        searchPhrase,
+                        searchPhrase.getCategory()
                 ))
                 .toList();
     }
 
-    private List<WordFrequency> getNewTermsFromApiTaken(Set<Term> termsAlreadyPersisted, List<WordFrequency> newTermsFromApi) {
-        return newTermsFromApi.subList(0, min(newTermsFromApi.size(), 1000 - termsAlreadyPersisted.size()));
+    private List<WordFrequency> getNewTermsFromApiTaken(int numberOfTermsAlreadyPersisted, List<WordFrequency> newTermsFromApi, SearchPhrase searchPhrase) {
+        return newTermsFromApi.subList(0, min(newTermsFromApi.size(), searchPhrase.getNumberOfRecords() - numberOfTermsAlreadyPersisted));
     }
 
     private List<WordFrequency> getNewTermsFromApi(Set<String> termNamesAlreadyPersisted, List<WordFrequency> termsFromApi) {
@@ -96,14 +101,14 @@ public class TermSetupService {
         return termsFromApi.subList(0, itemsTaken);
     }
 
-    private List<WordFrequency> getTermsFromApi(Category category) {
+    private List<WordFrequency> getTermsFromApi(SearchPhrase searchPhrase) {
         List<WordFrequency> termsFromApi = null;
         try {
             termsFromApi = datamuseClient.meansLike(
-                            category.getSearchWord(),
+                            searchPhrase.getSearchWord(),
                             Map.of(
                                     DatamuseParam.Code.MD, META_FLAG_F,
-                                    DatamuseParam.Code.MAX, "1000"
+                                    DatamuseParam.Code.MAX, searchPhrase.getNumberOfRecords().toString()
                             )
                     ).stream()
                     .filter(word -> word.getTags().contains("n") && !word.getTags().contains("syn"))

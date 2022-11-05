@@ -11,8 +11,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.business.exception.InternalServiceException;
 import pl.edu.agh.quizzesthesis.data.entity.Category;
+import pl.edu.agh.quizzesthesis.data.entity.SearchPhrase;
 import pl.edu.agh.quizzesthesis.data.entity.User;
 import pl.edu.agh.quizzesthesis.data.repository.CategoryRepository;
+import pl.edu.agh.quizzesthesis.data.repository.SearchPhraseRepository;
 import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
 import pl.edu.agh.quizzesthesis.data.repository.UserRepository;
 
@@ -29,9 +31,11 @@ import java.util.stream.Collectors;
 public class CategorySetupService {
 
     private static final String CATEGORIES_FILE_PATH = "categories.txt";
+    private static final String SEARCH_PHRASE_FILE_PATH = "search_phrases.txt";
 
     private final CategoryRepository categoryRepository;
     private final TermRepository termRepository;
+    private final SearchPhraseRepository searchPhraseRepository;
     private final UserRepository userRepository;
 
     @PostConstruct
@@ -39,24 +43,35 @@ public class CategorySetupService {
     public void setUp() {
         CSVParser parser = new CSVParserBuilder().withSeparator(';').build();
         try (
-                var reader = new BufferedReader(new InputStreamReader(new ClassPathResource(CATEGORIES_FILE_PATH).getInputStream()));
-                CSVReader csvReader = buildCsvReader(parser, reader)
+                var categoryReader = new BufferedReader(new InputStreamReader(new ClassPathResource(CATEGORIES_FILE_PATH).getInputStream()));
+                CSVReader categoryCsvReader = buildCsvReader(parser, categoryReader);
+                var searchPhraseReader = new BufferedReader(new InputStreamReader(new ClassPathResource(SEARCH_PHRASE_FILE_PATH).getInputStream()));
+                CSVReader searchPhraseCsvReader = buildCsvReader(parser, searchPhraseReader)
         ) {
             var categoriesAlreadyPersisted = getCategoriesAlreadyPersisted();
-            var categoriesInFile = getCategoriesInFile(csvReader);
+            var searchPhrasesAlreadyPersisted = getSearchPhrasesAlreadyPersisted();
+            var categoriesInFile = getCategoriesInFile(categoryCsvReader);
             var categoriesToPersist = getCategoriesToPersist(categoriesAlreadyPersisted, categoriesInFile);
             var categoriesToUpdate = getCategoriesToUpdate(categoriesAlreadyPersisted, categoriesInFile);
             var categoriesToRemove = getCategoriesToRemove(categoriesAlreadyPersisted, categoriesInFile);
-
             var newCategoriesPersisted = updateCategories(categoriesToPersist, categoriesToUpdate);
 
-            updateUsers(categoriesToRemove, newCategoriesPersisted);
+            var searchPhrasesInFile = getSearchPhrasesInFile(searchPhraseCsvReader);
+            var searchPhrasesToPersist = getSearchPhrasesToPersist(searchPhrasesAlreadyPersisted, searchPhrasesInFile);
+            var searchPhrasesToUpdate = getSearchPhrasesToUpdate(searchPhrasesAlreadyPersisted, searchPhrasesInFile);
+            var searchPhrasesToRemove = getSearchPhrasesToRemove(searchPhrasesAlreadyPersisted, searchPhrasesInFile);
 
-            cleanUpCategoriesAndTerms(categoriesToRemove);
+            updateSearchPhrases(searchPhrasesToPersist, searchPhrasesToUpdate);
+
+
+
+            updateUsers(categoriesToRemove, newCategoriesPersisted);
+            cleanUpCategoriesAndTerms(categoriesToRemove, searchPhrasesToRemove);
         } catch (IOException | CsvException e) {
             throw new InternalServiceException("Cannot read categories file", e);
         }
     }
+
 
     private CSVReader buildCsvReader(CSVParser parser, BufferedReader reader) {
         return new CSVReaderBuilder(reader)
@@ -65,8 +80,11 @@ public class CategorySetupService {
                 .build();
     }
 
-    private void cleanUpCategoriesAndTerms(List<Category> categoriesToRemove) {
+    private void cleanUpCategoriesAndTerms(List<Category> categoriesToRemove, List<SearchPhrase> searchPhrasesToRemove) {
+        searchPhrasesToRemove.forEach(termRepository::deleteAllBySearchPhrase);
         categoriesToRemove.forEach(termRepository::deleteAllByCategory);
+        categoriesToRemove.forEach(searchPhraseRepository::deleteAllByCategory);
+        searchPhraseRepository.deleteAll(searchPhrasesToRemove);
         categoryRepository.deleteAll(categoriesToRemove);
     }
 
@@ -81,6 +99,11 @@ public class CategorySetupService {
     private Iterable<Category> updateCategories(List<Category> categoriesToPersist, List<Category> categoriesToUpdate) {
         categoryRepository.saveAll(categoriesToUpdate);
         return categoryRepository.saveAll(categoriesToPersist);
+    }
+
+    private void updateSearchPhrases(List<SearchPhrase> searchPhrasesToPersist, List<SearchPhrase> searchPhrasesToUpdate) {
+        searchPhraseRepository.saveAll(searchPhrasesToUpdate);
+        searchPhraseRepository.saveAll(searchPhrasesToPersist);
     }
 
     private List<Category> getCategoriesToRemove(Map<String, Category> categoriesAlreadyPersisted, List<Category> categoriesInFile) {
@@ -104,13 +127,44 @@ public class CategorySetupService {
 
     private List<Category> getCategoriesInFile(CSVReader csvReader) throws IOException, CsvException {
         return csvReader.readAll().stream()
-                .map(categoryRow -> new Category(null, categoryRow[0], categoryRow[1]))
+                .map(categoryRow -> new Category(null, categoryRow[0]))
                 .toList();
     }
 
     private Map<String, Category> getCategoriesAlreadyPersisted() {
         return categoryRepository.findAll().stream()
                 .collect(Collectors.toMap(Category::getName, category -> category));
+    }
+    private Map<String, SearchPhrase> getSearchPhrasesAlreadyPersisted() {
+        return searchPhraseRepository.findAll().stream()
+                .collect(Collectors.toMap(SearchPhrase::getSearchWord, searchPhrase -> searchPhrase));
+    }
+
+    private List<SearchPhrase> getSearchPhrasesToRemove(Map<String, SearchPhrase> searchPhraseAlreadyPersisted, List<SearchPhrase> searchPhraseInFile) {
+        return searchPhraseAlreadyPersisted.values().stream()
+                .filter(category -> !searchPhraseInFile.contains(category))
+                .toList();
+    }
+
+    private List<SearchPhrase> getSearchPhrasesToUpdate(Map<String, SearchPhrase> searchPhrasesAlreadyPersisted, List<SearchPhrase> searchPhrasesInFile) {
+        return searchPhrasesInFile.stream()
+                .filter(searchPhrase -> searchPhrasesAlreadyPersisted.containsKey(searchPhrase.getSearchWord()))
+                .peek(searchPhrase -> searchPhrase.setId(searchPhrasesAlreadyPersisted.get(searchPhrase.getSearchWord()).getId()))
+                .toList();
+    }
+
+    private List<SearchPhrase> getSearchPhrasesToPersist(Map<String, SearchPhrase> searchPhrasesAlreadyPersisted, List<SearchPhrase> searchPhrasesInFile) {
+        return searchPhrasesInFile.stream()
+                .filter(searchPhrase -> !searchPhrasesAlreadyPersisted.containsKey(searchPhrase.getSearchWord()))
+                .toList();
+    }
+
+    private List<SearchPhrase> getSearchPhrasesInFile(CSVReader csvReader) throws IOException, CsvException {
+        var allCategories = categoryRepository.findAll().stream()
+                .collect(Collectors.toMap(Category::getName, category -> category));
+        return csvReader.readAll().stream()
+                .map(searchPhraseRow -> new SearchPhrase(null,searchPhraseRow[1],Integer.valueOf(searchPhraseRow[2]), allCategories.get(searchPhraseRow[0])))
+                .toList();
     }
 
     private void addUserRanks(User user, Iterable<Category> categoriesPersisted) {
