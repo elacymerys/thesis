@@ -1,0 +1,12 @@
+name;search_word;quantity
+animals;types of mammals;100
+animals;types of lizards;100
+animals;types of birds;100
+plants;types of herbs;150
+plants;types of flowers;150
+plants;types of trees;100
+geography;mount everest;150
+geography;amazon river;150
+geography;luzon;150
+parts of human body;parts of human body;90
+cars;types of cars;100
