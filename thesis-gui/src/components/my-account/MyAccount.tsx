@@ -62,7 +62,7 @@ const Ranking = () => {
   );
 }
 
-const MyAccount: React.FC = () => {
+export const MyAccount: React.FC = () => {
     return (
         <IonPage>
             <IonHeader>
@@ -82,5 +82,3 @@ const MyAccount: React.FC = () => {
         </IonPage>
     );
 }
-
-export default MyAccount;
