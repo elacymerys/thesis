@@ -74,7 +74,8 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public UserResponse refreshTokens(@CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, defaultValue = "") String refreshToken, HttpServletResponse response) {
+    public UserResponse refreshTokens(@CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, defaultValue = "") String refreshToken,
+                                                HttpServletResponse response) {
         var userAuthTriple = authService.refreshTokens(refreshToken);
         setAuthTokensCookies(response, userAuthTriple);
 
