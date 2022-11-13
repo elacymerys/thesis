@@ -56,7 +56,8 @@ public class AuthController {
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserResponse> signUp(@Valid @RequestBody SignUpRequest request, HttpServletResponse response) {
+    public ResponseEntity<UserResponse> signUp(@Valid @RequestBody SignUpRequest request,
+                                               HttpServletResponse response) {
         var userAuthTriple = authService.signUp(request);
         setAuthTokensCookies(response, userAuthTriple);
 
@@ -74,7 +75,7 @@ public class AuthController {
 
     @PostMapping("/refresh-token")
     public UserResponse refreshTokens(@CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, defaultValue = "") String refreshToken,
-                                      HttpServletResponse response) {
+                                                HttpServletResponse response) {
         var userAuthTriple = authService.refreshTokens(refreshToken);
         setAuthTokensCookies(response, userAuthTriple);
 

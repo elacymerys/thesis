@@ -1,4 +1,6 @@
-name;search_word
-animals;types of animals
-herbs;types of herbs
-parts of human body;parts of human body
+name
+animals
+cars
+plants
+parts of human body
+geography

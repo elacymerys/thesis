@@ -24,7 +24,7 @@ public class TermService {
 
     @Transactional
     public Term getRandom(int categoryId) {
-        int termCounter = (int) termRepository.countByCategoryId(categoryId);
+        int termCounter = termRepository.countByCategoryId(categoryId);
         if (termCounter == 0) {
             throw new NotFoundException("There are no terms for category %d".formatted(categoryId));
         }
@@ -38,7 +38,7 @@ public class TermService {
     }
 
     @Transactional
-    public Term getWithDifficulty(int categoryId, int difficulty){
+    public Term getWithDifficulty(int categoryId, int difficulty) {
         return getRandom(categoryId);
     }
 
