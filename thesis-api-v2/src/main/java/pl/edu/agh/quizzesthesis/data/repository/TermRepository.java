@@ -13,7 +13,7 @@ import java.util.Set;
 
 public interface TermRepository extends PagingAndSortingRepository<Term, Integer> {
 
-    boolean existsByNameAndSearchPhraseId(String termName, int categoryId);
+    boolean existsByNameAndCategoryId(String termName, int categoryId);
 
     Set<Term> findAllByCategoryId(int categoryId);
 

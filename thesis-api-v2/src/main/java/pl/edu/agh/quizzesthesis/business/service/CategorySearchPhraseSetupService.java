@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
-public class CategorySetupService {
+public class CategorySearchPhraseSetupService {
 
     private static final String CATEGORIES_FILE_PATH = "categories.txt";
     private static final String SEARCH_PHRASE_FILE_PATH = "search_phrases.txt";
@@ -62,7 +62,6 @@ public class CategorySetupService {
             var searchPhrasesToRemove = getSearchPhrasesToRemove(searchPhrasesAlreadyPersisted, searchPhrasesInFile);
 
             updateSearchPhrases(searchPhrasesToPersist, searchPhrasesToUpdate);
-
 
 
             updateUsers(categoriesToRemove, newCategoriesPersisted);
@@ -115,7 +114,8 @@ public class CategorySetupService {
     private List<Category> getCategoriesToUpdate(Map<String, Category> categoriesAlreadyPersisted, List<Category> categoriesInFile) {
         return categoriesInFile.stream()
                 .filter(category -> categoriesAlreadyPersisted.containsKey(category.getName()))
-                .peek(category -> category.setId(categoriesAlreadyPersisted.get(category.getName()).getId()))
+                .peek(category -> category.setId
+                        (categoriesAlreadyPersisted.get(category.getName()).getId()))
                 .toList();
     }
 
@@ -135,6 +135,7 @@ public class CategorySetupService {
         return categoryRepository.findAll().stream()
                 .collect(Collectors.toMap(Category::getName, category -> category));
     }
+
     private Map<String, SearchPhrase> getSearchPhrasesAlreadyPersisted() {
         return searchPhraseRepository.findAll().stream()
                 .collect(Collectors.toMap(SearchPhrase::getSearchWord, searchPhrase -> searchPhrase));
@@ -142,14 +143,16 @@ public class CategorySetupService {
 
     private List<SearchPhrase> getSearchPhrasesToRemove(Map<String, SearchPhrase> searchPhraseAlreadyPersisted, List<SearchPhrase> searchPhraseInFile) {
         return searchPhraseAlreadyPersisted.values().stream()
-                .filter(category -> !searchPhraseInFile.contains(category))
+                .filter(searchPhrase -> !searchPhraseInFile.contains(searchPhrase))
                 .toList();
     }
 
     private List<SearchPhrase> getSearchPhrasesToUpdate(Map<String, SearchPhrase> searchPhrasesAlreadyPersisted, List<SearchPhrase> searchPhrasesInFile) {
         return searchPhrasesInFile.stream()
                 .filter(searchPhrase -> searchPhrasesAlreadyPersisted.containsKey(searchPhrase.getSearchWord()))
-                .peek(searchPhrase -> searchPhrase.setId(searchPhrasesAlreadyPersisted.get(searchPhrase.getSearchWord()).getId()))
+                .peek(searchPhrase ->
+                        searchPhrase.setId(searchPhrasesAlreadyPersisted.get
+                                (searchPhrase.getSearchWord()).getId()))
                 .toList();
     }
 
@@ -163,8 +166,12 @@ public class CategorySetupService {
         var allCategories = categoryRepository.findAll().stream()
                 .collect(Collectors.toMap(Category::getName, category -> category));
         return csvReader.readAll().stream()
-                .map(searchPhraseRow -> new SearchPhrase(null,searchPhraseRow[1],Integer.valueOf(searchPhraseRow[2]), allCategories.get(searchPhraseRow[0])))
-                .toList();
+                .map(searchPhraseRow ->
+                        new SearchPhrase
+                                (null, searchPhraseRow[1],
+                                        Integer.valueOf(searchPhraseRow[2]),
+                                        allCategories.get(searchPhraseRow[0]))
+                ).toList();
     }
 
     private void addUserRanks(User user, Iterable<Category> categoriesPersisted) {

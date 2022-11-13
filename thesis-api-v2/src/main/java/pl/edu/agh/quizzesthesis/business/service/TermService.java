@@ -70,7 +70,7 @@ public class TermService {
         termRepository.save(term);
     }
 
-    public boolean existsOfSearchPhrase(String termName, int searchPhraseId) {
-        return termRepository.existsByNameAndSearchPhraseId(termName, searchPhraseId);
+    public boolean existsOfCategory(String termName, int categoryId) {
+        return termRepository.existsByNameAndCategoryId(termName, categoryId);
     }
 }

@@ -35,9 +35,7 @@ public class AuthController {
     private final Duration accessTokenDuration;
     private final Duration refreshTokenDuration;
 
-    public AuthController(AuthService authService,
-                          @Value("${jwt.access-token.duration}") Duration accessTokenDuration,
-                          @Value("${jwt.refresh-token.duration}") Duration refreshTokenDuration) {
+    public AuthController(AuthService authService, @Value("${jwt.access-token.duration}") Duration accessTokenDuration, @Value("${jwt.refresh-token.duration}") Duration refreshTokenDuration) {
         this.authService = authService;
         this.accessTokenDuration = accessTokenDuration;
         this.refreshTokenDuration = refreshTokenDuration;
@@ -60,8 +58,7 @@ public class AuthController {
         var userAuthTriple = authService.signUp(request);
         setAuthTokensCookies(response, userAuthTriple);
 
-        return ResponseEntity.created(URI.create("/api/auth/users"))
-                .body(userAuthTriple.userResponse());
+        return ResponseEntity.created(URI.create("/api/auth/users")).body(userAuthTriple.userResponse());
     }
 
     @PostMapping("/access-token")
@@ -73,8 +70,7 @@ public class AuthController {
     }
 
     @PostMapping("/refresh-token")
-    public UserResponse refreshTokens(@CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, defaultValue = "") String refreshToken,
-                                      HttpServletResponse response) {
+    public UserResponse refreshTokens(@CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, defaultValue = "") String refreshToken, HttpServletResponse response) {
         var userAuthTriple = authService.refreshTokens(refreshToken);
         setAuthTokensCookies(response, userAuthTriple);
 

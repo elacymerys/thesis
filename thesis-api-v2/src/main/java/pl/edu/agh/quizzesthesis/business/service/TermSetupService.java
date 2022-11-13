@@ -24,7 +24,7 @@ import static java.lang.Math.min;
 
 @Service
 @AllArgsConstructor
-@DependsOn("categorySetupService")
+@DependsOn("categorySearchPhraseSetupService")
 public class TermSetupService {
 
     private static final int REJECTED_PERCENT = 0;
@@ -64,7 +64,8 @@ public class TermSetupService {
         }
 
         newTermsFromApi = getNewTermsFromApiTaken(numberOfTermsBySearchPhrase, newTermsFromApi, searchPhrase);
-        float maxFrequency = termsFromApi.get(0).frequency();
+        var maxFrequency = termsFromApi.stream().max((wf1, wf2) -> Float.compare(wf1.frequency(), wf2.frequency()))
+                .map(WordFrequency::frequency).orElse(0F);
 
         termRepository.saveAll(getTermsToSave(searchPhrase, newTermsFromApi, maxFrequency));
     }
@@ -102,18 +103,17 @@ public class TermSetupService {
     }
 
     private List<WordFrequency> getTermsFromApi(SearchPhrase searchPhrase) {
-        List<WordFrequency> termsFromApi = null;
+        List<WordFrequency> termsFromApi;
         try {
             termsFromApi = datamuseClient.meansLike(
                             searchPhrase.getSearchWord(),
                             Map.of(
                                     DatamuseParam.Code.MD, META_FLAG_F,
-                                    DatamuseParam.Code.MAX, searchPhrase.getNumberOfRecords().toString()
+                                    DatamuseParam.Code.MAX, "1000"
                             )
                     ).stream()
                     .filter(word -> word.getTags().contains("n") && !word.getTags().contains("syn"))
                     .map(word -> new WordFrequency(word.getWord(), Float.parseFloat(word.getTags().get(word.getTags().size() - 1).substring(2))))
-                    .sorted((wf1, wf2) -> Float.compare(wf2.frequency(), wf1.frequency()))
                     .toList();
         } catch (DatamuseException | IOException e) {
             throw new ExternalServiceException("Cannot load terms from Datamuse", e);
@@ -127,5 +127,6 @@ public class TermSetupService {
                 .collect(Collectors.toSet());
     }
 
-    public record WordFrequency(String word, float frequency) {}
+    public record WordFrequency(String word, float frequency) {
+    }
 }
