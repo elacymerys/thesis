@@ -35,7 +35,9 @@ public class AuthController {
     private final Duration accessTokenDuration;
     private final Duration refreshTokenDuration;
 
-    public AuthController(AuthService authService, @Value("${jwt.access-token.duration}") Duration accessTokenDuration, @Value("${jwt.refresh-token.duration}") Duration refreshTokenDuration) {
+    public AuthController(AuthService authService,
+                          @Value("${jwt.access-token.duration}") Duration accessTokenDuration,
+                          @Value("${jwt.refresh-token.duration}") Duration refreshTokenDuration) {
         this.authService = authService;
         this.accessTokenDuration = accessTokenDuration;
         this.refreshTokenDuration = refreshTokenDuration;
@@ -54,11 +56,13 @@ public class AuthController {
 
     @PostMapping("/users")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<UserResponse> signUp(@Valid @RequestBody SignUpRequest request, HttpServletResponse response) {
+    public ResponseEntity<UserResponse> signUp(@Valid @RequestBody SignUpRequest request,
+                                               HttpServletResponse response) {
         var userAuthTriple = authService.signUp(request);
         setAuthTokensCookies(response, userAuthTriple);
 
-        return ResponseEntity.created(URI.create("/api/auth/users")).body(userAuthTriple.userResponse());
+        return ResponseEntity.created(URI.create("/api/auth/users"))
+                .body(userAuthTriple.userResponse());
     }
 
     @PostMapping("/access-token")
