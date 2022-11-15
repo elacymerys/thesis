@@ -8,15 +8,11 @@ import {
     IonTitle,
     IonToolbar
 } from "@ionic/react";
-import {userService} from "../../services/user-service";
+import {useUserContext} from "../../context/UserContext";
 
-const UserInfo: React.FC<{
-    nick: string,
-    email: string
-}> = ({
-    nick,
-    email
-}) => {
+const UserInfo: React.FC = () => {
+    const { user, signOut } = useUserContext();
+
     return (
         <IonCard>
             <IonCardContent style={{ textAlign: "center" }}>
@@ -25,13 +21,13 @@ const UserInfo: React.FC<{
                 </IonAvatar>
                 <IonCardContent>
                     <IonCardTitle>
-                        { nick }
+                        { user!.nick }
                     </IonCardTitle>
                     <IonCardSubtitle>
-                        { email }
+                        { user!.email }
                     </IonCardSubtitle>
                 </IonCardContent>
-                <IonButton expand="block">
+                <IonButton expand="block" onClick={ signOut }>
                     Sign Out
                 </IonButton>
             </IonCardContent>
@@ -70,17 +66,6 @@ const Ranking = () => {
 }
 
 export const MyAccount: React.FC = () => {
-    const [nick, setNick] = useState<string>('');
-    const [email, setEmail] = useState<string>('');
-
-    useEffect(() => {
-        userService.getUser()
-            .then(res => {
-                setNick(res.nick);
-                setEmail(res.email);
-            });
-    }, []);
-
     return (
         <IonPage>
             <IonHeader>
@@ -94,7 +79,7 @@ export const MyAccount: React.FC = () => {
                         <IonTitle>My Account</IonTitle>
                     </IonToolbar>
                 </IonHeader>
-                <UserInfo nick={ nick } email={ email } />
+                <UserInfo />
                 <Ranking />
             </IonContent>
         </IonPage>
