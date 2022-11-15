@@ -163,15 +163,24 @@ public class CategorySearchPhraseSetupService {
     }
 
     private List<SearchPhrase> getSearchPhrasesInFile(CSVReader csvReader) throws IOException, CsvException {
+        var Lines = csvReader.readAll();
         var allCategories = categoryRepository.findAll().stream()
                 .collect(Collectors.toMap(Category::getName, category -> category));
-        return csvReader.readAll().stream()
+        var searchPhrasesInFile = Lines.stream()
                 .map(searchPhraseRow ->
                         new SearchPhrase
                                 (null, searchPhraseRow[1],
                                         Integer.valueOf(searchPhraseRow[2]),
                                         allCategories.get(searchPhraseRow[0]))
-                ).toList();
+                ).filter(map -> map.getCategory() != null).toList();
+        try {
+            if (Lines.size() != searchPhrasesInFile.size()) {
+                throw new IllegalArgumentException();
+            }
+        } catch (IllegalArgumentException iae) {
+            System.out.println(iae + ": Category in search_phrases.txt does not match the ones in categories.txt");
+        }
+        return searchPhrasesInFile;
     }
 
     private void addUserRanks(User user, Iterable<Category> categoriesPersisted) {
