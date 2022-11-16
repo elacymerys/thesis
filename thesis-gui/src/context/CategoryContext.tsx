@@ -36,8 +36,10 @@ export const CategoryContextProvider: FC = ({ children }) => {
     useEffect(() => {
         if (!user) {
             setChosenCategories([]);
+        } else {
+            getCategories();
         }
-    }, [user])
+    }, [user]);
 
     const getCategories = () => {
         categoryService.getAll()

@@ -1,14 +1,15 @@
-import React, {useEffect, useState} from "react";
+import React from "react";
 import {
     IonAvatar, IonButton,
     IonCard, IonCardContent, IonCardSubtitle, IonCardTitle,
     IonContent,
     IonHeader, IonItem, IonLabel, IonList,
-    IonPage,
+    IonPage, IonRouterLink,
     IonTitle,
     IonToolbar
 } from "@ionic/react";
 import {useUserContext} from "../../context/UserContext";
+import {useCategoryContext} from "../../context/CategoryContext";
 
 const UserInfo: React.FC = () => {
     const { user, signOut } = useUserContext();
@@ -35,31 +36,57 @@ const UserInfo: React.FC = () => {
     );
 }
 
+const CategoryRanksItem: React.FC<{ name: string, rank: number }> = ({ name, rank }) => {
+    return (
+        <IonItem>
+            <IonLabel>{ name }</IonLabel>
+            <IonLabel slot="end">
+                { rank }
+            </IonLabel>
+        </IonItem>
+    );
+}
+
 const Ranking = () => {
-  return (
+    const { user } = useUserContext();
+    const { categories } = useCategoryContext();
+
+    const getCategoryNameWithId = (id: number) => {
+        for (let category of categories) {
+            if (category.id === id) {
+                return category.name;
+            }
+        }
+        return '';
+    }
+
+    const categoryRanksItems = Object.entries(user!.categoryRanks).filter(([_, rank]) => rank > 0).map(([id, rank]) => {
+        return <CategoryRanksItem
+            name={ getCategoryNameWithId(parseInt(id)) }
+            rank={ rank }
+        />
+    });
+
+    return (
       <IonCard>
           <IonCardContent>
               <IonCardTitle style={{ textAlign: "center" }}>
                   My Ranking
               </IonCardTitle>
-              <IonList lines="full">
-                  <IonItem>
-                      <IonLabel slot="start">Category 1</IonLabel>
-                      <IonLabel slot="end">0.78455</IonLabel>
-                  </IonItem>
-                  <IonItem>
-                      <IonLabel>Category 2</IonLabel>
-                      <IonLabel slot="end">0.74855</IonLabel>
-                  </IonItem>
-                  <IonItem>
-                      <IonLabel>Category 3</IonLabel>
-                      <IonLabel slot="end">0.53470</IonLabel>
-                  </IonItem>
-                  <IonItem lines="none">
-                      <IonLabel>Category 4</IonLabel>
-                      <IonLabel slot="end">0.29475</IonLabel>
-                  </IonItem>
-              </IonList>
+              {
+                  categoryRanksItems.length > 0 ?
+                      <IonList lines="full">
+                          { categoryRanksItems }
+                      </IonList> :
+                      <>
+                          <IonCardSubtitle style={{ textAlign: "center" }}>
+                              Play to earn points and climb the leaderboard!
+                          </IonCardSubtitle>
+                          <IonCardSubtitle style={{ textAlign: "center" }}>
+                              Click <IonRouterLink routerLink="/categories">here</IonRouterLink> to start the game
+                          </IonCardSubtitle>
+                      </>
+              }
           </IonCardContent>
       </IonCard>
   );
