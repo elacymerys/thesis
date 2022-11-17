@@ -10,6 +10,7 @@ import {
 } from "@ionic/react";
 import {useUserContext} from "../../context/UserContext";
 import {useCategoryContext} from "../../context/CategoryContext";
+import {PageHeader} from "../common/PageHeader";
 
 const UserInfo: React.FC = () => {
     const { user, signOut } = useUserContext();
@@ -95,17 +96,9 @@ const Ranking = () => {
 export const MyAccount: React.FC = () => {
     return (
         <IonPage>
-            <IonHeader>
-                <IonToolbar style={{ textAlign: "center" }}>
-                    <IonTitle>My Account</IonTitle>
-                </IonToolbar>
-            </IonHeader>
+            <PageHeader name={ "My Account" } condense={ false } />
             <IonContent className="ion-padding">
-                <IonHeader collapse="condense">
-                    <IonToolbar style={{ textAlign: "center" }}>
-                        <IonTitle>My Account</IonTitle>
-                    </IonToolbar>
-                </IonHeader>
+                <PageHeader name={ "My Account" } condense={ true } />
                 <UserInfo />
                 <Ranking />
             </IonContent>
