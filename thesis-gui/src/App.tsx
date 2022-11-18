@@ -1,5 +1,15 @@
 import {Redirect, Route} from 'react-router-dom';
-import {IonApp, IonLoading, IonRouterOutlet, setupIonicReact} from '@ionic/react';
+import {
+    IonApp,
+    IonIcon,
+    IonLabel,
+    IonLoading,
+    IonRouterOutlet,
+    IonTabBar,
+    IonTabButton,
+    IonTabs,
+    setupIonicReact
+} from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import React, {FC, useCallback} from "react";
 import {SignUp} from "./components/auth/sign-up/SignUp";
@@ -28,6 +38,7 @@ import '@ionic/react/css/display.css';
 import './theme/variables.css';
 import {Quiz} from "./components/quiz/Quiz";
 import {MyAccount} from "./components/my-account/MyAccount";
+import {ellipse, square, triangle} from "ionicons/icons";
 
 setupIonicReact();
 
@@ -35,41 +46,57 @@ const App: FC = () => {
     const { loadingState } = useUserContext();
 
     const AuthRoute: FC<{ path: string }> = useCallback(({ path, children }) => (
-        <Route exact path={path}>
-            {loadingState === 'UNAUTHORIZED' && <Redirect to="auth/sign-in"/>}
-            {loadingState === 'FAILURE' && <Redirect to="error-page"/>}
-            {loadingState === 'SUCCESS' && [children] }
-            {loadingState === 'LOADING' && <></>}
-        </Route>
+        <IonTabs>
+            <Route exact path={path}>
+                {loadingState === 'UNAUTHORIZED' && <Redirect to="auth/sign-in"/>}
+                {loadingState === 'FAILURE' && <Redirect to="error-page"/>}
+                {loadingState === 'SUCCESS' && [children] }
+                {loadingState === 'LOADING' && <></>}
+            </Route>
+            <IonTabBar slot="bottom">
+                <IonTabButton tab="tab1" href="/categories">
+                    <IonIcon icon={triangle} />
+                    <IonLabel>Tab 1</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="tab2" href="/tab2">
+                    <IonIcon icon={ellipse} />
+                    <IonLabel>Tab 2</IonLabel>
+                </IonTabButton>
+                <IonTabButton tab="tab3" href="/my-account">
+                    <IonIcon icon={square} />
+                    <IonLabel>Tab 3</IonLabel>
+                </IonTabButton>
+            </IonTabBar>
+        </IonTabs>
     ), [loadingState]);
 
     return (
         <IonApp>
             <IonLoading isOpen={loadingState === 'LOADING'}/>
             <IonReactRouter>
-                <IonRouterOutlet>
-                    <Route exact path="/auth/sign-up">
-                        <SignUp/>
-                    </Route>
-                    <Route exact path="/auth/sign-in">
-                        <SignIn/>
-                    </Route>
-                    <AuthRoute path="/categories">
-                        <CategorySelect/>
-                    </AuthRoute>
-                    <AuthRoute path="/questions">
-                        <Quiz/>
-                    </AuthRoute>
-                    <AuthRoute path="/my-account">
-                        <MyAccount />
-                    </AuthRoute>
-                    <Route exact path="/error-page">
-                        <ErrorPage/>
-                    </Route>
-                    <Route exact path="/">
-                        <Redirect to="/categories"/>
-                    </Route>
-                </IonRouterOutlet>
+                    <IonRouterOutlet>
+                        <Route exact path="/auth/sign-up">
+                            <SignUp/>
+                        </Route>
+                        <Route exact path="/auth/sign-in">
+                            <SignIn/>
+                        </Route>
+                        <AuthRoute path="/categories">
+                            <CategorySelect/>
+                        </AuthRoute>
+                        <AuthRoute path="/questions">
+                            <Quiz/>
+                        </AuthRoute>
+                        <AuthRoute path="/my-account">
+                            <MyAccount />
+                        </AuthRoute>
+                        <Route exact path="/error-page">
+                            <ErrorPage/>
+                        </Route>
+                        <Route exact path="/">
+                            <Redirect to="/categories"/>
+                        </Route>
+                    </IonRouterOutlet>
             </IonReactRouter>
         </IonApp>
     );
