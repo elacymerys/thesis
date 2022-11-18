@@ -7,7 +7,7 @@ import './DefinitionQuestionCard.css';
 import { CategoryType } from "../../../types/category-type";
 
 
-const DefinitionQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType }> = props => {
+export const DefinitionQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType }> = props => {
     return (
         <IonCard>
             <IonCardHeader>
@@ -25,5 +25,3 @@ const DefinitionQuestionCard: React.FC<{ question: string, questionNumber: numbe
         </IonCard>
     );
 };
-
-export default DefinitionQuestionCard;

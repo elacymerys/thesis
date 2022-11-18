@@ -6,7 +6,6 @@ import com.szadowsz.datamuse.WordResult;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import pl.edu.agh.quizzesthesis.business.exception.ExternalServiceException;
-import pl.edu.agh.quizzesthesis.business.service.TermService.WordFrequency;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 
 import java.io.IOException;
@@ -48,7 +47,7 @@ public class WrongAnswerService {
 
         var relatedNounsSorted = relatedWords.stream()
                 .filter(word -> word.getTags().contains("n") && !word.getTags().contains("syn"))
-                .map(word -> new WordFrequency(word.getWord(), Float.parseFloat(word.getTags().get(word.getTags().size() - 1).substring(2))))
+                .map(word -> new TermSetupService.WordFrequency(word.getWord(), Float.parseFloat(word.getTags().get(word.getTags().size() - 1).substring(2))))
                 .sorted((wf1, wf2) -> Float.compare(wf1.frequency(), wf2.frequency()))
                 .toList();
 
@@ -85,10 +84,11 @@ public class WrongAnswerService {
                     break;
                 }
             }
-            if (!termService.existsOfCategory(potentialAnswer.word(), rightAnswerTerm.getCategory().getId())){
+            if (!termService.existsOfCategory(potentialAnswer.word(),
+                    rightAnswerTerm.getSearchPhrase().getCategory().getId())) {
                 continue;
             }
-            if (!stop){
+            if (!stop) {
                 wrongAnswers.add(potentialAnswer.word());
             }
         }

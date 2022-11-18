@@ -29,6 +29,9 @@ public class Term {
     private String authorName;
 
     @ManyToOne
+    private SearchPhrase searchPhrase;
+
+    @ManyToOne
     private Category category;
 
     @Override

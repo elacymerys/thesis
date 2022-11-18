@@ -5,10 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Objects;
 
 @Entity
@@ -16,20 +13,23 @@ import java.util.Objects;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class Category {
+public class SearchPhrase {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer id;
+    private String searchWord;
+    private Integer numberOfRecords;
 
-    private String name;
+    @ManyToOne
+    private Category category;
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        Category category = (Category) o;
-        return Objects.equals(id, category.id);
+        SearchPhrase searchPhrase = (SearchPhrase) o;
+        return Objects.equals(id, searchPhrase.id);
     }
 
     @Override
