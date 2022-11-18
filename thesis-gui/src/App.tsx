@@ -27,6 +27,7 @@ import '@ionic/react/css/display.css';
 /* Theme variables */
 import './theme/variables.css';
 import {Quiz} from "./components/quiz/Quiz";
+import {MyAccount} from "./components/my-account/MyAccount";
 
 setupIonicReact();
 
@@ -58,6 +59,9 @@ const App: FC = () => {
                     </AuthRoute>
                     <AuthRoute path="/questions">
                         <Quiz/>
+                    </AuthRoute>
+                    <AuthRoute path="/my-account">
+                        <MyAccount />
                     </AuthRoute>
                     <Route exact path="/error-page">
                         <ErrorPage/>
