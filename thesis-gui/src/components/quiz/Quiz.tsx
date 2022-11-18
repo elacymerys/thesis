@@ -57,7 +57,7 @@ export const Quiz: React.FC = () => {
         console.log(`${selected === question!.correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
         setShowResult(true);
 
-        questionService.sendAnswer(question!.correct.id, { answerCorrect: selected === question!.correct.name })
+        questionService.sendAnswer({ termId: question!.correct.id, answerCorrect: selected === question!.correct.name })
             .then(() => setTimeout(getNewQuestion, 1500))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {

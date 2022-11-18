@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import pl.edu.agh.quizzesthesis.api.dto.DefinitionQuestionResponse;
 import pl.edu.agh.quizzesthesis.api.dto.PictureQuestionResponse;
+import pl.edu.agh.quizzesthesis.business.Current;
+import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
 import pl.edu.agh.quizzesthesis.business.service.DefinitionQuestionService;
 import pl.edu.agh.quizzesthesis.business.service.PictureQuestionService;
 
@@ -21,12 +23,12 @@ public class QuestionController {
     private final PictureQuestionService pictureQuestionService;
 
     @GetMapping("/definition/random")
-    public DefinitionQuestionResponse getRandomDefinitionQuestion(@PathVariable int categoryId) {
-        return definitionQuestionService.generateQuestion(categoryId, null);
+    public DefinitionQuestionResponse getRandomDefinitionQuestion(@Current UserAuthDetails userAuthDetails, @PathVariable int categoryId) {
+        return definitionQuestionService.generateQuestion(categoryId, userAuthDetails);
     }
 
     @GetMapping("/picture/random")
-    public PictureQuestionResponse getRandomPictureQuestion(@PathVariable int categoryId) {
-        return pictureQuestionService.generateQuestion(categoryId, null);
+    public PictureQuestionResponse getRandomPictureQuestion(@Current UserAuthDetails userAuthDetails, @PathVariable int categoryId) {
+        return pictureQuestionService.generateQuestion(categoryId, userAuthDetails);
     }
 }
