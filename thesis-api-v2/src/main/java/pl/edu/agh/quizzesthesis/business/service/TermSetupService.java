@@ -78,7 +78,7 @@ public class TermSetupService {
                         word.frequency() / maxFrequency,
                         0L,
                         0L,
-                        word.frequency() / maxFrequency,
+                        1.0f - (word.frequency() / maxFrequency),
                         null,
                         null,
                         searchPhrase,

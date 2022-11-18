@@ -36,12 +36,12 @@ public class TermService {
                 .orElseThrow(() -> new NotFoundException("Cannot find term with id %d".formatted(termId)));
 
         term.setTotalAnswersCounter(term.getTotalAnswersCounter() + 1);
-        if (isAnswerCorrect) {
-            term.setCorrectAnswersCounter(term.getCorrectAnswersCounter() + 1);
+        if (!isAnswerCorrect) {
+            term.setWrongAnswersCounter(term.getWrongAnswersCounter() + 1);
         }
 
         term.setDifficulty(
-                (term.getInitialDifficulty() * INITIAL_DIFFICULTY_WEIGHT + term.getCorrectAnswersCounter()) /
+                (term.getInitialDifficulty() * INITIAL_DIFFICULTY_WEIGHT + term.getWrongAnswersCounter()) /
                         (INITIAL_DIFFICULTY_WEIGHT + term.getTotalAnswersCounter())
         );
 
