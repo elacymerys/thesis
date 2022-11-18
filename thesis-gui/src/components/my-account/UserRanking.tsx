@@ -28,12 +28,7 @@ export const UserRanking = () => {
     const { categories } = useCategoryContext();
 
     const getCategoryNameWithId = (id: number) => {
-        for (let category of categories) {
-            if (category.id === id) {
-                return category.name;
-            }
-        }
-        return '';
+        return categories.find(category => category.id == id)?.name || '';
     }
 
     const categoryRanksItems = Object.entries(user!.categoryRanks).filter(([_, rank]) => rank > 0).map(([id, rank]) => {
