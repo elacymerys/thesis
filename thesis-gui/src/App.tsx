@@ -43,7 +43,7 @@ import {ellipse, square, triangle} from "ionicons/icons";
 setupIonicReact();
 
 const App: FC = () => {
-    const { loadingState } = useUserContext();
+    const { user, loadingState } = useUserContext();
 
     const AuthRoute: FC<{ path: string }> = useCallback(({ path, children }) => (
         <Route exact path={path}>
@@ -83,17 +83,17 @@ const App: FC = () => {
                         </Route>
                     </IonRouterOutlet>
                     <IonTabBar slot="bottom">
-                        <IonTabButton tab="tab1" href="/categories">
+                        <IonTabButton tab="tab1" href="/categories" disabled={ !user }>
                             <IonIcon icon={triangle} />
-                            <IonLabel>Tab 1</IonLabel>
+                            <IonLabel>Play</IonLabel>
                         </IonTabButton>
-                        <IonTabButton tab="tab2" href="/tab2">
+                        <IonTabButton tab="tab2" href="/tab2" disabled={ !user }>
                             <IonIcon icon={ellipse} />
                             <IonLabel>Tab 2</IonLabel>
                         </IonTabButton>
-                        <IonTabButton tab="tab3" href="/my-account">
+                        <IonTabButton tab="tab3" href="/my-account" disabled={ !user }>
                             <IonIcon icon={square} />
-                            <IonLabel>Tab 3</IonLabel>
+                            <IonLabel>My Account</IonLabel>
                         </IonTabButton>
                     </IonTabBar>
                 </IonTabs>
