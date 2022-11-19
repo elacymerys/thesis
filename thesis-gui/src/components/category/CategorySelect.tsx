@@ -7,22 +7,16 @@ import {
     IonList,
     IonLoading,
     IonPage,
-    IonRadioGroup,
-    IonTitle,
-    IonToolbar
+    IonRadioGroup
 } from "@ionic/react";
 import {CategoryCheckbox} from "./CategoryCheckbox";
 import {PageHeader} from "../common/PageHeader";
 
-export const CategorySelect: React.FC = () => {
-    const { loadingState, categories, getCategories } = useCategoryContext();
-    const history = useHistory();
+const PAGE_NAME = "Categories";
 
-    useEffect(() => {
-        if (categories.length === 0) {
-            getCategories();
-        }
-    }, []);
+export const CategorySelect: React.FC = () => {
+    const { loadingState, categories } = useCategoryContext();
+    const history = useHistory();
 
     useEffect(() => {
         if (loadingState === 'FAILURE') {
@@ -36,12 +30,9 @@ export const CategorySelect: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader/>
+            <PageHeader name={ PAGE_NAME } condense={ false } />
             <IonContent class="ion-padding">
-                <IonToolbar>
-                    <IonTitle>Categories</IonTitle>
-                </IonToolbar>
-
+                <PageHeader name={ PAGE_NAME } condense={ true } />
                 <IonLoading isOpen={loadingState === 'LOADING'}/>
 
                 <IonList>
@@ -60,4 +51,4 @@ export const CategorySelect: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}

@@ -2,7 +2,7 @@ import React, {useMemo, useState} from "react";
 import {
     IonButton,
     IonContent, IonInput, IonItem, IonLabel,
-    IonPage, IonRouterLink, IonTitle, IonToolbar,
+    IonPage, IonRouterLink,
 } from "@ionic/react";
 import './SignUp.css';
 import {useUserContext} from "../../../context/UserContext";
@@ -10,8 +10,10 @@ import {useHistory} from "react-router";
 import {ApiError, isApiError} from "../../../types/api-error";
 import {HttpStatusCode} from "../../../utils/http-status-code";
 import {validateEmail, validateNick, validatePassword} from "../../../utils/validators";
-import {PageHeader} from "../../common/PageHeader";
 import {FormErrorMessage} from "../../common/FormErrorMessage";
+import {PageHeader} from "../../common/PageHeader";
+
+const PAGE_NAME = "Sign Up";
 
 export const SignUp: React.FC = () => {
     const { signUp } = useUserContext();
@@ -77,11 +79,9 @@ export const SignUp: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader/>
+            <PageHeader name={ PAGE_NAME } condense={ false } />
             <IonContent className="ion-padding">
-                <IonToolbar>
-                    <IonTitle size="large">Sign Up</IonTitle>
-                </IonToolbar>
+                <PageHeader name={ PAGE_NAME } condense={ true } />
 
                 <IonItem>
                     <IonLabel position="floating">Nick</IonLabel>
@@ -119,4 +119,4 @@ export const SignUp: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}

@@ -3,25 +3,20 @@ import {
     IonButton,
     IonButtons,
     IonContent,
-    IonHeader,
-    IonPage,
-    IonTitle,
-    IonToolbar
+    IonPage
 } from "@ionic/react";
 import {PageHeader} from "./PageHeader";
+
+const PAGE_NAME = "Unexpected Error";
 
 export const ErrorPage: React.FC = () => {
     const refreshApp = () => window.location.replace('/');
 
     return (
         <IonPage>
-            <PageHeader/>
+            <PageHeader name={ PAGE_NAME } condense={ false } />
             <IonContent className="ion-padding">
-                <IonHeader>
-                    <IonToolbar>
-                        <IonTitle size="large">Unexpected error</IonTitle>
-                    </IonToolbar>
-                </IonHeader>
+                <PageHeader name={ PAGE_NAME } condense={ true } />
                 <IonButtons>
                     <IonButton
                         onClick={refreshApp}
@@ -33,4 +28,4 @@ export const ErrorPage: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}

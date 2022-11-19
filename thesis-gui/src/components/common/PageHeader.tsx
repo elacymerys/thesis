@@ -1,19 +1,15 @@
 import React from "react";
-import {IonButton, IonHeader, IonTitle, IonToolbar} from "@ionic/react";
-import {useUserContext} from "../../context/UserContext";
+import {IonHeader, IonTitle, IonToolbar} from "@ionic/react";
 
-export const PageHeader: React.FC = () => {
-    const { user, signOut } = useUserContext();
-
+export const PageHeader: React.FC<{
+    name: string,
+    condense: boolean
+}> = ({name, condense}) => {
     return (
-        <IonHeader>
-            <IonToolbar>
-                <IonTitle style={{ textAlign: 'right' }}>
-                    {user && <IonButton>{user.nick}</IonButton>}
-                    {user && <IonButton onClick={signOut} fill="outline">Sign out</IonButton>}
-                    {!user && <IonButton routerLink="/auth/sign-in" routerDirection="back" fill="outline">Sign in</IonButton>}
-                </IonTitle>
+        <IonHeader collapse={ condense ? "condense" : undefined }>
+            <IonToolbar style={{ textAlign: "center" }}>
+                <IonTitle>{ name }</IonTitle>
             </IonToolbar>
         </IonHeader>
     );
-};
+}
