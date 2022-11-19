@@ -56,7 +56,7 @@ const QuizzesList: React.FC = () => {
   );
 }
 
-const MyQuizzes: React.FC = () => {
+export const MyQuizzes: React.FC = () => {
     return (
         <IonPage>
             <PageHeader name={ PAGE_NAME } condense={ false } />
@@ -70,5 +70,3 @@ const MyQuizzes: React.FC = () => {
         </IonPage>
     );
 }
-
-export default MyQuizzes;
