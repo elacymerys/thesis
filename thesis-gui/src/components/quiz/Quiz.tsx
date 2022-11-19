@@ -5,7 +5,7 @@ import {
     IonPage, IonRadioGroup
 } from '@ionic/react';
 import './Quiz.css';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HttpStatusCode } from "../../utils/http-status-code";
 import { CategoryType } from "../../types/category-type";
 import Answer from "../answer/Answer";
@@ -20,6 +20,7 @@ import {ApiError, isApiError} from "../../types/api-error";
 import {QuestionResponse} from "../../types/question-response";
 import {PageHeader} from "../common/PageHeader";
 
+const PAGE_NAME = "Questions";
 
 export const Quiz: React.FC = () => {
     const { tryRefreshTokens } = useUserContext();
@@ -86,13 +87,13 @@ export const Quiz: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader name={ "Questions" } condense={ false } />
+            <PageHeader name={ PAGE_NAME } condense={ false } />
             <IonContent fullscreen>
                 <IonLoading
                     isOpen={ showLoading }
                     message={ 'Loading...' }
                 />
-                <PageHeader name={ "Questions" } condense={ true } />
+                <PageHeader name={ PAGE_NAME } condense={ true } />
 
                 {
                     ( question && question.type === QuestionType.DEFINITION &&
@@ -128,4 +129,4 @@ export const Quiz: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}

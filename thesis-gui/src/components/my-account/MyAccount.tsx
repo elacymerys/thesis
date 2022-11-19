@@ -3,14 +3,14 @@ import {
     IonAvatar, IonButton,
     IonCard, IonCardContent, IonCardSubtitle, IonCardTitle,
     IonContent,
-    IonHeader, IonItem, IonLabel, IonList,
-    IonPage, IonRouterLink,
-    IonTitle,
-    IonToolbar
+    IonItem, IonLabel, IonList,
+    IonPage, IonRouterLink
 } from "@ionic/react";
 import {useUserContext} from "../../context/UserContext";
 import {useCategoryContext} from "../../context/CategoryContext";
 import {PageHeader} from "../common/PageHeader";
+
+const PAGE_NAME = "My Account";
 
 const UserInfo: React.FC = () => {
     const { user, signOut } = useUserContext();
@@ -96,9 +96,9 @@ const Ranking = () => {
 export const MyAccount: React.FC = () => {
     return (
         <IonPage>
-            <PageHeader name={ "My Account" } condense={ false } />
+            <PageHeader name={ PAGE_NAME } condense={ false } />
             <IonContent className="ion-padding">
-                <PageHeader name={ "My Account" } condense={ true } />
+                <PageHeader name={ PAGE_NAME } condense={ true } />
                 <UserInfo />
                 <Ranking />
             </IonContent>

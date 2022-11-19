@@ -27,7 +27,7 @@ const CATEGORY_CONTEXT_INIT_STATE: CategoryContextType = {
 const CategoryContext = createContext<CategoryContextType>(CATEGORY_CONTEXT_INIT_STATE);
 
 export const CategoryContextProvider: FC = ({ children }) => {
-    const { tryRefreshTokens, user } = useUserContext();
+    const {tryRefreshTokens, user} = useUserContext();
 
     const [loadingState, setLoadingState] = useState<LoadingState>(CATEGORY_CONTEXT_INIT_STATE.loadingState);
     const [categories, setCategories] = useState<Category[]>(CATEGORY_CONTEXT_INIT_STATE.categories);
@@ -63,10 +63,11 @@ export const CategoryContextProvider: FC = ({ children }) => {
         : chosenCategories[Math.floor(Math.random() * chosenCategories.length)];
 
     return (
-        <CategoryContext.Provider value={{ loadingState, categories, chosenCategories, getRandom, getCategories, chooseCategories }}>
+        <CategoryContext.Provider
+            value={{loadingState, categories, chosenCategories, getRandom, getCategories, chooseCategories}}>
             {children}
         </CategoryContext.Provider>
     )
-};
+}
 
 export const useCategoryContext = () => useContext(CategoryContext);

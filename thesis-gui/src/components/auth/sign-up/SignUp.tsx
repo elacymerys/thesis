@@ -13,6 +13,8 @@ import {validateEmail, validateNick, validatePassword} from "../../../utils/vali
 import {FormErrorMessage} from "../../common/FormErrorMessage";
 import {PageHeader} from "../../common/PageHeader";
 
+const PAGE_NAME = "Sign Up";
+
 export const SignUp: React.FC = () => {
     const { signUp } = useUserContext();
     const history = useHistory();
@@ -77,9 +79,9 @@ export const SignUp: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader name={ "Sign Up" } condense={ false } />
+            <PageHeader name={ PAGE_NAME } condense={ false } />
             <IonContent className="ion-padding">
-                <PageHeader name={ "Sign Up" } condense={ true } />
+                <PageHeader name={ PAGE_NAME } condense={ true } />
 
                 <IonItem>
                     <IonLabel position="floating">Nick</IonLabel>
@@ -117,4 +119,4 @@ export const SignUp: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}

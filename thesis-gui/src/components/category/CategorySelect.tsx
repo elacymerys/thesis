@@ -12,6 +12,8 @@ import {
 import {CategoryCheckbox} from "./CategoryCheckbox";
 import {PageHeader} from "../common/PageHeader";
 
+const PAGE_NAME = "Categories";
+
 export const CategorySelect: React.FC = () => {
     const { loadingState, categories } = useCategoryContext();
     const history = useHistory();
@@ -28,9 +30,9 @@ export const CategorySelect: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader name="Categories" condense={ false } />
+            <PageHeader name={ PAGE_NAME } condense={ false } />
             <IonContent class="ion-padding">
-                <PageHeader name="Categories" condense={ true } />
+                <PageHeader name={ PAGE_NAME } condense={ true } />
                 <IonLoading isOpen={loadingState === 'LOADING'}/>
 
                 <IonList>
@@ -49,4 +51,4 @@ export const CategorySelect: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}

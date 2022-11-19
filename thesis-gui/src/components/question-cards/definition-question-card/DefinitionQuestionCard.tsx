@@ -1,3 +1,5 @@
+import React from "react";
+
 import {
     IonCard, IonCardContent,
     IonCardHeader,
@@ -5,7 +7,6 @@ import {
 } from '@ionic/react';
 import './DefinitionQuestionCard.css';
 import { CategoryType } from "../../../types/category-type";
-
 
 export const DefinitionQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType }> = props => {
     return (
@@ -24,4 +25,4 @@ export const DefinitionQuestionCard: React.FC<{ question: string, questionNumber
             </IonCardContent>
         </IonCard>
     );
-};
+}
