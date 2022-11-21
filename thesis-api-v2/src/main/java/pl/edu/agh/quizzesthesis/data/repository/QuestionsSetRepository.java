@@ -7,5 +7,9 @@ import java.util.Optional;
 
 public interface QuestionsSetRepository extends CrudRepository<QuestionsSet, String> {
 
-    Optional<QuestionsSet> findQuestionsSetNameByQuestionsSetKey(String questionsSetKey);
+    Optional<QuestionsSet> findByQuestionsSetKey(String questionsSetKey);
+
+    Optional<QuestionsSet> findByQuestionsSetKeyAndAndTeacherId(String questionSetKey, int teacherId);
+
+    void deleteByQuestionsSetKey(String questionSetKey);
 }

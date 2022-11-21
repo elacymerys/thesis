@@ -9,4 +9,6 @@ import java.util.List;
 public interface TeacherQuestionsRepository extends CrudRepository<TeacherQuestion, Integer> {
 
     List<TeacherQuestion> findAllByQuestionsSet(QuestionsSet questionsSet);
+
+    void deleteAllByQuestionsSet(QuestionsSet questionsSet);
 }

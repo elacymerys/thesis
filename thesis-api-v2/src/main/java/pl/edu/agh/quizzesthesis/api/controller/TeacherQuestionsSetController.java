@@ -3,9 +3,7 @@ package pl.edu.agh.quizzesthesis.api.controller;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetNameKeyResponse;
-import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetResponse;
-import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetsRequest;
+import pl.edu.agh.quizzesthesis.api.dto.*;
 import pl.edu.agh.quizzesthesis.business.Current;
 import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
 import pl.edu.agh.quizzesthesis.business.service.TeacherQuestionsSetService;
@@ -27,13 +25,15 @@ public class TeacherQuestionsSetController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public String createQuestionsSet(@Current UserAuthDetails userAuthDetails, @RequestBody QuestionsSetsRequest request) {
+    public QuestionsSetKeyResponse createQuestionsSet(@Current UserAuthDetails userAuthDetails,
+                                                      @RequestBody QuestionsSetsRequest request) {
         return teacherQuestionsSetService.createQuestionsSet(userAuthDetails, request);
     }
 
     @DeleteMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteQuestionsSet(@Current UserAuthDetails userAuthDetails, @RequestBody String questionsSetKey) {
+    public void deleteQuestionsSet(@Current UserAuthDetails userAuthDetails, @RequestBody QuestionsSetKeyRequest request) {
+        teacherQuestionsSetService.deleteQuestionsSet(userAuthDetails, request.questionsSetKey());
     }
 
     @GetMapping("/list")
@@ -42,7 +42,8 @@ public class TeacherQuestionsSetController {
     }
 
     @PatchMapping("/refresh-key")
-    public String refreshQuestionsSetKey(@Current UserAuthDetails userAuthDetails, @RequestBody String questionsSetKey) {
+    public String refreshQuestionsSetKey(@Current UserAuthDetails userAuthDetails,
+                                         @RequestBody QuestionsSetKeyRequest request) {
         return null;
     }
 }

@@ -3,6 +3,7 @@ package pl.edu.agh.quizzesthesis.business.service;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetKeyResponse;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetResponse;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetsRequest;
 import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
@@ -23,14 +24,14 @@ public class TeacherQuestionsSetService {
 
     @Transactional
     public QuestionsSetResponse getQuestionsSet(String questionsSetKey) {
-        var questionsSet = questionsSetRepository.findQuestionsSetNameByQuestionsSetKey(questionsSetKey)
+        var questionsSet = questionsSetRepository.findByQuestionsSetKey(questionsSetKey)
                 .orElseThrow(() -> new NotFoundException("Cannot find questions set by key " + questionsSetKey));
         var teacherQuestions = teacherQuestionsRepository.findAllByQuestionsSet(questionsSet);
         return questionsSetMapper.entityToResponse(questionsSet.getQuestionsSetName(), teacherQuestions);
     }
 
     @Transactional
-    public String createQuestionsSet(UserAuthDetails userAuthDetails, QuestionsSetsRequest questionsSetsRequest) {
+    public QuestionsSetKeyResponse createQuestionsSet(UserAuthDetails userAuthDetails, QuestionsSetsRequest questionsSetsRequest) {
         var questionsSet = questionsSetRepository.save(
                 new QuestionsSet(
                         null,
@@ -50,6 +51,16 @@ public class TeacherQuestionsSetService {
                         questionsSet
                 )).toList();
         teacherQuestionsRepository.saveAll(teacherQuestions);
-        return questionsSet.getQuestionsSetKey();
+        return new QuestionsSetKeyResponse(questionsSet.getQuestionsSetKey());
+    }
+
+    @Transactional
+    public void deleteQuestionsSet(UserAuthDetails userAuthDetails, String questionsSetKey) {
+        var questionSet = questionsSetRepository
+                .findByQuestionsSetKeyAndAndTeacherId(questionsSetKey, userAuthDetails.id())
+                .orElseThrow(() -> new NotFoundException("Cannot delete questions set by key " + questionsSetKey));
+
+        teacherQuestionsRepository.deleteAllByQuestionsSet(questionSet);
+        questionsSetRepository.deleteByQuestionsSetKey(questionsSetKey);
     }
 }
