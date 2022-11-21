@@ -38,7 +38,7 @@ public class TeacherQuestionsSetController {
 
     @GetMapping("/list")
     public List<QuestionsSetNameKeyResponse> getQuestionsSetsNamesAndKeys(@Current UserAuthDetails userAuthDetails) {
-        return null;
+        return teacherQuestionsSetService.getQuestionsSetsNamesAndKeys(userAuthDetails);
     }
 
     @PatchMapping("/refresh-key")

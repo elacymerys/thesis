@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetKeyResponse;
+import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetNameKeyResponse;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetResponse;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetsRequest;
 import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
@@ -13,6 +14,8 @@ import pl.edu.agh.quizzesthesis.data.entity.QuestionsSet;
 import pl.edu.agh.quizzesthesis.data.entity.TeacherQuestion;
 import pl.edu.agh.quizzesthesis.data.repository.QuestionsSetRepository;
 import pl.edu.agh.quizzesthesis.data.repository.TeacherQuestionsRepository;
+
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -56,11 +59,21 @@ public class TeacherQuestionsSetService {
 
     @Transactional
     public void deleteQuestionsSet(UserAuthDetails userAuthDetails, String questionsSetKey) {
-        var questionSet = questionsSetRepository
-                .findByQuestionsSetKeyAndAndTeacherId(questionsSetKey, userAuthDetails.id())
+        var questionsSet = questionsSetRepository
+                .findByQuestionsSetKeyAndTeacherId(questionsSetKey, userAuthDetails.id())
                 .orElseThrow(() -> new NotFoundException("Cannot delete questions set by key " + questionsSetKey));
 
-        teacherQuestionsRepository.deleteAllByQuestionsSet(questionSet);
+        teacherQuestionsRepository.deleteAllByQuestionsSet(questionsSet);
         questionsSetRepository.deleteByQuestionsSetKey(questionsSetKey);
+    }
+
+    public List<QuestionsSetNameKeyResponse> getQuestionsSetsNamesAndKeys(UserAuthDetails userAuthDetails) {
+        var questionsSets = questionsSetRepository.findAllByTeacherId(userAuthDetails.id());
+        return questionsSets
+                .stream()
+                .map(questionsSet -> new QuestionsSetNameKeyResponse(
+                        questionsSet.getQuestionsSetName(),
+                        questionsSet.getQuestionsSetKey()
+                )).toList();
     }
 }
