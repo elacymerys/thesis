@@ -8,6 +8,7 @@ import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetResponse;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetsRequest;
 import pl.edu.agh.quizzesthesis.business.Current;
 import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
+import pl.edu.agh.quizzesthesis.business.service.TeacherQuestionsSetService;
 
 import java.util.List;
 
@@ -17,10 +18,11 @@ import static pl.edu.agh.quizzesthesis.App.API_URL_PREFIX;
 @RequestMapping(API_URL_PREFIX + "/questions-set")
 @AllArgsConstructor
 public class TeacherQuestionsSetController {
+    private final TeacherQuestionsSetService teacherQuestionsSetService;
 
     @GetMapping
     public QuestionsSetResponse getQuestionsSet(@RequestParam(name = "key") String questionsSetKey) {
-        return null;
+        return teacherQuestionsSetService.getQuestionsSet(questionsSetKey);
     }
 
     @PostMapping
