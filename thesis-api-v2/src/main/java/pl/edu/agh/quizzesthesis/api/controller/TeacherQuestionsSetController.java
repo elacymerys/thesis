@@ -42,8 +42,8 @@ public class TeacherQuestionsSetController {
     }
 
     @PatchMapping("/refresh-key")
-    public String refreshQuestionsSetKey(@Current UserAuthDetails userAuthDetails,
+    public QuestionsSetKeyResponse refreshQuestionsSetKey(@Current UserAuthDetails userAuthDetails,
                                          @RequestBody QuestionsSetKeyRequest request) {
-        return null;
+        return teacherQuestionsSetService.refreshQuestionsSetKey(userAuthDetails, request.questionsSetKey());
     }
 }

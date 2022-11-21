@@ -76,4 +76,27 @@ public class TeacherQuestionsSetService {
                         questionsSet.getQuestionsSetKey()
                 )).toList();
     }
+
+    public QuestionsSetKeyResponse refreshQuestionsSetKey(UserAuthDetails userAuthDetails, String questionsSetKey) {
+        var questionsSet = questionsSetRepository.
+                findByQuestionsSetKeyAndTeacherId(questionsSetKey, userAuthDetails.id())
+                .orElseThrow(() -> new NotFoundException("Cannot refresh questions set key for key " + questionsSetKey));
+        var teacherQuestions = teacherQuestionsRepository.findAllByQuestionsSet(questionsSet);
+        var newQuestionSet = questionsSetRepository.save(
+                new QuestionsSet(
+                        null,
+                        questionsSet.getQuestionsSetName(),
+                        questionsSet.getTeacherId(),
+                        questionsSet.getTeacherName()
+                )
+        );
+        var updatedTeacherQuestions = teacherQuestions
+                .stream()
+                .peek(teacherQuestion -> teacherQuestion.setQuestionsSet(newQuestionSet))
+                .toList();
+
+        teacherQuestionsRepository.saveAll(updatedTeacherQuestions);
+        questionsSetRepository.delete(questionsSet);
+        return new QuestionsSetKeyResponse(newQuestionSet.getQuestionsSetKey());
+    }
 }
