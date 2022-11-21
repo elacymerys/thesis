@@ -67,6 +67,7 @@ public class TeacherQuestionsSetService {
         questionsSetRepository.deleteByQuestionsSetKey(questionsSetKey);
     }
 
+    @Transactional
     public List<QuestionsSetNameKeyResponse> getQuestionsSetsNamesAndKeys(UserAuthDetails userAuthDetails) {
         var questionsSets = questionsSetRepository.findAllByTeacherId(userAuthDetails.id());
         return questionsSets
@@ -77,6 +78,7 @@ public class TeacherQuestionsSetService {
                 )).toList();
     }
 
+    @Transactional
     public QuestionsSetKeyResponse refreshQuestionsSetKey(UserAuthDetails userAuthDetails, String questionsSetKey) {
         var questionsSet = questionsSetRepository.
                 findByQuestionsSetKeyAndTeacherId(questionsSetKey, userAuthDetails.id())
