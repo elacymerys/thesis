@@ -28,7 +28,7 @@ public class TeacherQuestionsSetController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public String createQuestionsSet(@Current UserAuthDetails userAuthDetails, @RequestBody QuestionsSetsRequest request) {
-        return null;
+        return teacherQuestionsSetService.createQuestionsSet(userAuthDetails, request);
     }
 
     @DeleteMapping

@@ -25,6 +25,8 @@ public class QuestionsSet {
     private String questionsSetKey;
 
     private String questionsSetName;
+    private Integer teacherId;
+    private String teacherName;
 
     @Override
     public boolean equals(Object o) {
