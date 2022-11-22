@@ -9,11 +9,13 @@ import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetResponse;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetsRequest;
 import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
 import pl.edu.agh.quizzesthesis.business.exception.NotFoundException;
+import pl.edu.agh.quizzesthesis.business.exception.UnknownUserException;
 import pl.edu.agh.quizzesthesis.business.mapper.QuestionsSetMapper;
 import pl.edu.agh.quizzesthesis.data.entity.QuestionsSet;
 import pl.edu.agh.quizzesthesis.data.entity.TeacherQuestion;
 import pl.edu.agh.quizzesthesis.data.repository.QuestionsSetRepository;
 import pl.edu.agh.quizzesthesis.data.repository.TeacherQuestionsRepository;
+import pl.edu.agh.quizzesthesis.data.repository.UserRepository;
 
 import java.util.List;
 
@@ -23,6 +25,7 @@ public class TeacherQuestionsSetService {
 
     private final QuestionsSetRepository questionsSetRepository;
     private final TeacherQuestionsRepository teacherQuestionsRepository;
+    private final UserRepository userRepository;
     private final QuestionsSetMapper questionsSetMapper;
 
     @Transactional
@@ -35,12 +38,13 @@ public class TeacherQuestionsSetService {
 
     @Transactional
     public QuestionsSetKeyResponse createQuestionsSet(UserAuthDetails userAuthDetails, QuestionsSetsRequest questionsSetsRequest) {
+        var user = userRepository.findById(userAuthDetails.id())
+                .orElseThrow(() -> new UnknownUserException("Cannot create questions set for user with id " + userAuthDetails.id()));
         var questionsSet = questionsSetRepository.save(
                 new QuestionsSet(
                         null,
                         questionsSetsRequest.questionsSetName(),
-                        userAuthDetails.id(),
-                        userAuthDetails.nick(),
+                        user,
                         questionsSetsRequest.teacherQuestionsRequest().size()
                 )
         );
@@ -60,8 +64,10 @@ public class TeacherQuestionsSetService {
 
     @Transactional
     public void deleteQuestionsSet(UserAuthDetails userAuthDetails, String questionsSetKey) {
+        var user = userRepository.findById(userAuthDetails.id())
+                .orElseThrow(() -> new UnknownUserException("Cannot delete questions set for user with id " + userAuthDetails.id()));
         var questionsSet = questionsSetRepository
-                .findByQuestionsSetKeyAndTeacherId(questionsSetKey, userAuthDetails.id())
+                .findByQuestionsSetKeyAndUser(questionsSetKey, user)
                 .orElseThrow(() -> new NotFoundException("Cannot delete questions set by key " + questionsSetKey));
 
         teacherQuestionsRepository.deleteAllByQuestionsSet(questionsSet);
@@ -70,7 +76,9 @@ public class TeacherQuestionsSetService {
 
     @Transactional
     public List<QuestionsSetNameKeySizeResponse> getQuestionsSetsNamesKeysAndSizes(UserAuthDetails userAuthDetails) {
-        var questionsSets = questionsSetRepository.findAllByTeacherId(userAuthDetails.id());
+        var user = userRepository.findById(userAuthDetails.id())
+                .orElseThrow(() -> new UnknownUserException("Cannot list questions sets for user with id " + userAuthDetails.id()));
+        var questionsSets = questionsSetRepository.findAllByUser(user);
         return questionsSets
                 .stream()
                 .map(questionsSet -> new QuestionsSetNameKeySizeResponse(
@@ -82,16 +90,17 @@ public class TeacherQuestionsSetService {
 
     @Transactional
     public QuestionsSetKeyResponse refreshQuestionsSetKey(UserAuthDetails userAuthDetails, String questionsSetKey) {
+        var user = userRepository.findById(userAuthDetails.id())
+                .orElseThrow(() -> new UnknownUserException("Cannot refresh questions set key for user with id " + userAuthDetails.id()));
         var questionsSet = questionsSetRepository.
-                findByQuestionsSetKeyAndTeacherId(questionsSetKey, userAuthDetails.id())
+                findByQuestionsSetKeyAndUser(questionsSetKey, user)
                 .orElseThrow(() -> new NotFoundException("Cannot refresh questions set key for key " + questionsSetKey));
         var teacherQuestions = teacherQuestionsRepository.findAllByQuestionsSet(questionsSet);
         var newQuestionSet = questionsSetRepository.save(
                 new QuestionsSet(
                         null,
                         questionsSet.getQuestionsSetName(),
-                        questionsSet.getTeacherId(),
-                        questionsSet.getTeacherName(),
+                        user,
                         questionsSet.getNumberOfQuestions()
                 )
         );

@@ -2,13 +2,14 @@ package pl.edu.agh.quizzesthesis.data.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import pl.edu.agh.quizzesthesis.data.entity.QuestionsSet;
+import pl.edu.agh.quizzesthesis.data.entity.User;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface QuestionsSetRepository extends CrudRepository<QuestionsSet, String> {
 
-    Optional<QuestionsSet> findByQuestionsSetKeyAndTeacherId(String questionSetKey, int teacherId);
+    Optional<QuestionsSet> findByQuestionsSetKeyAndUser(String questionSetKey, User user);
 
-    List<QuestionsSet> findAllByTeacherId(int teacherId);
+    List<QuestionsSet> findAllByUser(User user);
 }

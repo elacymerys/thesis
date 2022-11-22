@@ -18,7 +18,7 @@ import static pl.edu.agh.quizzesthesis.App.API_URL_PREFIX;
 public class TeacherQuestionsSetController {
     private final TeacherQuestionsSetService teacherQuestionsSetService;
 
-    @GetMapping("/keys/{key}")
+    @GetMapping("/{key}")
     public QuestionsSetResponse getQuestionsSet(@PathVariable(name = "key") String questionsSetKey) {
         return teacherQuestionsSetService.getQuestionsSet(questionsSetKey);
     }
