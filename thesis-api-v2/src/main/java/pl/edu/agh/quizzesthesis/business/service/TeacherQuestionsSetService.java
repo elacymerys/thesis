@@ -4,7 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetKeyResponse;
-import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetNameKeyResponse;
+import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetNameKeySizeResponse;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetResponse;
 import pl.edu.agh.quizzesthesis.api.dto.QuestionsSetsRequest;
 import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
@@ -40,7 +40,8 @@ public class TeacherQuestionsSetService {
                         null,
                         questionsSetsRequest.questionsSetName(),
                         userAuthDetails.id(),
-                        userAuthDetails.nick()
+                        userAuthDetails.nick(),
+                        questionsSetsRequest.teacherQuestionsRequest().size()
                 )
         );
         var teacherQuestions = questionsSetsRequest
@@ -68,13 +69,14 @@ public class TeacherQuestionsSetService {
     }
 
     @Transactional
-    public List<QuestionsSetNameKeyResponse> getQuestionsSetsNamesAndKeys(UserAuthDetails userAuthDetails) {
+    public List<QuestionsSetNameKeySizeResponse> getQuestionsSetsNamesKeysAndSizes(UserAuthDetails userAuthDetails) {
         var questionsSets = questionsSetRepository.findAllByTeacherId(userAuthDetails.id());
         return questionsSets
                 .stream()
-                .map(questionsSet -> new QuestionsSetNameKeyResponse(
+                .map(questionsSet -> new QuestionsSetNameKeySizeResponse(
                         questionsSet.getQuestionsSetName(),
-                        questionsSet.getQuestionsSetKey()
+                        questionsSet.getQuestionsSetKey(),
+                        questionsSet.getNumberOfQuestions()
                 )).toList();
     }
 
@@ -89,7 +91,8 @@ public class TeacherQuestionsSetService {
                         null,
                         questionsSet.getQuestionsSetName(),
                         questionsSet.getTeacherId(),
-                        questionsSet.getTeacherName()
+                        questionsSet.getTeacherName(),
+                        questionsSet.getNumberOfQuestions()
                 )
         );
         var updatedTeacherQuestions = teacherQuestions
