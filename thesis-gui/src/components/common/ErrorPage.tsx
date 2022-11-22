@@ -3,10 +3,7 @@ import {
     IonButton,
     IonButtons,
     IonContent,
-    IonHeader,
-    IonPage,
-    IonTitle,
-    IonToolbar
+    IonPage
 } from "@ionic/react";
 import {PageHeader} from "./PageHeader";
 
@@ -15,13 +12,9 @@ export const ErrorPage: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader/>
+            <PageHeader name={ "Unexpected Error" } condense={ false } />
             <IonContent className="ion-padding">
-                <IonHeader>
-                    <IonToolbar>
-                        <IonTitle size="large">Unexpected error</IonTitle>
-                    </IonToolbar>
-                </IonHeader>
+                <PageHeader name={ "Unexpected Error" } condense={ true } />
                 <IonButtons>
                     <IonButton
                         onClick={refreshApp}
