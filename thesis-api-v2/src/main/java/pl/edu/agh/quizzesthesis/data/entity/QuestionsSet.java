@@ -27,6 +27,7 @@ public class QuestionsSet {
     private String questionsSetName;
     private Integer teacherId;
     private String teacherName;
+    private Integer numberOfQuestions;
 
     @Override
     public boolean equals(Object o) {
