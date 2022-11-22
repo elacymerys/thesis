@@ -27,7 +27,7 @@ public class TeacherQuestionsSetService {
 
     @Transactional
     public QuestionsSetResponse getQuestionsSet(String questionsSetKey) {
-        var questionsSet = questionsSetRepository.findByQuestionsSetKey(questionsSetKey)
+        var questionsSet = questionsSetRepository.findById(questionsSetKey)
                 .orElseThrow(() -> new NotFoundException("Cannot find questions set by key " + questionsSetKey));
         var teacherQuestions = teacherQuestionsRepository.findAllByQuestionsSet(questionsSet);
         return questionsSetMapper.entityToResponse(questionsSet.getQuestionsSetName(), teacherQuestions);
@@ -65,7 +65,7 @@ public class TeacherQuestionsSetService {
                 .orElseThrow(() -> new NotFoundException("Cannot delete questions set by key " + questionsSetKey));
 
         teacherQuestionsRepository.deleteAllByQuestionsSet(questionsSet);
-        questionsSetRepository.deleteByQuestionsSetKey(questionsSetKey);
+        questionsSetRepository.deleteById(questionsSetKey);
     }
 
     @Transactional

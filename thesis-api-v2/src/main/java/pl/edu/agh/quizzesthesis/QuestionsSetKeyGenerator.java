@@ -9,7 +9,7 @@ import java.util.Random;
 
 public class QuestionsSetKeyGenerator implements IdentifierGenerator {
 
-    private static final char[] ALLOWED_KEY_CHARACTERS = "abcdefghijklmnopqrstuvwxyz0123456789".toCharArray();
+    private static final char[] ALLOWED_KEY_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789".toCharArray();
     private static final int KEY_LENGTH = 8;
 
     @Override

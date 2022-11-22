@@ -13,13 +13,13 @@ import java.util.List;
 import static pl.edu.agh.quizzesthesis.App.API_URL_PREFIX;
 
 @RestController
-@RequestMapping(API_URL_PREFIX + "/questions-set")
+@RequestMapping(API_URL_PREFIX + "/questions-sets")
 @AllArgsConstructor
 public class TeacherQuestionsSetController {
     private final TeacherQuestionsSetService teacherQuestionsSetService;
 
-    @GetMapping
-    public QuestionsSetResponse getQuestionsSet(@RequestParam(name = "key") String questionsSetKey) {
+    @GetMapping("/keys/{key}")
+    public QuestionsSetResponse getQuestionsSet(@PathVariable(name = "key") String questionsSetKey) {
         return teacherQuestionsSetService.getQuestionsSet(questionsSetKey);
     }
 
@@ -36,7 +36,7 @@ public class TeacherQuestionsSetController {
         teacherQuestionsSetService.deleteQuestionsSet(userAuthDetails, request.questionsSetKey());
     }
 
-    @GetMapping("/list")
+    @GetMapping
     public List<QuestionsSetNameKeySizeResponse> getQuestionsSetsNamesAndKeys(@Current UserAuthDetails userAuthDetails) {
         return teacherQuestionsSetService.getQuestionsSetsNamesKeysAndSizes(userAuthDetails);
     }
