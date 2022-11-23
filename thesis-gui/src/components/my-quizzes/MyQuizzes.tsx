@@ -57,17 +57,15 @@ const QuizzesList: React.FC = () => {
   );
 }
 
-export const MyQuizzes: React.FC = () => {
-    return (
-        <IonPage>
-            <PageHeader name={ PAGE_NAME } condense={ false } />
-            <IonContent className="ion-padding">
-                <PageHeader name={ PAGE_NAME } condense={ true } />
-                <IonButton expand="block">
-                    Create new quiz
-                </IonButton>
-                <QuizzesList />
-            </IonContent>
-        </IonPage>
-    );
-}
+export const MyQuizzes: React.FC = () => (
+    <IonPage>
+        <PageHeader name={ PAGE_NAME } condense={ false } />
+        <IonContent className="ion-padding">
+            <PageHeader name={ PAGE_NAME } condense={ true } />
+            <IonButton expand="block">
+                Create new quiz
+            </IonButton>
+            <QuizzesList />
+        </IonContent>
+    </IonPage>
+);
