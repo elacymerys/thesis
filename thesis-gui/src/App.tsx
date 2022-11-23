@@ -40,6 +40,7 @@ import {Quiz} from "./components/quiz/Quiz";
 import {MyAccount} from "./components/my-account/MyAccount";
 import {ellipse, square, triangle} from "ionicons/icons";
 import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
+import {QuizCreator} from "./components/my-quizzes/QuizCreator";
 
 setupIonicReact();
 
@@ -75,6 +76,9 @@ const App: FC = () => {
                         </AuthRoute>
                         <AuthRoute path="/my-quizzes">
                             <MyQuizzes />
+                        </AuthRoute>
+                        <AuthRoute path="/quiz-creator">
+                            <QuizCreator />
                         </AuthRoute>
                         <AuthRoute path="/my-account">
                             <MyAccount />
