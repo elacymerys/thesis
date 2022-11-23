@@ -1,16 +1,36 @@
 name;search_word;quantity
-animals;types of animals;100
-animals;types of lizard;100
-animals;types of fish;100
-animals;breed of dog;150
-animals;breed of cat;150
-plants;types of plants;150
-plants;types of herbs;150
-plants;types of flowers;150
-plants;types of trees;100
-geography;mount everest;150
-geography;amazon river;150
-geography;luzon;150
-geography;Atlantic Ocean;150
+animals;types of animals;156
+animals;types of fish;124
+animals;breed of dog;92
+plants;types of plants;500
+plants;types of herbs;250
+geography;mount everest;227
+geography;amazon river;107
+geography;luzon;164
+geography;Atlantic Ocean;50
+geography;Alps Mountain;85
+geography;Sicily Island;156
+geography;geography;107
 parts of human body;parts of human body;90
 cars;types of cars;100
+cars;Saturn;28
+alcohols;Sauvignon blanc;139
+alcohols;wine;156
+alcohols;beer;93
+alcohols;pale ale;61
+alcohols;pilsner;44
+computer science;router;72
+computer science;Ethernet;48
+computer science;computer network;119
+computer science;programming language;100
+astronomy;astronomy;35
+astronomy;planets;82
+chemistry;chemistry;183
+chemistry;periodic table;141
+chemistry;chemical element;168
+chemistry;chemical compound;99
+chemistry;chemical reaction;54
+history;Napoleon Bonaparte;96
+history;Ancient Rome;81
+history;Adolf Hitler;77
+history;Julius Caesar;91

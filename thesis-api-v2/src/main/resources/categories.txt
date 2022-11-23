@@ -4,3 +4,8 @@ cars
 plants
 parts of human body
 geography
+alcohols
+computer science
+astronomy
+chemistry
+history

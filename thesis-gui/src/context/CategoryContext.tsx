@@ -34,7 +34,9 @@ export const CategoryContextProvider: FC = ({ children }) => {
     const [chosenCategories, setChosenCategories] = useState<Category[]>(CATEGORY_CONTEXT_INIT_STATE.chosenCategories);
 
     useEffect(() => {
-        if (!user) {
+        if (user) {
+            getCategories();
+        } else {
             setChosenCategories([]);
         } else {
             getCategories();
