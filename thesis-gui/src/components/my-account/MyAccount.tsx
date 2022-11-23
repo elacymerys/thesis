@@ -96,9 +96,8 @@ const Ranking = () => {
 export const MyAccount: React.FC = () => {
     return (
         <IonPage>
-            <PageHeader name={ PAGE_NAME } condense={ false } />
+            <PageHeader name={ PAGE_NAME } />
             <IonContent className="ion-padding">
-                <PageHeader name={ PAGE_NAME } condense={ true } />
                 <UserInfo />
                 <Ranking />
             </IonContent>

@@ -69,9 +69,8 @@ export const SignIn: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader name={ PAGE_NAME } condense={ false } />
+            <PageHeader name={ PAGE_NAME } />
             <IonContent class="ion-padding">
-                <PageHeader name={ PAGE_NAME } condense={ true } />
                 <IonItem>
                     <IonLabel position="floating">Login</IonLabel>
                     <IonInput onIonChange={e => handleLoginChange(e.detail.value as string)} type="text" required/>

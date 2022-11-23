@@ -87,13 +87,12 @@ export const Quiz: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader name={ PAGE_NAME } condense={ false } />
+            <PageHeader name={ PAGE_NAME } />
             <IonContent fullscreen>
                 <IonLoading
                     isOpen={ showLoading }
                     message={ 'Loading...' }
                 />
-                <PageHeader name={ PAGE_NAME } condense={ true } />
 
                 {
                     ( question && question.type === QuestionType.DEFINITION &&
