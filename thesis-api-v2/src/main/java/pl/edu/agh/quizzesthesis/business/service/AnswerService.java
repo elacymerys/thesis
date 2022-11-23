@@ -16,6 +16,6 @@ public class AnswerService {
     @Transactional
     public void answerQuestion(UserAuthDetails userAuthDetails, AnswerRequest answerRequest) {
         var term = termService.updateTermDifficulty(answerRequest.termId(), answerRequest.answerCorrect());
-        userService.updateUserRank(userAuthDetails, term, answerRequest.answerCorrect());
+        userService.updateUserRankInCategory(userAuthDetails, term.getCategory(), answerRequest.answerCorrect());
     }
 }

@@ -7,6 +7,7 @@ import pl.edu.agh.quizzesthesis.api.dto.UserResponse;
 import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
 import pl.edu.agh.quizzesthesis.business.exception.UnknownUserException;
 import pl.edu.agh.quizzesthesis.business.mapper.UserMapper;
+import pl.edu.agh.quizzesthesis.data.entity.Category;
 import pl.edu.agh.quizzesthesis.data.entity.Term;
 import pl.edu.agh.quizzesthesis.data.repository.UserRepository;
 
@@ -27,10 +28,9 @@ public class UserService {
     }
 
     @Transactional
-    public void updateUserRank(UserAuthDetails userAuthDetails, Term term, boolean isAnswerCorrect) {
+    public void updateUserRankInCategory(UserAuthDetails userAuthDetails, Category category, boolean isAnswerCorrect) {
         var user = userRepository.findById(userAuthDetails.id())
                 .orElseThrow(() -> new UnknownUserException("Cannot find user with id %d".formatted(userAuthDetails.id())));
-        var category = term.getCategory();
 
         long totalAnswersCounter = user.getTotalAnswersCounter().get(category) + 1;
         long correctAnswersCounter = user.getCorrectAnswersCounter().get(category) + (isAnswerCorrect ? 1 : 0);
