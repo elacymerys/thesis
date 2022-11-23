@@ -9,6 +9,7 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 import java.util.Objects;
 
 @Entity
@@ -25,8 +26,10 @@ public class QuestionsSet {
     private String questionsSetKey;
 
     private String questionsSetName;
-    private Integer teacherId;
-    private String teacherName;
+
+    @ManyToOne
+    private User user;
+
     private Integer numberOfQuestions;
 
     @Override
