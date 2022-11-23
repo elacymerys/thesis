@@ -38,8 +38,6 @@ export const CategoryContextProvider: FC = ({ children }) => {
             getCategories();
         } else {
             setChosenCategories([]);
-        } else {
-            getCategories();
         }
     }, [user]);
 
