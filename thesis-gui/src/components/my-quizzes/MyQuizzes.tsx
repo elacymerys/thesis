@@ -45,9 +45,10 @@ const QuizzesListItem: React.FC<{
 }
 
 const QuizzesList: React.FC = () => {
-    const quizzesListItems = QUIZZES.map(quiz => {
-        return <QuizzesListItem name={ quiz.name } questionsNumber={ quiz.questionsNumber } />
-    });
+    const quizzesListItems = QUIZZES.map(quiz => (
+            <QuizzesListItem name={ quiz.name } questionsNumber={ quiz.questionsNumber } />
+        )
+    );
 
     return (
       <IonList lines="full" style={{ paddingTop: "15px" }}>
