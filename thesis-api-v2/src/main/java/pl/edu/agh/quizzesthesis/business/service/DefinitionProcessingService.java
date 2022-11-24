@@ -144,7 +144,7 @@ public class DefinitionProcessingService {
                 }
             }
 
-           var distanceValueKeys = distancesToRightAnswer.entrySet().stream()
+            var distanceValueKeys = distancesToRightAnswer.entrySet().stream()
                     .sorted((a, b) -> Float.compare(a.getValue(), b.getValue()))
                     .limit(limitDistanceValueKeys(distancesToRightAnswer))
                     .map(Map.Entry::getKey)
@@ -172,6 +172,24 @@ public class DefinitionProcessingService {
             }
             String newDefinition = String.join("", summaryCensored).replace(WHITE_SPACE_REPLACER, " ");
             return new DefinitionProcessing(newDefinition, answer, articleTitle);
+        }
+
+        public DefinitionProcessing removeInBracketsFromDefinition() {
+            String text = definition;
+            if (text.length() > 1 && text.charAt(text.length() - 2) == '.') {
+                text = text.substring(0, text.length() - 1);
+            }
+            int startIndex = text.indexOf("(");
+            int endIndex = text.indexOf(")");
+            while (startIndex != -1 && endIndex != -1) {
+                System.out.println("tutaj się blokuje z tekstem: " + text + "znalazłem nawiasy na indexach " + startIndex + " i " + endIndex);
+                String replacement = "";
+                String toBeReplaced = text.substring(startIndex, endIndex + 1);
+                text = text.replace(toBeReplaced, replacement);
+                startIndex = text.indexOf("(");
+                endIndex = text.indexOf(")");
+            }
+            return new DefinitionProcessing(text, answer, articleTitle);
         }
 
         private int limitDistanceValueKeys(Map<String, Float> distancesToRightAnswer) {
