@@ -18,7 +18,6 @@ import static com.szadowsz.datamuse.DatamuseParam.META_FLAG_F;
 @AllArgsConstructor
 public class WrongAnswerService {
 
-    private static final float FREQUENCY_THRESHOLD = 0.25f;
     private static final float ANSWER_CHOICE_PROBABILITY = 0.7f;
     private static final float EDIT_DISTANCE = 2.0f;
 
@@ -51,18 +50,13 @@ public class WrongAnswerService {
                 .sorted((wf1, wf2) -> Float.compare(wf1.frequency(), wf2.frequency()))
                 .toList();
 
-        float minimumFrequencyThreshold = relatedNounsSorted.size() > 0
-                ? relatedNounsSorted.get((int) (relatedNounsSorted.size() * FREQUENCY_THRESHOLD)).frequency()
-                : 0;
 
         var wrongAnswers = new ArrayList<String>();
         for (var potentialAnswer : relatedNounsSorted) {
             if (wrongAnswers.size() == 3) {
                 break;
             }
-            if (potentialAnswer.frequency() < minimumFrequencyThreshold) {
-                continue;
-            }
+
             if (random.nextFloat(1.0f) > ANSWER_CHOICE_PROBABILITY) {
                 continue;
             }
@@ -98,9 +92,15 @@ public class WrongAnswerService {
                 if (wrongAnswers.size() == 3) {
                     break;
                 }
-                if (potentialAnswer.frequency() > minimumFrequencyThreshold && !wrongAnswers.contains(potentialAnswer.word())) {
+                if (!wrongAnswers.contains(potentialAnswer.word())) {
                     wrongAnswers.add(potentialAnswer.word());
                 }
+            }
+        }
+        while (wrongAnswers.size() < 3) {
+            var potentialAnswer = termService.getRandom(rightAnswerTerm.getSearchPhrase().getCategory().getId());
+            if (!wrongAnswers.contains(potentialAnswer.getName())) {
+                wrongAnswers.add(potentialAnswer.getName());
             }
         }
         return wrongAnswers;
