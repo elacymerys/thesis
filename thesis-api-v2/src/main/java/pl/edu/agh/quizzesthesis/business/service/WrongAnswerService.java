@@ -44,7 +44,7 @@ public class WrongAnswerService {
             throw new ExternalServiceException("Error while querying Datamuse", e);
         }
 
-        var relatedNounsSorted = relatedWords.stream()
+        var relatedNouns = relatedWords.stream()
                 .filter(word -> word.getTags().contains("n") && !word.getTags().contains("syn"))
                 .map(word -> new TermSetupService.WordFrequency(word.getWord(), Float.parseFloat(word.getTags().get(word.getTags().size() - 1).substring(2))))
                 .sorted((wf1, wf2) -> Float.compare(wf1.frequency(), wf2.frequency()))
@@ -52,7 +52,7 @@ public class WrongAnswerService {
 
 
         var wrongAnswers = new ArrayList<String>();
-        for (var potentialAnswer : relatedNounsSorted) {
+        for (var potentialAnswer : relatedNouns) {
             if (wrongAnswers.size() == 3) {
                 break;
             }
@@ -88,7 +88,7 @@ public class WrongAnswerService {
         }
 
         if (wrongAnswers.size() < 3) {
-            for (var potentialAnswer : relatedNounsSorted) {
+            for (var potentialAnswer : relatedNouns) {
                 if (wrongAnswers.size() == 3) {
                     break;
                 }
