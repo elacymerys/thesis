@@ -174,15 +174,16 @@ public class DefinitionProcessingService {
             return new DefinitionProcessing(newDefinition, answer, articleTitle);
         }
 
-        public DefinitionProcessing removeInBracketsFromDefinition() {
+        public DefinitionProcessing removeTextInBracketsFromDefinition() {
             String text = definition;
-            if (text.length() > 1 && text.charAt(text.length() - 2) == '.') {
-                text = text.substring(0, text.length() - 1);
-            }
             int startIndex = text.indexOf("(");
             int endIndex = text.indexOf(")");
             while (startIndex != -1 && endIndex != -1) {
-                System.out.println("tutaj się blokuje z tekstem: " + text + "znalazłem nawiasy na indexach " + startIndex + " i " + endIndex);
+                int potentialStartIndex = text.indexOf("(", startIndex + 1);
+                while (potentialStartIndex != -1 && potentialStartIndex < endIndex) {
+                    endIndex = text.indexOf(")", endIndex + 1);
+                    potentialStartIndex = text.indexOf("(", potentialStartIndex + 1);
+                }
                 String replacement = "";
                 String toBeReplaced = text.substring(startIndex, endIndex + 1);
                 text = text.replace(toBeReplaced, replacement);
