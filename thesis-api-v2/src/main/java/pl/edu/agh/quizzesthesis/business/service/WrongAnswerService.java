@@ -47,7 +47,6 @@ public class WrongAnswerService {
         var relatedNouns = relatedWords.stream()
                 .filter(word -> word.getTags().contains("n") && !word.getTags().contains("syn"))
                 .map(word -> new TermSetupService.WordFrequency(word.getWord(), Float.parseFloat(word.getTags().get(word.getTags().size() - 1).substring(2))))
-                .sorted((wf1, wf2) -> Float.compare(wf1.frequency(), wf2.frequency()))
                 .toList();
 
 
