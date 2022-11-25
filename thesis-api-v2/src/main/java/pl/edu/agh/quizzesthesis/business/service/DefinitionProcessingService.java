@@ -184,6 +184,8 @@ public class DefinitionProcessingService {
                     endIndex = text.indexOf(")", endIndex + 1);
                     potentialStartIndex = text.indexOf("(", potentialStartIndex + 1);
                 }
+                if (endIndex == -1)
+                    endIndex = text.length();
                 String replacement = "";
                 String toBeReplaced = text.substring(startIndex, endIndex + 1);
                 text = text.replace(toBeReplaced, replacement);
