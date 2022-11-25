@@ -22,7 +22,7 @@ public class Term {
 
     private String name;
     private Float initialDifficulty;
-    private Long correctAnswersCounter;
+    private Long wrongAnswersCounter;
     private Long totalAnswersCounter;
     private Float difficulty;
     private String pictureURL;

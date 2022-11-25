@@ -28,12 +28,6 @@ public class AuthService {
     private final UserMapper mapper;
 
     @Transactional
-    public UserResponse getUser(int id) {
-        var user = userRepository.findById(id).orElseThrow(() -> new UnknownUserException("Cannot find user by id " + id));
-        return mapper.entityToResponse(user);
-    }
-
-    @Transactional
     public UserAuthTriple signUp(SignUpRequest request) {
         if (userRepository.existsByNick(request.nick())) {
             throw new ConflictException("User with nick %s already exists".formatted(request.nick()));
@@ -47,7 +41,7 @@ public class AuthService {
                 .collect(toUnmodifiableMap(category -> category, category -> 0L));
 
         var emptyCategoryRanks = categoryService.getAll().stream()
-                .collect(toUnmodifiableMap(category -> category, category -> 0.0f));
+                .collect(toUnmodifiableMap(category -> category, category -> UserService.INITIAL_USER_RANK));
 
         var user = userRepository.save(new User(null,
                                                       request.nick(),
