@@ -2,7 +2,7 @@ import React, {useMemo, useState} from "react";
 import {
     IonButton,
     IonContent, IonInput, IonItem, IonLabel,
-    IonPage, IonRouterLink, IonText, IonTitle, IonToolbar,
+    IonPage, IonRouterLink,
 } from "@ionic/react";
 import './SignIn.css';
 import {useUserContext} from "../../../context/UserContext";
@@ -10,8 +10,8 @@ import {useHistory} from "react-router";
 import {ApiError, isApiError} from "../../../types/api-error";
 import {HttpStatusCode} from "../../../utils/http-status-code";
 import {validateEmail, validateNick, validatePassword} from "../../../utils/validators";
-import {PageHeader} from "../../common/PageHeader";
 import {FormErrorMessage} from "../../common/FormErrorMessage";
+import {PageHeader} from "../../common/PageHeader";
 
 export const SignIn: React.FC = () => {
     const { signIn } = useUserContext();
@@ -67,11 +67,9 @@ export const SignIn: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader/>
+            <PageHeader name={ "Sign In" } condense={ false } />
             <IonContent class="ion-padding">
-                <IonToolbar class="ion-margin-bottom">
-                    <IonTitle size="large">Sign In</IonTitle>
-                </IonToolbar>
+                <PageHeader name={ "Sign In" } condense={ true } />
                 <IonItem>
                     <IonLabel position="floating">Login</IonLabel>
                     <IonInput onIonChange={e => handleLoginChange(e.detail.value as string)} type="text" required/>
