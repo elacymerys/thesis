@@ -84,7 +84,7 @@ export const Quiz: React.FC = () => {
             .catch(err =>
             {
             console.log(err);
-            setTimeout(getNewQuestion, 100);
+            getNewQuestion();
             });
     }
 
