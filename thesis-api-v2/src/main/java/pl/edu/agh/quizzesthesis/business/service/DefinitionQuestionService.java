@@ -27,8 +27,8 @@ public class DefinitionQuestionService implements QuestionService<DefinitionQues
         String processedDefinition = definitionProcessingService
                 .startProcessing(definitionArticle.definition(), term.getName(), definitionArticle.articleTitle())
                 .standardizeDefinitionLength()
-                .removeAnswerFromDefinition()
                 .removeTextInBracketsFromDefinition()
+                .removeAnswerFromDefinition()
                 .getDefinition();
 
         var answers = wrongAnswerService.prepareAnswers(term);
