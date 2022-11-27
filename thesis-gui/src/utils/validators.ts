@@ -24,3 +24,27 @@ export const validatePassword = (password: string): string => {
         return '';
     }
 }
+
+export const validateQuestion = (question: string): string => {
+    if (!question || question.length < 2 || question.length > 200) {
+        return 'Question must be 1-200 characters long!';
+    } else {
+        return '';
+    }
+}
+
+export const validateAnswer = (answer: string): string => {
+    if (!answer || answer.length < 2 || answer.length > 50) {
+        return 'Answer must be 1-50 characters long!';
+    } else {
+        return '';
+    }
+}
+
+export const validateQuestionsSetName = (answer: string): string => {
+    if (!answer || answer.length < 2 || answer.length > 50) {
+        return 'Questions set name must be 1-50 characters long!';
+    } else {
+        return '';
+    }
+}

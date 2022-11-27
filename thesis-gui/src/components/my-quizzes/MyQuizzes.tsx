@@ -46,7 +46,11 @@ const QuizzesListItem: React.FC<{
 
 const QuizzesList: React.FC = () => {
     const quizzesListItems = QUIZZES.map(quiz => (
-            <QuizzesListItem name={ quiz.name } questionsNumber={ quiz.questionsNumber } />
+            <QuizzesListItem
+                name={ quiz.name }
+                questionsNumber={ quiz.questionsNumber }
+                key={quiz.name}
+            />
         )
     );
 
@@ -61,7 +65,10 @@ export const MyQuizzes: React.FC = () => (
     <IonPage>
         <PageHeader name={ PAGE_NAME } />
         <IonContent className="ion-padding">
-            <IonButton expand="block">
+            <IonButton
+                routerDirection="back"
+                routerLink="/quiz-creator"
+                expand="block" >
                 Create new quiz
             </IonButton>
             <QuizzesList />
