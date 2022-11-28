@@ -7,7 +7,7 @@ import {QuestionResponse} from "../types/question-response";
 export const questionService = {
     get(categoryId: number) {
         const questionType = questionTypeService.getRandom();
-        if (questionType == QuestionType.DEFINITION) {
+        if (questionType === QuestionType.DEFINITION) {
             return definitionQuestionService.get(categoryId);
         } else {
             return pictureQuestionService.get(categoryId);

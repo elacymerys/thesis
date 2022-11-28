@@ -70,18 +70,21 @@ export const Quiz: React.FC = () => {
 
     const getNewQuestion = () => {
         const randomCategory = getRandom()!;
-
         return questionService.get(randomCategory.id)
             .then(res => {
                 console.log(`Correct answer: ${res.correct.name}`)
-
                 setCategory(randomCategory);
                 setQuestion(res);
                 setSelected(undefined);
                 setQuestionNumber(prev => prev + 1);
-            })
-            .catch(err => console.log(err))
-            .finally(() => setShowResult(false));
+                setShowResult(false)
+            }
+            )
+            .catch(err =>
+            {
+            console.log(err);
+            getNewQuestion();
+            });
     }
 
     return (

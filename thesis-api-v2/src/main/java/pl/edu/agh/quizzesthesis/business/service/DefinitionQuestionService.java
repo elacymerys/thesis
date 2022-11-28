@@ -37,6 +37,7 @@ public class DefinitionQuestionService extends QuestionService<DefinitionQuestio
         String processedDefinition = definitionProcessingService
                 .startProcessing(definitionArticle.definition(), term.getName(), definitionArticle.articleTitle())
                 .standardizeDefinitionLength()
+                .removeTextInBracketsFromDefinition()
                 .removeAnswerFromDefinition()
                 .getDefinition();
 
