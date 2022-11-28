@@ -56,7 +56,7 @@ export const Quiz: React.FC = () => {
         console.log(`${selected === question!.correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
         setShowResult(true);
 
-        questionService.sendAnswer(question!.correct.id, { answerCorrect: selected === question!.correct.name })
+        questionService.sendAnswer({ termId: question!.correct.id, answerCorrect: selected === question!.correct.name })
             .then(() => setTimeout(getNewQuestion, 1500))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
@@ -70,18 +70,21 @@ export const Quiz: React.FC = () => {
 
     const getNewQuestion = () => {
         const randomCategory = getRandom()!;
-
         return questionService.get(randomCategory.id)
             .then(res => {
                 console.log(`Correct answer: ${res.correct.name}`)
-
                 setCategory(randomCategory);
                 setQuestion(res);
                 setSelected(undefined);
                 setQuestionNumber(prev => prev + 1);
-            })
-            .catch(err => console.log(err))
-            .finally(() => setShowResult(false));
+                setShowResult(false)
+            }
+            )
+            .catch(err =>
+            {
+            console.log(err);
+            getNewQuestion();
+            });
     }
 
     return (

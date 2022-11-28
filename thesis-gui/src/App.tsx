@@ -19,6 +19,7 @@ import {ErrorPage} from "./components/common/ErrorPage";
 import {CategorySelect} from "./components/category/CategorySelect";
 import {Quiz} from "./components/quiz/Quiz";
 import {MyAccount} from "./components/my-account/MyAccount";
+import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
 import {useUserContext} from "./context/UserContext";
 
 /* Core CSS required for Ionic components to work properly */
@@ -72,6 +73,9 @@ const App: FC = () => {
                         <AuthRoute path="/questions">
                             <Quiz/>
                         </AuthRoute>
+                        <AuthRoute path="/my-quizzes">
+                            <MyQuizzes />
+                        </AuthRoute>
                         <AuthRoute path="/my-account">
                             <MyAccount />
                         </AuthRoute>
@@ -87,9 +91,9 @@ const App: FC = () => {
                             <IonIcon icon={triangle} />
                             <IonLabel>Play</IonLabel>
                         </IonTabButton>
-                        <IonTabButton tab="tab2" href="/tab2" disabled={ !user }>
+                        <IonTabButton tab="tab2" href="/my-quizzes" disabled={ !user }>
                             <IonIcon icon={ellipse} />
-                            <IonLabel>Tab 2</IonLabel>
+                            <IonLabel>My Quizzes</IonLabel>
                         </IonTabButton>
                         <IonTabButton tab="tab3" href="/my-account" disabled={ !user }>
                             <IonIcon icon={square} />
