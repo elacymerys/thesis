@@ -35,8 +35,8 @@ class DefinitionProcessingService:
         text = self.definition
         if text[-2] == ".":
             text = text[:len(text)-1]
-        delimiters_postfixes = [",", ".", "!", "?", ")", ";", "]"]
-        delimiters_prefixes = ["(", "["]
+        delimiters_postfixes = [",", ".", "!", "?", ";", "]"]
+        delimiters_prefixes = ["["]
         white_space_replacer = "###"
         text = text.replace("  ", " ")
         text = text.replace(" ", " " + white_space_replacer + " ")

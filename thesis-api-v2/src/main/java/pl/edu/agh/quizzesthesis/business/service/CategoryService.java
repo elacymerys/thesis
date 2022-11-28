@@ -9,6 +9,7 @@ import pl.edu.agh.quizzesthesis.data.entity.Category;
 import pl.edu.agh.quizzesthesis.data.repository.CategoryRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @AllArgsConstructor
@@ -26,5 +27,9 @@ public class CategoryService {
 
     public List<Category> getAll() {
         return categoryRepository.findAll();
+    }
+
+    public Optional<Category> getById(int categoryId) {
+        return categoryRepository.findById(categoryId);
     }
 }
