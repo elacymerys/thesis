@@ -97,7 +97,8 @@ public class WrongAnswerService {
             }
         }
         while (wrongAnswers.size() < 3) {
-            var potentialAnswer = termService.getRandom(rightAnswerTerm.getSearchPhrase().getCategory().getId());
+            var potentialAnswer = termService.getWithDifficulty(
+                    rightAnswerTerm.getSearchPhrase().getCategory().getId(), 0.5f);
             if (!wrongAnswers.contains(potentialAnswer.getName())) {
                 wrongAnswers.add(potentialAnswer.getName());
             }
