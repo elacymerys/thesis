@@ -121,7 +121,7 @@ export const Quiz: React.FC = () => {
 
                 <IonButton
                     onClick={ checkAnswer }
-                    disabled={ showResult }
+                    disabled={ selected === undefined || showResult }
                     expand="block"
                     style={{ marginTop: 20, marginBottom: 30 }}
                 >
