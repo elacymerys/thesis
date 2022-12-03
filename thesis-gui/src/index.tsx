@@ -5,13 +5,17 @@ import * as serviceWorkerRegistration from './serviceWorkerRegistration';
 import reportWebVitals from './reportWebVitals';
 import {UserContextProvider} from "./context/UserContext";
 import {CategoryContextProvider} from "./context/CategoryContext";
+import {QuizzContextProvider} from "./context/QuizzContext"; 
 
 ReactDOM.render(
   <React.StrictMode>
       <UserContextProvider>
-          <CategoryContextProvider>
+        <QuizzContextProvider>
+            <CategoryContextProvider>
               <App />
           </CategoryContextProvider>
+        </QuizzContextProvider>
+
       </UserContextProvider>
   </React.StrictMode>,
   document.getElementById('root')

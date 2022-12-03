@@ -16,10 +16,11 @@ import {ellipse, square, triangle} from "ionicons/icons";
 import {SignUp} from "./components/auth/sign-up/SignUp";
 import {SignIn} from "./components/auth/sign-in/SignIn";
 import {ErrorPage} from "./components/common/ErrorPage";
-import {CategorySelect} from "./components/category/CategorySelect";
-import {Quiz} from "./components/quiz/Quiz";
+import {HomePage} from "./components/category/HomePage";
+import {Question} from "./components/question/Question";
 import {MyAccount} from "./components/my-account/MyAccount";
 import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
+import {Quizz} from "./components/quiz/Quizz";
 import {useUserContext} from "./context/UserContext";
 
 /* Core CSS required for Ionic components to work properly */
@@ -68,10 +69,13 @@ const App: FC = () => {
                             <SignIn/>
                         </Route>
                         <AuthRoute path="/categories">
-                            <CategorySelect/>
+                            <HomePage/>
                         </AuthRoute>
                         <AuthRoute path="/questions">
-                            <Quiz/>
+                            <Question/>
+                        </AuthRoute>
+                        <AuthRoute path="/quizz">
+                            <Quizz/>
                         </AuthRoute>
                         <AuthRoute path="/my-quizzes">
                             <MyQuizzes />

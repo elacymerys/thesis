@@ -4,7 +4,7 @@ import {
     IonList, IonLoading,
     IonPage, IonRadioGroup
 } from '@ionic/react';
-import './Quiz.css';
+import './Question.css';
 import { useEffect, useState } from "react";
 import { HttpStatusCode } from "../../utils/http-status-code";
 import { CategoryType } from "../../types/category-type";
@@ -21,7 +21,7 @@ import {QuestionResponse} from "../../types/question-response";
 import {PageHeader} from "../common/PageHeader";
 
 
-export const Quiz: React.FC = () => {
+export const Question: React.FC = () => {
     const { tryRefreshTokens } = useUserContext();
     const { chosenCategories, getRandom } = useCategoryContext();
     const history = useHistory();
