@@ -2,14 +2,13 @@ import React from "react";
 import {IonHeader, IonTitle, IonToolbar} from "@ionic/react";
 
 export const PageHeader: React.FC<{
-    name: string,
-    condense: boolean
-}> = ({name, condense}) => {
+    name: string
+}> = ({ name }) => {
     return (
-        <IonHeader collapse={ condense ? "condense" : undefined }>
+        <IonHeader>
             <IonToolbar style={{ textAlign: "center" }}>
                 <IonTitle>{ name }</IonTitle>
             </IonToolbar>
         </IonHeader>
     );
-};
+}

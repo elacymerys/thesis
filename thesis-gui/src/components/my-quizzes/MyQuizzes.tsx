@@ -59,9 +59,8 @@ const QuizzesList: React.FC = () => {
 
 export const MyQuizzes: React.FC = () => (
     <IonPage>
-        <PageHeader name={ PAGE_NAME } condense={ false } />
+        <PageHeader name={ PAGE_NAME } />
         <IonContent className="ion-padding">
-            <PageHeader name={ PAGE_NAME } condense={ true } />
             <IonButton expand="block">
                 Create new quiz
             </IonButton>
