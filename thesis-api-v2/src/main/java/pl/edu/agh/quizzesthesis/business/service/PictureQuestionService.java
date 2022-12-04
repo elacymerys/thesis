@@ -33,6 +33,6 @@ public class PictureQuestionService extends QuestionService<PictureQuestionRespo
         var answers = wrongAnswerService.prepareAnswers(term);
 
         return new PictureQuestionResponse(PICTURE_QUESTION_TYPE_ID, term.getPictureURL(),
-                termMapper.entityToResponse(pictureWithAuthor), answers, term.getAuthorName());
+                termMapper.entityToResponse(pictureWithAuthor), answers, term.getAuthorName(), term.getAuthorProfileURL());
     }
 }

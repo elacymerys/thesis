@@ -6,4 +6,5 @@ export interface QuestionResponse {
     correct: CorrectType,
     answers: string[],
     authorName?: string
+    authorProfileURL?: string
 }

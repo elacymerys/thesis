@@ -6,15 +6,20 @@ import {
 } from '@ionic/react';
 import './PictureQuestionCard.css';
 import { CategoryType } from "../../../types/category-type";
+import {unsplashURL} from "../../../utils/consts";
+import {referral} from "../../../utils/consts";
 
 export const PictureQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType,
-    authorName: string }> = props => {
+    authorName: string, authorProfileURL: string}> = props => {
     return (
         <IonCard>
             <img src={ props.question } alt="" />
             <IonItem lines="none">
-                <IonNote>
-                    { `Author: ${props.authorName}` }
+                <IonNote style={{ "font-size": "1em"}}>
+                    <p>Picture by: <a
+                        href={props.authorProfileURL + referral}>{props.authorName}</a> on <a
+                        href={unsplashURL + referral}>Unsplash</a>
+                    </p>
                 </IonNote>
             </IonItem>
 

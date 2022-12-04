@@ -108,6 +108,7 @@ export const Quiz: React.FC = () => {
                         questionNumber={ questionNumber }
                         category={ category! }
                         authorName={ question.authorName! }
+                        authorProfileURL={ question.authorProfileURL! }
                     /> )
                 }
 

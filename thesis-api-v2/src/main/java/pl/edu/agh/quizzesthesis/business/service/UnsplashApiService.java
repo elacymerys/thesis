@@ -41,6 +41,7 @@ public class UnsplashApiService {
         var fromResponse = getFromResponse(responseBody);
         term.setPictureURL(fromResponse.pictureURL());
         term.setAuthorName(fromResponse.authorName());
+        term.setAuthorProfileURL(fromResponse.authorProfileURL());
     }
 
     @NotNull
@@ -58,6 +59,7 @@ public class UnsplashApiService {
     private PictureWithAuthorResponse getFromResponse(String responseBody) {
         String pictureURL;
         String authorName;
+        String authorProfileURL;
         try {
             pictureURL = objectMapper
                     .readTree(responseBody)
@@ -73,9 +75,17 @@ public class UnsplashApiService {
                     .get("user")
                     .get("name")
                     .asText();
+            authorProfileURL = objectMapper
+                    .readTree(responseBody)
+                    .get("results")
+                    .get(0)
+                    .get("user")
+                    .get("links")
+                    .get("html")
+                    .asText();
         } catch (JsonProcessingException e) {
             throw new UnsplashException("Error getting data from Unsplash");
         }
-        return new PictureWithAuthorResponse(pictureURL, authorName);
+        return new PictureWithAuthorResponse(pictureURL, authorName, authorProfileURL);
     }
 }
