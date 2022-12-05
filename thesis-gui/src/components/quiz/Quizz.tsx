@@ -38,6 +38,7 @@ export const Quizz: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [buttonName, setButtonName] = useState<string>('Next')
     const [showQuestionNumber,setShowQuestionNumber] = useState<string>(`Question ${questionNumber} of ${numberOfQuestions}`);
+    // const [disableNext, setDisableNext] = useState<boolean>(false)
     const { chosenKey } = useQuizzContext();
 
     
@@ -75,8 +76,7 @@ export const Quizz: React.FC = () => {
         };
 
     const getQuizz = async () => {
-        return await quizzService.get(chosenKey)
-        .then(res => {
+        return await quizzService.get(chosenKey).then(res => {
             console.log(`Downloaded quizz: ${res.questionsSetName}`)
             setSelected(undefined);
             setQuizz(res);
@@ -89,6 +89,8 @@ export const Quizz: React.FC = () => {
         .catch(err =>
         {
         console.log(err);
+        setShowQuestionNumber('Your code is not valid, ask author for a new one.');
+        setShowResult(true);
         });
     }
     return(
