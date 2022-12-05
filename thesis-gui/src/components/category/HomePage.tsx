@@ -19,9 +19,17 @@ import {PageHeader} from "../common/PageHeader";
 
 export const HomePage: React.FC = () => {
     const { loadingState, categories } = useCategoryContext();
-    const { chosenKey, chooseKey } = useQuizzContext();
+    const { chooseKey } = useQuizzContext();
     const history = useHistory();
     const [input, setInput] = useState<string>('');
+    const [disableQuizz, setDisableQuizz] = useState<boolean>(true);
+    const handleCodeLength = (code: string) => {
+        if(code.length != 8)
+            setDisableQuizz(true);
+        else
+            setDisableQuizz(false);
+
+    };
 
 
     useEffect(() => {
@@ -49,6 +57,7 @@ export const HomePage: React.FC = () => {
                     onIonChange={(e:any) => {
                         setInput(e.target.value);
                         chooseKey(e.target.value);
+                        handleCodeLength(e.target.value);
                     }}
                     placeholder="Enter code of the Quiz"
                     ></IonInput>
@@ -57,9 +66,10 @@ export const HomePage: React.FC = () => {
                     routerLink={"/quizz"}
                     routerDirection="back"
                     expand="block"
+                    disabled={disableQuizz}
                     style={{ marginTop: 20, marginBottom: 30 }}
                 >
-                    {input}
+                    Start
                 </IonButton>
                 
                 <IonText color="primary">

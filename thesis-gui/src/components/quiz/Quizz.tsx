@@ -11,10 +11,13 @@ import {
     IonCardTitle,
     IonContent,
 
+
+    IonLabel,
+
     IonList,
     IonLoading,
     IonPage,
-    IonRadioGroup
+    IonRadioGroup,
 } from "@ionic/react";
 import {PageHeader} from "../common/PageHeader";
 import { TeacherQuestionSet } from "../../types/teacher-question-set";
@@ -34,8 +37,8 @@ export const Quizz: React.FC = () => {
     const [showLoading, setShowLoading] = useState(false);
     const [showAlert, setShowAlert] = useState(false);
     const [buttonName, setButtonName] = useState<string>('Next')
+    const [showQuestionNumber,setShowQuestionNumber] = useState<string>(`Question ${questionNumber} of ${numberOfQuestions}`);
     const { chosenKey } = useQuizzContext();
-
 
     
     useEffect(() => {
@@ -54,13 +57,15 @@ export const Quizz: React.FC = () => {
     );
     const getNextQuestion = () => {
         setShowResult(false);
-        if (questionNumber<numberOfQuestions){
-            setQuestionNumber(prev => prev+1);
-        }
+        setQuestionNumber(prev => prev+1);
         setQuestion(quizz?.teacherQuestionsResponse[questionNumber])
     }
 
     const checkAnswer = () => {
+        if (questionNumber<numberOfQuestions)
+            setShowQuestionNumber(`Question ${questionNumber+1} of ${numberOfQuestions}`)
+        else
+            setShowQuestionNumber('');
         if(questionNumber<=numberOfQuestions){
             selected === question?.correct ?   setCorrectAnswers(prev => prev+1) : setCorrectAnswers(prev => prev);
             setShowResult(true);
@@ -78,6 +83,7 @@ export const Quizz: React.FC = () => {
             setQuestion(res.teacherQuestionsResponse[0]);
             setShowResult(false);
             setNumberOfQuestions(res.teacherQuestionsResponse.length);
+            setShowQuestionNumber(`Question ${questionNumber} of ${res.teacherQuestionsResponse.length}`)
         }
         )
         .catch(err =>
@@ -94,12 +100,20 @@ export const Quizz: React.FC = () => {
                 message={ 'Loading...' }
             />
             <PageHeader name={ PAGE_NAME } condense={ true } />
+            <IonButton 
+                href="/categories"
+                style={{ marginTop: 20, marginBottom: 30 }}
+                >
+                    <IonLabel>Home page</IonLabel>
+            </IonButton>
             <IonCardHeader>
                 <IonCardSubtitle>
                     { `Quiz: ${!!quizz ? quizz.questionsSetName : ''}` }
                 </IonCardSubtitle>
                 <IonCardTitle>
-                    { `Question ${questionNumber} of ${numberOfQuestions}` }
+                    { 
+                    showQuestionNumber
+                    }
                 </IonCardTitle>
             </IonCardHeader>
             <IonCardContent style={{ textAlign: "justify" }}>
@@ -111,15 +125,17 @@ export const Quizz: React.FC = () => {
                     </IonRadioGroup>
                 </IonList>
 
+
+                
                 <IonButton
                     onClick={ () => {
                         checkAnswer();
-                        if(questionNumber >= numberOfQuestions-1) {
-                        setButtonName("Show result")
-                        }
                         if(questionNumber >= numberOfQuestions) {
                             setShowAlert(true)
-                        }  
+                        } 
+                        else if(questionNumber >= numberOfQuestions-1) {
+                        setButtonName("Show result");
+                        }
                         }
                     }
                     disabled={ showResult }
