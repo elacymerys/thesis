@@ -1,18 +1,41 @@
 import React, {useEffect, useState} from "react";
 import {
-    IonButton,
+    IonButton, IonCard, IonCardContent,
     IonContent, IonIcon,
     IonItem,
     IonLabel,
     IonList,
     IonPage, IonText, useIonToast
 } from "@ionic/react";
-import {keyOutline} from "ionicons/icons";
+import {createOutline, keyOutline, refreshOutline, trashOutline} from "ionicons/icons";
 import {PageHeader} from "../common/PageHeader";
 import {quizzesService} from "../../services/quizzes-service";
 import {QuizzesList} from "../../types/quizzes-list";
 
 const PAGE_NAME = "My Quizzes";
+
+const QUIZZES = [
+    {
+        questionsSetName: "Quiz 1",
+        numberOfQuestionsInSet: 5,
+        questionsSetKey: "kkadnada"
+    },
+    {
+        questionsSetName: "Quiz 2",
+        numberOfQuestionsInSet: 27,
+        questionsSetKey: "efewkdew"
+    },
+    {
+        questionsSetName: "Quiz 3",
+        numberOfQuestionsInSet: 8,
+        questionsSetKey: "jknwkjnd"
+    },
+    {
+        questionsSetName: "Quiz 4",
+        numberOfQuestionsInSet: 13,
+        questionsSetKey: "knkdqndq"
+    }
+];
 
 const QuizzesListItem: React.FC<{
     name: string,
@@ -34,6 +57,24 @@ const QuizzesListItem: React.FC<{
         presentToast();
     }
 
+    const refreshKey = () => {
+        console.log('REFRESH');
+        quizzesService.refreshQuestionSetKey({ questionsSetKey: _key })
+            .then(res => console.log('REFRESH'))
+            .catch(err => console.log(err));
+    }
+
+    const editQuiz = () => {
+        console.log('EDIT');
+    }
+
+    const deleteQuiz = () => {
+        console.log('DELETE');
+        quizzesService.deleteQuestionSet({ questionsSetKey: _key })
+            .then(res => console.log('DELETE'))
+            .catch(err => console.log(err));
+    }
+
     return (
         <IonItem>
             <IonLabel>
@@ -44,7 +85,24 @@ const QuizzesListItem: React.FC<{
                 className="btn"
                 icon={keyOutline}
                 onClick={ copyKeyToClipboard }
-                style={{ paddingRight: "10px" }}
+                style={{ paddingRight: "15px" }}
+            ></IonIcon>
+            <IonIcon
+                className="btn"
+                icon={refreshOutline}
+                onClick={ refreshKey }
+                style={{ paddingRight: "15px" }}
+            ></IonIcon>
+            <IonIcon
+                className="btn"
+                icon={createOutline}
+                onClick={ editQuiz }
+                style={{ paddingRight: "15px" }}
+            ></IonIcon>
+            <IonIcon
+                className="btn"
+                icon={trashOutline}
+                onClick={ deleteQuiz }
             ></IonIcon>
         </IonItem>
     );
@@ -63,7 +121,7 @@ export const MyQuizzes: React.FC = () => {
         getQuizzesList();
     }, []);
 
-    const quizzesListItems = quizzesList.map(quiz => {
+    const quizzesListItems = QUIZZES.map(quiz => {
         return <QuizzesListItem
             name={ quiz.questionsSetName }
             questionsNumber={ quiz.numberOfQuestionsInSet }
@@ -85,10 +143,18 @@ export const MyQuizzes: React.FC = () => {
                     Create new quiz
                 </IonButton>
                 {
-                    quizzesListItems.length > 0 &&
-                        <IonText style={{ paddingLeft: "15px" }}>
+                    QUIZZES.length > 0 &&
+                    <IonCard>
+                        <IonCardContent>
                             * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard
-                        </IonText>
+                            or <IonIcon icon={refreshOutline} /> to refresh it
+                        </IonCardContent>
+                    </IonCard>
+                    // quizzesListItems.length > 0 &&
+                    //     <IonText style={{ paddingLeft: "15px" }}>
+                    //         * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard
+                    //         or <IonIcon icon={refreshOutline} /> to refresh it
+                    //     </IonText>
                 }
                 <IonList lines="full" style={{ paddingTop: "15px" }}>
                     { quizzesListItems }
