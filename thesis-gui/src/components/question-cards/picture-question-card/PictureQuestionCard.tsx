@@ -1,3 +1,4 @@
+import React from "react";
 import {
     IonCard, IonCardContent,
     IonCardHeader,
@@ -5,7 +6,6 @@ import {
 } from '@ionic/react';
 import './PictureQuestionCard.css';
 import { CategoryType } from "../../../types/category-type";
-
 
 export const PictureQuestionCard: React.FC<{ question: string, questionNumber: number, category: CategoryType,
     authorName: string }> = props => {
@@ -32,4 +32,4 @@ export const PictureQuestionCard: React.FC<{ question: string, questionNumber: n
             </IonCardContent>
         </IonCard>
     );
-};
+}

@@ -78,9 +78,8 @@ const NavigationButtons: React.FC = () => {
 export const QuizCreator: React.FC = () => {
     return (
         <IonPage>
-            <PageHeader name={ PAGE_NAME } condense={ false } />
+            <PageHeader name={ PAGE_NAME } />
             <IonContent className="ion-padding">
-                <PageHeader name={ PAGE_NAME } condense={ true } />
                 <IonButton expand="block">Save Quiz</IonButton>
                 <QuestionInput />
                 <NavigationButtons />
