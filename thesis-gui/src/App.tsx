@@ -1,19 +1,26 @@
-import { Redirect, Route } from 'react-router-dom';
+import {Redirect, Route} from 'react-router-dom';
 import {
   IonApp,
   IonIcon,
   IonLabel,
+  IonLoading,
   IonRouterOutlet,
   IonTabBar,
   IonTabButton,
   IonTabs,
   setupIonicReact
 } from '@ionic/react';
-import { IonReactRouter } from '@ionic/react-router';
-import { ellipse, square, triangle } from 'ionicons/icons';
-import Tab1 from './pages/Tab1';
-import Tab2 from './pages/Tab2';
-import Tab3 from './pages/Tab3';
+import {IonReactRouter} from '@ionic/react-router';
+import React, {FC, useCallback} from "react";
+import {ellipse, square, triangle} from "ionicons/icons";
+import {SignUp} from "./components/auth/sign-up/SignUp";
+import {SignIn} from "./components/auth/sign-in/SignIn";
+import {ErrorPage} from "./components/common/ErrorPage";
+import {CategorySelect} from "./components/category/CategorySelect";
+import {Quiz} from "./components/quiz/Quiz";
+import {MyAccount} from "./components/my-account/MyAccount";
+import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
+import {useUserContext} from "./context/UserContext";
 
 /* Core CSS required for Ionic components to work properly */
 import '@ionic/react/css/core.css';
@@ -33,41 +40,70 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import CategoryStorage from "./services/category-storage";
-import SignUp from "./components/auth/sign-up/SignUp";
-import SignIn from "./components/auth/sign-in/SignIn";
-import PictureQuestionCard from "./components/question-cards/picture-question-card/PictureQuestionCard";
-import Quiz from "./components/quiz/Quiz";
-import {QuizCreator} from "./components/my-quizzes/QuizCreator";
 
 setupIonicReact();
 
-const ProtectedRoute = ({...props}) => {
-  return (CategoryStorage.isEmpty()) ? <Redirect to="/categories" /> : <Route {...props} />;
-};
+const App: FC = () => {
+  const { user, loadingState } = useUserContext();
 
-const App: React.FC = () => (
-  <IonApp>
-    <IonReactRouter>
-        <IonRouterOutlet>
-          <Route exact path="/auth/sign-up">
-            <SignUp />
-          </Route>
-          <Route exact path="/auth/sign-in">
-            <SignIn />
-          </Route>
-          <Route exact path="/categories">
-            <Tab1 />
-          </Route>
-          <ProtectedRoute path="/questions">
-            <Quiz />
-          </ProtectedRoute>
-          <Route exact path="/">
-            <QuizCreator />
-          </Route>
-        </IonRouterOutlet>
-    </IonReactRouter>
-  </IonApp>
-);
+  const AuthRoute: FC<{ path: string }> = useCallback(({ path, children }) => (
+      <Route exact path={path}>
+        {loadingState === 'UNAUTHORIZED' && <Redirect to="auth/sign-in"/>}
+        {loadingState === 'FAILURE' && <Redirect to="error-page"/>}
+        {loadingState === 'SUCCESS' && [children] }
+        {loadingState === 'LOADING' && <></>}
+      </Route>
+  ), [loadingState]);
+
+  return (
+      <IonApp>
+        <IonLoading isOpen={loadingState === 'LOADING'}/>
+        <IonReactRouter>
+          <IonTabs>
+            <IonRouterOutlet>
+              <Route exact path="/auth/sign-up">
+                <SignUp/>
+              </Route>
+              <Route exact path="/auth/sign-in">
+                <SignIn/>
+              </Route>
+              <AuthRoute path="/categories">
+                <CategorySelect/>
+              </AuthRoute>
+              <AuthRoute path="/questions">
+                <Quiz/>
+              </AuthRoute>
+              <AuthRoute path="/my-quizzes">
+                <MyQuizzes />
+              </AuthRoute>
+              <AuthRoute path="/my-account">
+                <MyAccount />
+              </AuthRoute>
+              <Route exact path="/error-page">
+                <ErrorPage/>
+              </Route>
+              <Route exact path="/">
+                <Redirect to="/categories"/>
+              </Route>
+            </IonRouterOutlet>
+            <IonTabBar slot="bottom">
+              <IonTabButton tab="tab1" href="/categories" disabled={ !user }>
+                <IonIcon icon={triangle} />
+                <IonLabel>Play</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="tab2" href="/my-quizzes" disabled={ !user }>
+                <IonIcon icon={ellipse} />
+                <IonLabel>My Quizzes</IonLabel>
+              </IonTabButton>
+              <IonTabButton tab="tab3" href="/my-account" disabled={ !user }>
+                <IonIcon icon={square} />
+                <IonLabel>My Account</IonLabel>
+              </IonTabButton>
+            </IonTabBar>
+          </IonTabs>
+        </IonReactRouter>
+      </IonApp>
+  );
+};
 
 export default App;
