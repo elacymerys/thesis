@@ -27,6 +27,7 @@ public class Term {
     private Float difficulty;
     private String pictureURL;
     private String authorName;
+    private String authorProfileURL;
 
     @ManyToOne
     private SearchPhrase searchPhrase;
