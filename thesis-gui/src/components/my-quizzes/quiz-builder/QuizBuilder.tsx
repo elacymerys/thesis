@@ -9,7 +9,7 @@ import {
     IonToolbar
 } from "@ionic/react";
 import {trashBin} from "ionicons/icons";
-import {QuestionForm} from "../../../types/my-quizz";
+import {QuestionForm} from "../../../types/my-quiz";
 import {QuestionInput} from "./QuestionInput";
 import {AnswersInput} from "./AnswersInput";
 import {NavigationButtons} from "./NavigationButtons";

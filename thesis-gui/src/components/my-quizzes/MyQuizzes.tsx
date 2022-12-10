@@ -7,18 +7,22 @@ import {
     IonList,
     IonPage, IonText, useIonToast
 } from "@ionic/react";
+import {useHistory} from "react-router";
 import {keyOutline} from "ionicons/icons";
 import {PageHeader} from "../common/PageHeader";
 import {quizzesService} from "../../services/quizzes-service";
-import {QuizzesList} from "../../types/quizzes-list";
+import {Quiz} from "../../types/my-quiz";
+import {useUserContext} from "../../context/UserContext";
+import {ApiError, isApiError} from "../../types/api-error";
+import {HttpStatusCode} from "../../utils/http-status-code";
 
 const PAGE_NAME = "My Quizzes";
 
 const QuizzesListItem: React.FC<{
     name: string,
     questionsNumber: number,
-    _key: string
-}> = ({ name, questionsNumber, _key }) => {
+    questionsSetKey: string
+}> = ({ name, questionsNumber, questionsSetKey }) => {
     const [present] = useIonToast();
 
     const presentToast = () => {
@@ -30,7 +34,7 @@ const QuizzesListItem: React.FC<{
     };
 
     const copyKeyToClipboard = () => {
-        navigator.clipboard.writeText(_key);
+        navigator.clipboard.writeText(questionsSetKey);
         presentToast();
     }
 
@@ -51,12 +55,21 @@ const QuizzesListItem: React.FC<{
 }
 
 export const MyQuizzes: React.FC = () => {
-    const [quizzesList, setQuizzesList] = useState<QuizzesList>([]);
+    const { tryRefreshTokens } = useUserContext();
+    const history = useHistory();
+
+    const [quizzesList, setQuizzesList] = useState<Quiz[]>([]);
 
     const getQuizzesList = () => {
         quizzesService.getList()
             .then(res => setQuizzesList(res))
-            .catch(err => console.log(err));
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(getQuizzesList);
+                } else {
+                    history.push('/error-page');
+                }
+            });
     }
 
     useEffect(() => {
@@ -65,9 +78,10 @@ export const MyQuizzes: React.FC = () => {
 
     const quizzesListItems = quizzesList.map(quiz => {
         return <QuizzesListItem
+            key={quiz.questionsSetKey}
             name={ quiz.questionsSetName }
             questionsNumber={ quiz.numberOfQuestionsInSet }
-            _key={ quiz.questionsSetKey }
+            questionsSetKey={ quiz.questionsSetKey }
         />
     });
 

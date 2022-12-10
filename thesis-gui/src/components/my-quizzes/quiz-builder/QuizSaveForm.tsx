@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useState} from "react";
-import {QuestionForm} from "../../../types/my-quizz";
+import {QuestionForm} from "../../../types/my-quiz";
 import {InputChangeEventDetail, IonButton, IonCol, IonGrid, IonInput, IonItem, IonLabel, IonRow} from "@ionic/react";
 import {validateQuestionsSetName} from "../../../utils/validators";
 import {FormErrorMessage} from "../../common/FormErrorMessage";
