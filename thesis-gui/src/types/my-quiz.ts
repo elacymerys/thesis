@@ -9,3 +9,18 @@ export type QuestionForm = {
     correct: number,
     answers: { values: string[], errorMessages: string[] }
 };
+
+export type TeacherQuestionRequest = {
+    question: string,
+    correct: string,
+    answers: string[]
+}
+
+export type QuestionsSetCreateRequest = {
+    questionsSetName: string,
+    teacherQuestionsRequest: TeacherQuestionRequest[]
+}
+
+export type QuestionsSetKeyResponse = {
+    questionsSetKey: string
+}
