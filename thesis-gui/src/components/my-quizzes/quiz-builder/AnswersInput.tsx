@@ -42,7 +42,7 @@ export const AnswersInput: React.FC<{
                 onBlur={() => setFocus(false)}
             >
                 <IonInput
-                    placeholder={ `Enter answer ${answerNumber}` }
+                    placeholder={ `Enter answer ${answerNumber + 1}` }
                     value={values[answerNumber]}
                     onIonChange={e => handleTextChange(answerNumber, e)}
                 />

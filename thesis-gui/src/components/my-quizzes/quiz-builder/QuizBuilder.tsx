@@ -1,10 +1,12 @@
 import React, {useCallback, useMemo, useState} from "react";
 import {
     IonButton,
+    IonButtons,
     IonContent,
     IonIcon,
     IonItemDivider,
-    IonTitle
+    IonTitle,
+    IonToolbar
 } from "@ionic/react";
 import {trashBin} from "ionicons/icons";
 import {QuestionForm} from "../../../types/my-quizz";
@@ -94,15 +96,17 @@ export const QuizBuilder: React.FC<{
 
     return (
         <IonContent className="ion-padding">
-            <div style={{display: 'flex', justifyContent: 'start', alignItems: 'center'}}>
-                <IonTitle className="ion-padding" style={{flex: 0}}>Question {currentQuestionNumber + 1}</IonTitle>
-                <IonButton
-                    disabled={questions.length < 2}
-                    onClick={handleDelete}
-                >
-                    <IonIcon icon={trashBin}/>
-                </IonButton>
-            </div>
+            <IonToolbar>
+                <IonTitle className="ion-padding">Question {currentQuestionNumber + 1}</IonTitle>
+                <IonButtons slot="primary">
+                    <IonButton
+                        disabled={questions.length < 2}
+                        onClick={handleDelete}
+                    >
+                        <IonIcon slot="icon-only" icon={trashBin}/>
+                    </IonButton>
+                </IonButtons>
+            </IonToolbar>
             <QuestionInput
                 question={currentQuestion.question}
                 onChange={handleQuestionChange}
