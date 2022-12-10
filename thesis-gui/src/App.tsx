@@ -21,6 +21,7 @@ import {Question} from "./components/question/Question";
 import {MyAccount} from "./components/my-account/MyAccount";
 import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
 import {Quizz} from "./components/quiz/Quizz";
+import {QuizCreator} from "./components/my-quizzes/QuizCreator";
 import {useUserContext} from "./context/UserContext";
 
 /* Core CSS required for Ionic components to work properly */
@@ -79,6 +80,9 @@ const App: FC = () => {
                         </AuthRoute>
                         <AuthRoute path="/my-quizzes">
                             <MyQuizzes />
+                        </AuthRoute>
+                        <AuthRoute path="/quiz-creator">
+                            <QuizCreator />
                         </AuthRoute>
                         <AuthRoute path="/my-account">
                             <MyAccount />

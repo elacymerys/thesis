@@ -111,6 +111,6 @@ export const UserContextProvider: FC = ({ children }) => {
             {children}
         </UserContext.Provider>
     )
-};
+}
 
 export const useUserContext = () => useContext(UserContext);

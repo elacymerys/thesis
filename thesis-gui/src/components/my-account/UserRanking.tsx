@@ -31,12 +31,15 @@ export const UserRanking = () => {
         return categories.find(category => category.id == id)?.name || '';
     }
 
-    const categoryRanksItems = Object.entries(user!.categoryRanks).filter(([_, rank]) => rank > 0).map(([id, rank]) => {
-        return <CategoryRanksItem
-            name={ getCategoryNameWithId(parseInt(id)) }
-            rank={ rank }
-        />
-    });
+    const categoryRanksItems = Object.entries(user!.categoryRanks)
+        .filter(([id, _]) => user!.categoryTotalAnswersCounter[parseInt(id)] > 0)
+        .map(([id, rank]) => (
+            <CategoryRanksItem
+                name={ getCategoryNameWithId(parseInt(id)) }
+                rank={ rank }
+            />
+        )
+    );
 
     return (
         <IonCard>

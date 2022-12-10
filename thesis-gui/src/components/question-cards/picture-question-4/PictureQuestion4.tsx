@@ -1,3 +1,4 @@
+import React from "react";
 import {
     IonButton,
     IonCard,
@@ -46,18 +47,18 @@ export const PictureQuestion4: React.FC = () => {
                 <IonGrid>
                     <IonRow>
                         <IonCol>
-                            <img src="https://cdn.pixabay.com/photo/2018/06/11/00/21/foal-3467629__480.jpg" />
+                            <img src="https://cdn.pixabay.com/photo/2018/06/11/00/21/foal-3467629__480.jpg" alt="" />
                         </IonCol>
                         <IonCol>
-                            <img src="https://cdn.pixabay.com/photo/2018/06/11/00/21/foal-3467629__480.jpg" />
+                            <img src="https://cdn.pixabay.com/photo/2018/06/11/00/21/foal-3467629__480.jpg" alt="" />
                         </IonCol>
                     </IonRow>
                     <IonRow>
                         <IonCol>
-                            <img src="https://cdn.pixabay.com/photo/2018/06/11/00/21/foal-3467629__480.jpg" />
+                            <img src="https://cdn.pixabay.com/photo/2018/06/11/00/21/foal-3467629__480.jpg" alt="" />
                         </IonCol>
                         <IonCol>
-                            <img src="https://cdn.pixabay.com/photo/2018/06/11/00/21/foal-3467629__480.jpg" />
+                            <img src="https://cdn.pixabay.com/photo/2018/06/11/00/21/foal-3467629__480.jpg" alt="" />
                         </IonCol>
                     </IonRow>
                 </IonGrid>
@@ -71,4 +72,4 @@ export const PictureQuestion4: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}

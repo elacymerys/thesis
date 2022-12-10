@@ -1,91 +1,58 @@
 import React from "react";
-import {
-    IonButton,
-    IonCol,
-    IonContent, IonGrid,
-    IonIcon,
-    IonInput,
-    IonItem,
-    IonList,
-    IonPage, IonRadio, IonRadioGroup, IonRow,
-    IonTextarea,
-    IonTitle
-} from "@ionic/react";
+import {QuestionForm, QuestionsSetCreateRequest, TeacherQuestionRequest} from "../../types/my-quiz";
+import {QuizBuilder} from "./quiz-builder/QuizBuilder";
 import {PageHeader} from "../common/PageHeader";
-import {arrowBackOutline, arrowForwardOutline} from "ionicons/icons";
+import {IonPage} from "@ionic/react";
+import {quizzesService} from "../../services/quizzes-service";
+import {useHistory} from "react-router";
+import {ApiError, isApiError} from "../../types/api-error";
+import {HttpStatusCode} from "../../utils/http-status-code";
+import {useUserContext} from "../../context/UserContext";
 
-const PAGE_NAME = "Quiz Creator";
-
-const AnswerInputItem: React.FC<{ answerNumber: number }> = ({ answerNumber }) => {
-    return (
-        <IonItem>
-            <IonInput placeholder={ `Enter answer ${answerNumber}` }></IonInput>
-            <IonRadio slot="end"></IonRadio>
-        </IonItem>
-    );
-}
-
-const AnswersInput: React.FC = () => {
-    const answerInputItems = [1, 2, 3, 4].map(answerNumber => (
-            <AnswerInputItem answerNumber={ answerNumber } />
-        )
-    );
-
-    return (
-        <IonList>
-            <IonRadioGroup>
-                { answerInputItems }
-            </IonRadioGroup>
-        </IonList>
-    );
-}
-
-const QuestionInput: React.FC = () => {
-    return (
-        <>
-            <IonTitle style={{ paddingTop: "30px", paddingLeft: "15px" }}>Question X</IonTitle>
-            <IonItem>
-                <IonTextarea
-                    autoGrow={ true }
-                    placeholder="Enter text of the question you'd like to ask! Below enter 4 possible answers and check the correct one"
-                ></IonTextarea>
-            </IonItem>
-            <AnswersInput />
-        </>
-    );
-}
-
-const NavigationButtons: React.FC = () => {
-    return (
-        <IonGrid>
-            <IonRow>
-                <IonCol style={{ margin: 0,  padding: 0 }}>
-                    <IonButton expand="full" fill="clear" style={{ marginRight: 0, paddingRight: 0, borderRight: "solid" }}>
-                        Prev
-                        <IonIcon slot="start" icon={arrowBackOutline}></IonIcon>
-                    </IonButton>
-                </IonCol>
-                <IonCol style={{ margin: 0,  padding: 0 }}>
-                    <IonButton expand="full" fill="clear" style={{ marginLeft: 0, paddingLeft: 0 }}>
-                        Next
-                        <IonIcon slot="end" icon={arrowForwardOutline}></IonIcon>
-                    </IonButton>
-                </IonCol>
-            </IonRow>
-        </IonGrid>
-    );
-}
+const PAGE_NAME = 'Quiz Creator';
 
 export const QuizCreator: React.FC = () => {
+    const history = useHistory();
+    const { tryRefreshTokens } = useUserContext();
+
+    const questions = [{
+        question: { value: '', errorMessage: '' },
+        answers: { values: ['', '', '', ''], errorMessages: ['', '', '', ''] },
+        correct: 0
+    }];
+
+    const createNewQuiz = (request: QuestionsSetCreateRequest) => {
+        quizzesService.createNew(request)
+            .then(() => history.push('/my-quizzes'))
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(() => createNewQuiz(request));
+                } else {
+                    history.push('/error-page');
+                }
+            });
+    }
+
+    const handleSubmit = (questionsSetName: string, questions: QuestionForm[]) => {
+        const questionsRequests: TeacherQuestionRequest[] = questions.map(q => ({
+            question: q.question.value,
+            correct: q.answers.values[q.correct],
+            answers: q.answers.values
+        }));
+
+        createNewQuiz({
+            questionsSetName,
+            teacherQuestionsRequest: questionsRequests
+        });
+    };
+
     return (
         <IonPage>
-            <PageHeader name={ PAGE_NAME } condense={ false } />
-            <IonContent className="ion-padding">
-                <PageHeader name={ PAGE_NAME } condense={ true } />
-                <IonButton expand="block">Save Quiz</IonButton>
-                <QuestionInput />
-                <NavigationButtons />
-            </IonContent>
+            <PageHeader name={PAGE_NAME}/>
+            <QuizBuilder
+                initQuestions={questions}
+                onSubmit={handleSubmit}
+            />
         </IonPage>
     );
 }
