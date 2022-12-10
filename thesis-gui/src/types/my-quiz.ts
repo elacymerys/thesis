@@ -24,3 +24,14 @@ export type QuestionsSetCreateRequest = {
 export type QuestionsSetKeyResponse = {
     questionsSetKey: string
 }
+
+export type TeacherQuestionResponse = {
+    question: string,
+    correct: string,
+    answers: string[]
+}
+
+export type QuizFullResponse = {
+    questionsSetName: string,
+    teacherQuestionsResponse: TeacherQuestionResponse[]
+};

@@ -51,6 +51,7 @@ export const QuizCreator: React.FC = () => {
             <PageHeader name={PAGE_NAME}/>
             <QuizBuilder
                 initQuestions={questions}
+                initQuestionsSetName=""
                 onSubmit={handleSubmit}
             />
         </IonPage>

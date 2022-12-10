@@ -1,4 +1,4 @@
-import React, {useCallback, useMemo, useState} from "react";
+import React, {useCallback, useEffect, useMemo, useState} from "react";
 import {
     IonButton,
     IonButtons,
@@ -17,13 +17,20 @@ import {QuizSaveForm} from "./QuizSaveForm";
 
 export const QuizBuilder: React.FC<{
     initQuestions: QuestionForm[],
+    initQuestionsSetName: string,
     onSubmit: (questionsSetName: string, questions: QuestionForm[]) => void
 }> = ({
     initQuestions,
+    initQuestionsSetName,
     onSubmit,
 }) => {
     const [questions, setQuestions] = useState<QuestionForm[]>(initQuestions);
     const [currentQuestionNumber, setCurrentQuestionNumber] = useState<number>(0);
+
+    useEffect(
+        () => setQuestions(initQuestions),
+        [initQuestions]
+    );
 
     const currentQuestion = useMemo(
         //if update of currentQuestionNumber happened before creating new question object, fallback to last question
@@ -126,6 +133,7 @@ export const QuizBuilder: React.FC<{
             <IonItemDivider/>
             <QuizSaveForm
                 questions={questions}
+                initQuestionsSetName={initQuestionsSetName}
                 onSave={handleSubmit}
             />
         </IonContent>

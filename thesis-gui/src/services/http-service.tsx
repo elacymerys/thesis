@@ -34,4 +34,8 @@ export const httpService = {
     delete<RequestType, ResponseType>(path: string, body: RequestType): Promise<ResponseType> {
         return this.request(path, 'DELETE', body);
     },
+
+    put<RequestType, ResponseType>(path: string, body: RequestType): Promise<ResponseType> {
+        return this.request(path, 'PUT', body);
+    }
 };

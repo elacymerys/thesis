@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
-    IonButton,
+    IonButton, IonButtons,
     IonContent, IonIcon,
     IonItem,
     IonLabel,
@@ -8,7 +8,7 @@ import {
     IonPage, IonText, useIonToast
 } from "@ionic/react";
 import {useHistory} from "react-router";
-import {keyOutline} from "ionicons/icons";
+import {keyOutline, create, trashBin} from "ionicons/icons";
 import {PageHeader} from "../common/PageHeader";
 import {quizzesService} from "../../services/quizzes-service";
 import {Quiz} from "../../types/my-quiz";
@@ -21,8 +21,17 @@ const PAGE_NAME = "My Quizzes";
 const QuizzesListItem: React.FC<{
     name: string,
     questionsNumber: number,
-    questionsSetKey: string
-}> = ({ name, questionsNumber, questionsSetKey }) => {
+    questionsSetKey: string,
+    reloadQuizzes: () => void
+}> = ({
+    name,
+    questionsNumber,
+    questionsSetKey,
+    reloadQuizzes
+}) => {
+    const { tryRefreshTokens } = useUserContext();
+    const history = useHistory();
+
     const [present] = useIonToast();
 
     const presentToast = () => {
@@ -38,18 +47,49 @@ const QuizzesListItem: React.FC<{
         presentToast();
     }
 
+    const handleDelete = () => {
+        quizzesService.delete(questionsSetKey)
+            .then(reloadQuizzes)
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(handleDelete);
+                } else {
+                    history.push('/error-page');
+                }
+            });
+    };
+
     return (
         <IonItem>
             <IonLabel>
                 <h2>{ name }</h2>
                 <p>{ `${questionsNumber} question(s)` }</p>
             </IonLabel>
-            <IonIcon
-                className="btn"
-                icon={keyOutline}
-                onClick={ copyKeyToClipboard }
-                style={{ paddingRight: "10px" }}
-            ></IonIcon>
+            <IonButtons>
+                <IonButton onClick={ copyKeyToClipboard }>
+                    <IonIcon
+                        slot="icon-only"
+                        icon={keyOutline}
+                    ></IonIcon>
+                </IonButton>
+                <IonButton
+                    routerLink={`/quiz-editor/${questionsSetKey}`}
+                    routerDirection="back"
+                >
+                    <IonIcon
+                        slot="icon-only"
+                        icon={create}
+                    ></IonIcon>
+                </IonButton>
+                <IonButton
+                    onClick={handleDelete}
+                >
+                    <IonIcon
+                        slot="icon-only"
+                        icon={trashBin}
+                    ></IonIcon>
+                </IonButton>
+            </IonButtons>
         </IonItem>
     );
 }
@@ -82,6 +122,7 @@ export const MyQuizzes: React.FC = () => {
             name={ quiz.questionsSetName }
             questionsNumber={ quiz.numberOfQuestionsInSet }
             questionsSetKey={ quiz.questionsSetKey }
+            reloadQuizzes={getQuizzesList}
         />
     });
 
@@ -100,7 +141,7 @@ export const MyQuizzes: React.FC = () => {
                 {
                     quizzesListItems.length > 0 &&
                     <IonText style={{ paddingLeft: "15px" }}>
-                        * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard
+                        * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard, on <IonIcon icon={create} /> to edit a quiz or on <IonIcon icon={trashBin} /> to delete a quiz
                     </IonText>
                 }
                 <IonList lines="full" style={{ paddingTop: "15px" }}>
