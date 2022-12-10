@@ -47,7 +47,7 @@ export const CategoryContextProvider: FC = ({ children }) => {
             .then(() => setLoadingState('SUCCESS'))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
-                    setTimeout(() => tryRefreshTokens().then(getCategories), 3000);
+                    tryRefreshTokens().then(getCategories);
                 } else {
                     setLoadingState('FAILURE');
                 }
