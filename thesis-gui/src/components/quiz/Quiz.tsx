@@ -78,12 +78,16 @@ export const Quiz: React.FC = () => {
                 setQuestion(res);
                 setSelected(undefined);
                 setQuestionNumber(prev => prev + 1);
-                setShowResult(false)
             })
             .catch(err => {
-                console.log(err);
-                getNewQuestion();
-            });
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(getNewQuestion);
+                } else {
+                    console.log(err);
+                    history.push('/error-page');
+                }
+            })
+            .finally(() => setShowResult(false));
     }
 
     return (
@@ -119,7 +123,7 @@ export const Quiz: React.FC = () => {
 
                 <IonButton
                     onClick={ checkAnswer }
-                    disabled={ showResult }
+                    disabled={ selected === undefined || showResult }
                     expand="block"
                     style={{ marginTop: 20, marginBottom: 30 }}
                 >
