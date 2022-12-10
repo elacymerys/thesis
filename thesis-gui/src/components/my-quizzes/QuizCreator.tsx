@@ -26,9 +26,10 @@ const AnswerInputItem: React.FC<{ answerNumber: number }> = ({ answerNumber }) =
 }
 
 const AnswersInput: React.FC = () => {
-    const answerInputItems = Array.from({ length: 4 }, (_, i) => i + 1).map(answerNumber => {
-        return <AnswerInputItem answerNumber={ answerNumber } />
-    });
+    const answerInputItems = [1, 2, 3, 4].map(answerNumber => (
+            <AnswerInputItem answerNumber={ answerNumber } />
+        )
+    );
 
     return (
         <IonList>
@@ -78,9 +79,8 @@ const NavigationButtons: React.FC = () => {
 export const QuizCreator: React.FC = () => {
     return (
         <IonPage>
-            <PageHeader name={ PAGE_NAME } condense={ false } />
+            <PageHeader name={ PAGE_NAME } />
             <IonContent className="ion-padding">
-                <PageHeader name={ PAGE_NAME } condense={ true } />
                 <IonButton expand="block">Save Quiz</IonButton>
                 <QuestionInput />
                 <NavigationButtons />

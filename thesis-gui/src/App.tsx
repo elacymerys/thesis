@@ -12,10 +12,15 @@ import {
 } from '@ionic/react';
 import {IonReactRouter} from '@ionic/react-router';
 import React, {FC, useCallback} from "react";
+import {ellipse, square, triangle} from "ionicons/icons";
 import {SignUp} from "./components/auth/sign-up/SignUp";
 import {SignIn} from "./components/auth/sign-in/SignIn";
 import {ErrorPage} from "./components/common/ErrorPage";
 import {CategorySelect} from "./components/category/CategorySelect";
+import {Quiz} from "./components/quiz/Quiz";
+import {MyAccount} from "./components/my-account/MyAccount";
+import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
+import {QuizCreator} from "./components/my-quizzes/QuizCreator";
 import {useUserContext} from "./context/UserContext";
 
 /* Core CSS required for Ionic components to work properly */
@@ -36,11 +41,6 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
-import {Quiz} from "./components/quiz/Quiz";
-import {MyAccount} from "./components/my-account/MyAccount";
-import {ellipse, square, triangle} from "ionicons/icons";
-import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
-import {QuizCreator} from "./components/my-quizzes/QuizCreator";
 
 setupIonicReact();
 

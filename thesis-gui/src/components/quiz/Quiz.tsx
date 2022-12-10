@@ -5,7 +5,7 @@ import {
     IonPage, IonRadioGroup
 } from '@ionic/react';
 import './Quiz.css';
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HttpStatusCode } from "../../utils/http-status-code";
 import { CategoryType } from "../../types/category-type";
 import Answer from "../answer/Answer";
@@ -20,6 +20,7 @@ import {ApiError, isApiError} from "../../types/api-error";
 import {QuestionResponse} from "../../types/question-response";
 import {PageHeader} from "../common/PageHeader";
 
+const PAGE_NAME = "Questions";
 
 export const Quiz: React.FC = () => {
     const { tryRefreshTokens } = useUserContext();
@@ -56,7 +57,7 @@ export const Quiz: React.FC = () => {
         console.log(`${selected === question!.correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
         setShowResult(true);
 
-        questionService.sendAnswer(question!.correct.id, { answerCorrect: selected === question!.correct.name })
+        questionService.sendAnswer({ termId: question!.correct.id, answerCorrect: selected === question!.correct.name })
             .then(() => setTimeout(getNewQuestion, 1500))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
@@ -70,29 +71,29 @@ export const Quiz: React.FC = () => {
 
     const getNewQuestion = () => {
         const randomCategory = getRandom()!;
-
         return questionService.get(randomCategory.id)
             .then(res => {
                 console.log(`Correct answer: ${res.correct.name}`)
-
                 setCategory(randomCategory);
                 setQuestion(res);
                 setSelected(undefined);
                 setQuestionNumber(prev => prev + 1);
+                setShowResult(false)
             })
-            .catch(err => console.log(err))
-            .finally(() => setShowResult(false));
+            .catch(err => {
+                console.log(err);
+                getNewQuestion();
+            });
     }
 
     return (
         <IonPage>
-            <PageHeader name={ "Questions" } condense={ false } />
+            <PageHeader name={ PAGE_NAME } />
             <IonContent fullscreen>
                 <IonLoading
                     isOpen={ showLoading }
                     message={ 'Loading...' }
                 />
-                <PageHeader name={ "Questions" } condense={ true } />
 
                 {
                     ( question && question.type === QuestionType.DEFINITION &&
@@ -128,4 +129,4 @@ export const Quiz: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}

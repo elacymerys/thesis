@@ -73,9 +73,8 @@ export const MyQuizzes: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader name={ PAGE_NAME } condense={ false } />
+            <PageHeader name={ PAGE_NAME } />
             <IonContent className="ion-padding">
-                <PageHeader name={ PAGE_NAME } condense={ true } />
                 <IonButton
                     routerLink="/quiz-creator"
                     routerDirection="back"
@@ -86,9 +85,9 @@ export const MyQuizzes: React.FC = () => {
                 </IonButton>
                 {
                     quizzesListItems.length > 0 &&
-                        <IonText style={{ paddingLeft: "15px" }}>
-                            * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard
-                        </IonText>
+                    <IonText style={{ paddingLeft: "15px" }}>
+                        * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard
+                    </IonText>
                 }
                 <IonList lines="full" style={{ paddingTop: "15px" }}>
                     { quizzesListItems }

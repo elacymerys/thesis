@@ -17,6 +17,7 @@ import pl.edu.agh.quizzesthesis.api.dto.UserResponse;
 import pl.edu.agh.quizzesthesis.business.Current;
 import pl.edu.agh.quizzesthesis.business.UserAuthDetails;
 import pl.edu.agh.quizzesthesis.business.service.AuthService;
+import pl.edu.agh.quizzesthesis.business.service.UserService;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
@@ -29,23 +30,26 @@ import static pl.edu.agh.quizzesthesis.SecurityConfig.REFRESH_TOKEN_COOKIE_NAME;
 
 @RestController
 @RequestMapping("/api/auth")
-public class AuthController {
+public class UserController {
 
     private final AuthService authService;
+    private final UserService userService;
     private final Duration accessTokenDuration;
     private final Duration refreshTokenDuration;
 
-    public AuthController(AuthService authService,
+    public UserController(AuthService authService,
+                          UserService userService,
                           @Value("${jwt.access-token.duration}") Duration accessTokenDuration,
                           @Value("${jwt.refresh-token.duration}") Duration refreshTokenDuration) {
         this.authService = authService;
+        this.userService = userService;
         this.accessTokenDuration = accessTokenDuration;
         this.refreshTokenDuration = refreshTokenDuration;
     }
 
     @GetMapping("/users/current")
     public UserResponse getCurrentUser(@Current UserAuthDetails userAuthDetails) {
-        return authService.getUser(userAuthDetails.id());
+        return userService.getUser(userAuthDetails.id());
     }
 
     @DeleteMapping("/users/current")
