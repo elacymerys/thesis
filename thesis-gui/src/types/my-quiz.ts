@@ -1,3 +1,9 @@
+export type Quiz = {
+    questionsSetName: string,
+    questionsSetKey: string,
+    numberOfQuestionsInSet: number
+};
+
 export type QuestionForm = {
     question: { value: string, errorMessage: string },
     correct: number,

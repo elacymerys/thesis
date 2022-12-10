@@ -1,77 +1,112 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {
     IonButton,
-    IonContent,
+    IonContent, IonIcon,
     IonItem,
     IonLabel,
     IonList,
-    IonPage
+    IonPage, IonText, useIonToast
 } from "@ionic/react";
+import {useHistory} from "react-router";
+import {keyOutline} from "ionicons/icons";
 import {PageHeader} from "../common/PageHeader";
+import {quizzesService} from "../../services/quizzes-service";
+import {Quiz} from "../../types/my-quiz";
+import {useUserContext} from "../../context/UserContext";
+import {ApiError, isApiError} from "../../types/api-error";
+import {HttpStatusCode} from "../../utils/http-status-code";
 
 const PAGE_NAME = "My Quizzes";
 
-const QUIZZES = [
-    {
-        name: "Quiz 1",
-        questionsNumber: 5
-    },
-    {
-        name: "Quiz 2",
-        questionsNumber: 27
-    },
-    {
-        name: "Quiz 3",
-        questionsNumber: 8
-    },
-    {
-        name: "Quiz 4",
-        questionsNumber: 13
-    }
-];
-
 const QuizzesListItem: React.FC<{
     name: string,
-    questionsNumber: number
-}> = ({ name, questionsNumber }) => {
+    questionsNumber: number,
+    questionsSetKey: string
+}> = ({ name, questionsNumber, questionsSetKey }) => {
+    const [present] = useIonToast();
+
+    const presentToast = () => {
+        present({
+            message: `"${name}" quiz key was copied to clipboard!`,
+            duration: 1500,
+            position: 'bottom'
+        });
+    };
+
+    const copyKeyToClipboard = () => {
+        navigator.clipboard.writeText(questionsSetKey);
+        presentToast();
+    }
+
     return (
-        <IonItem button detail={true}>
+        <IonItem>
             <IonLabel>
                 <h2>{ name }</h2>
                 <p>{ `${questionsNumber} question(s)` }</p>
             </IonLabel>
+            <IonIcon
+                className="btn"
+                icon={keyOutline}
+                onClick={ copyKeyToClipboard }
+                style={{ paddingRight: "10px" }}
+            ></IonIcon>
         </IonItem>
     );
 }
 
-const QuizzesList: React.FC = () => {
-    const quizzesListItems = QUIZZES.map(quiz => (
-            <QuizzesListItem
-                name={ quiz.name }
-                questionsNumber={ quiz.questionsNumber }
-                key={quiz.name}
-            />
-        )
-    );
+export const MyQuizzes: React.FC = () => {
+    const { tryRefreshTokens } = useUserContext();
+    const history = useHistory();
+
+    const [quizzesList, setQuizzesList] = useState<Quiz[]>([]);
+
+    const getQuizzesList = () => {
+        quizzesService.getList()
+            .then(res => setQuizzesList(res))
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(getQuizzesList);
+                } else {
+                    history.push('/error-page');
+                }
+            });
+    }
+
+    useEffect(() => {
+        getQuizzesList();
+    }, []);
+
+    const quizzesListItems = quizzesList.map(quiz => {
+        return <QuizzesListItem
+            key={quiz.questionsSetKey}
+            name={ quiz.questionsSetName }
+            questionsNumber={ quiz.numberOfQuestionsInSet }
+            questionsSetKey={ quiz.questionsSetKey }
+        />
+    });
 
     return (
-      <IonList lines="full" style={{ paddingTop: "15px" }}>
-          { quizzesListItems }
-      </IonList>
-  );
+        <IonPage>
+            <PageHeader name={ PAGE_NAME } />
+            <IonContent className="ion-padding">
+                <IonButton
+                    routerLink="/quiz-creator"
+                    routerDirection="back"
+                    expand="block"
+                    style={{ marginBottom: "30px" }}
+                >
+                    Create new quiz
+                </IonButton>
+                {
+                    quizzesListItems.length > 0 &&
+                    <IonText style={{ paddingLeft: "15px" }}>
+                        * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard
+                    </IonText>
+                }
+                <IonList lines="full" style={{ paddingTop: "15px" }}>
+                    { quizzesListItems }
+                </IonList>
+            </IonContent>
+        </IonPage>
+    );
 }
-
-export const MyQuizzes: React.FC = () => (
-    <IonPage>
-        <PageHeader name={ PAGE_NAME } />
-        <IonContent className="ion-padding">
-            <IonButton
-                routerDirection="back"
-                routerLink="/quiz-creator"
-                expand="block" >
-                Create new quiz
-            </IonButton>
-            <QuizzesList />
-        </IonContent>
-    </IonPage>
-);

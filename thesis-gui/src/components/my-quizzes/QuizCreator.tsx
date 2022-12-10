@@ -1,5 +1,5 @@
 import React from "react";
-import {QuestionForm} from "../../types/my-quizz";
+import {QuestionForm} from "../../types/my-quiz";
 import {QuizBuilder} from "./quiz-builder/QuizBuilder";
 import {PageHeader} from "../common/PageHeader";
 import {IonPage} from "@ionic/react";
