@@ -8,7 +8,7 @@ import {
     IonPage, IonText, useIonToast
 } from "@ionic/react";
 import {useHistory} from "react-router";
-import {keyOutline, create, trashBin} from "ionicons/icons";
+import {keyOutline, createOutline, trashBinOutline} from "ionicons/icons";
 import {PageHeader} from "../common/PageHeader";
 import {quizzesService} from "../../services/quizzes-service";
 import {Quiz} from "../../types/my-quiz";
@@ -78,7 +78,7 @@ const QuizzesListItem: React.FC<{
                 >
                     <IonIcon
                         slot="icon-only"
-                        icon={create}
+                        icon={createOutline}
                     ></IonIcon>
                 </IonButton>
                 <IonButton
@@ -86,7 +86,7 @@ const QuizzesListItem: React.FC<{
                 >
                     <IonIcon
                         slot="icon-only"
-                        icon={trashBin}
+                        icon={trashBinOutline}
                     ></IonIcon>
                 </IonButton>
             </IonButtons>
@@ -141,7 +141,7 @@ export const MyQuizzes: React.FC = () => {
                 {
                     quizzesListItems.length > 0 &&
                     <IonText style={{ paddingLeft: "15px" }}>
-                        * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard, on <IonIcon icon={create} /> to edit a quiz or on <IonIcon icon={trashBin} /> to delete a quiz
+                        * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard, on <IonIcon icon={createOutline} /> to edit a quiz or on <IonIcon icon={trashBinOutline} /> to delete a quiz
                     </IonText>
                 }
                 <IonList lines="full" style={{ paddingTop: "15px" }}>
