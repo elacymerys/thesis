@@ -1,5 +1,4 @@
 import {createContext, FC, useContext, useEffect, useState} from "react";
-import {LoadingState} from "../types/loading-state";
 import {useUserContext} from "./UserContext";
 
 type QuizzContextType = {
@@ -16,7 +15,7 @@ const QuizzContext = createContext<QuizzContextType>(QUIZZ_CONTEXT_INIT_STATE);
 
 export const QuizzContextProvider: FC = ({ children }) => {
 
-    const { tryRefreshTokens, user } = useUserContext();
+    const { user } = useUserContext();
     const [chosenKey, setChosenKey] = useState<string>(QUIZZ_CONTEXT_INIT_STATE.chosenKey);
 
     useEffect(() => {

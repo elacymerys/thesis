@@ -16,7 +16,7 @@ import {
     IonRadioGroup,
 } from "@ionic/react";
 import {PageHeader} from "../common/PageHeader";
-import {QuestionsSetCreateRequest, TeacherQuestionRequest} from "../../types/my-quiz";
+import {QuestionsSetRequest, TeacherQuestionRequest} from "../../types/my-quiz";
 import {useQuizzContext} from "../../context/QuizzContext"
 
 const PAGE_NAME = "Quiz";
@@ -25,7 +25,7 @@ export const Quiz: React.FC = () => {
     const [isCorrectKey, setIsCorrectKey] = useState<boolean>(true);
     const [showResult, setShowResult] = useState(false);
     const [selected, setSelected] = useState<string | undefined>(undefined);
-    const [quiz, setQuiz] = useState<QuestionsSetCreateRequest | undefined>(undefined);
+    const [quiz, setQuiz] = useState<QuestionsSetRequest | undefined>(undefined);
     const [question, setQuestion] = useState<TeacherQuestionRequest | undefined>(undefined);
     const [questionNumber, setQuestionNumber] = useState(1);
     const [numberOfQuestions, setNumberOfQuestions] = useState(0);

@@ -44,6 +44,7 @@ import '@ionic/react/css/display.css';
 
 /* Theme variables */
 import './theme/variables.css';
+import {QuizEditor} from "./components/my-quizzes/QuizEditor";
 
 setupIonicReact();
 
@@ -91,6 +92,9 @@ const App: FC = () => {
                         </AuthRoute>
                         <AuthRoute path="/quiz-creator">
                             <QuizCreator />
+                        </AuthRoute>
+                        <AuthRoute path="/quiz-editor/:key">
+                            <QuizEditor />
                         </AuthRoute>
                         <AuthRoute path="/my-account">
                             <MyAccount />

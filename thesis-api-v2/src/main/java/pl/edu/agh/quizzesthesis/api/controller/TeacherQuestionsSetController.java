@@ -23,6 +23,14 @@ public class TeacherQuestionsSetController {
         return teacherQuestionsSetService.getQuestionsSet(questionsSetKey);
     }
 
+    @PutMapping("/{key}")
+    @ResponseStatus(HttpStatus.OK)
+    public QuestionsSetKeyResponse updateQuestionsSet(@Current UserAuthDetails userAuthDetails,
+                                                      @PathVariable(name = "key") String questionsSetKey,
+                                                      @RequestBody QuestionsSetsRequest request) {
+        return teacherQuestionsSetService.updateQuestionsSet(userAuthDetails, questionsSetKey, request);
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public QuestionsSetKeyResponse createQuestionsSet(@Current UserAuthDetails userAuthDetails,
@@ -30,10 +38,11 @@ public class TeacherQuestionsSetController {
         return teacherQuestionsSetService.createQuestionsSet(userAuthDetails, request);
     }
 
-    @DeleteMapping
+    @DeleteMapping("/{key}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void deleteQuestionsSet(@Current UserAuthDetails userAuthDetails, @RequestBody QuestionsSetKeyRequest request) {
-        teacherQuestionsSetService.deleteQuestionsSet(userAuthDetails, request.questionsSetKey());
+    public void deleteQuestionsSet(@Current UserAuthDetails userAuthDetails,
+                                   @PathVariable(name = "key") String questionsSetKey) {
+        teacherQuestionsSetService.deleteQuestionsSet(userAuthDetails, questionsSetKey);
     }
 
     @GetMapping

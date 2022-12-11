@@ -6,12 +6,14 @@ import {FormErrorMessage} from "../../common/FormErrorMessage";
 
 export const QuizSaveForm: React.FC<{
     questions: QuestionForm[],
+    initQuestionsSetName: string,
     onSave: (name: string) => void
 }> = ({
     questions,
+    initQuestionsSetName,
     onSave
 }) => {
-    const [questionsSetName, setQuestionsSetName] = useState<string>('');
+    const [questionsSetName, setQuestionsSetName] = useState<string>(initQuestionsSetName);
     const [questionsSetNameErrorMessage, setQuestionsSetNameErrorMessage] = useState<string>('');
 
     const [wholeQuizErrorMessage, setWholeQuizErrorMessage] = useState<string>('');
@@ -20,6 +22,11 @@ export const QuizSaveForm: React.FC<{
     useEffect(
         () => setWholeQuizErrorMessage(''),
         [questions, questionsSetName]
+    );
+
+    useEffect(
+        () => setQuestionsSetName(initQuestionsSetName),
+        [initQuestionsSetName]
     );
 
     const isFormValid = useMemo<boolean>(
@@ -52,7 +59,9 @@ export const QuizSaveForm: React.FC<{
                         <IonLabel position="floating">Quiz name</IonLabel>
                         <IonInput
                             type="text"
-                            onIonChange={handleChange}>
+                            onIonChange={handleChange}
+                            value={questionsSetName}
+                        >
                         </IonInput>
                     </IonItem>
                     <FormErrorMessage>{questionsSetNameErrorMessage}</FormErrorMessage>

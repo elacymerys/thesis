@@ -16,7 +16,7 @@ export type TeacherQuestionRequest = {
     answers: string[]
 }
 
-export type QuestionsSetCreateRequest = {
+export type QuestionsSetRequest = {
     questionsSetName: string,
     teacherQuestionsRequest: TeacherQuestionRequest[]
 }
@@ -24,3 +24,18 @@ export type QuestionsSetCreateRequest = {
 export type QuestionsSetKeyResponse = {
     questionsSetKey: string
 }
+
+export type QuestionsSetKeyRequest = {
+    questionsSetKey: string
+}
+
+export type TeacherQuestionResponse = {
+    question: string,
+    correct: string,
+    answers: string[]
+}
+
+export type QuestionsSetResponse = {
+    questionsSetName: string,
+    teacherQuestionsResponse: TeacherQuestionResponse[]
+};

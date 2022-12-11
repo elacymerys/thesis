@@ -1,14 +1,14 @@
 import React, {useEffect, useState} from "react";
 import {
-    IonButton,
+    IonButton, IonButtons, IonCard, IonCardContent,
     IonContent, IonIcon,
     IonItem,
     IonLabel,
     IonList,
-    IonPage, IonText, useIonToast
+    IonPage, useIonToast
 } from "@ionic/react";
 import {useHistory} from "react-router";
-import {keyOutline} from "ionicons/icons";
+import {keyOutline, createOutline, trashBinOutline, refreshOutline} from "ionicons/icons";
 import {PageHeader} from "../common/PageHeader";
 import {quizService} from "../../services/quiz-service";
 import {Quiz} from "../../types/my-quiz";
@@ -21,22 +21,61 @@ const PAGE_NAME = "My Quizzes";
 const QuizzesListItem: React.FC<{
     name: string,
     questionsNumber: number,
-    questionsSetKey: string
-}> = ({ name, questionsNumber, questionsSetKey }) => {
+    questionsSetKey: string,
+    reloadQuizzes: () => void
+}> = ({
+    name,
+    questionsNumber,
+    questionsSetKey,
+    reloadQuizzes
+}) => {
+    const COPY_KEY_TOAST_MESSAGE = `"${name}" quiz key was copied to clipboard!`;
+    const REFRESH_KEY_TOAST_MESSAGE = `"${name}" quiz key was refreshed and copied to clipboard!`;
+
+    const { tryRefreshTokens } = useUserContext();
+    const history = useHistory();
+
     const [present] = useIonToast();
 
-    const presentToast = () => {
+    const presentToast = (toastMessage: string) => {
         present({
-            message: `"${name}" quiz key was copied to clipboard!`,
+            message: toastMessage,
             duration: 1500,
-            position: 'bottom'
+            position: 'top'
         });
     };
 
-    const copyKeyToClipboard = () => {
-        navigator.clipboard.writeText(questionsSetKey);
-        presentToast();
+    const copyKeyToClipboard = (key: string, toastMessage: string) => {
+        navigator.clipboard.writeText(key);
+        presentToast(toastMessage);
     }
+
+    const handleRefresh = () => {
+        quizService.refreshKey({ questionsSetKey: questionsSetKey })
+            .then(res => {
+                copyKeyToClipboard(res.questionsSetKey, REFRESH_KEY_TOAST_MESSAGE);
+                reloadQuizzes();
+            })
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(handleRefresh);
+                } else {
+                    history.push('/error-page');
+                }
+            });
+    }
+
+    const handleDelete = () => {
+        quizService.delete(questionsSetKey)
+            .then(reloadQuizzes)
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(handleDelete);
+                } else {
+                    history.push('/error-page');
+                }
+            });
+    };
 
     return (
         <IonItem>
@@ -44,12 +83,39 @@ const QuizzesListItem: React.FC<{
                 <h2>{ name }</h2>
                 <p>{ `${questionsNumber} question(s)` }</p>
             </IonLabel>
-            <IonIcon
-                className="btn"
-                icon={keyOutline}
-                onClick={ copyKeyToClipboard }
-                style={{ paddingRight: "10px" }}
-            ></IonIcon>
+            <IonButtons>
+                <IonButton onClick={ () => copyKeyToClipboard(questionsSetKey, COPY_KEY_TOAST_MESSAGE) }>
+                    <IonIcon
+                        slot="icon-only"
+                        icon={keyOutline}
+                    ></IonIcon>
+                </IonButton>
+                <IonButton
+                    onClick={ handleRefresh }
+                >
+                    <IonIcon
+                        slot="icon-only"
+                        icon={refreshOutline}
+                    ></IonIcon>
+                </IonButton>
+                <IonButton
+                    routerLink={`/quiz-editor/${questionsSetKey}`}
+                    routerDirection="back"
+                >
+                    <IonIcon
+                        slot="icon-only"
+                        icon={createOutline}
+                    ></IonIcon>
+                </IonButton>
+                <IonButton
+                    onClick={handleDelete}
+                >
+                    <IonIcon
+                        slot="icon-only"
+                        icon={trashBinOutline}
+                    ></IonIcon>
+                </IonButton>
+            </IonButtons>
         </IonItem>
     );
 }
@@ -82,6 +148,7 @@ export const MyQuizzes: React.FC = () => {
             name={ quiz.questionsSetName }
             questionsNumber={ quiz.numberOfQuestionsInSet }
             questionsSetKey={ quiz.questionsSetKey }
+            reloadQuizzes={getQuizzesList}
         />
     });
 
@@ -93,17 +160,21 @@ export const MyQuizzes: React.FC = () => {
                     routerLink="/quiz-creator"
                     routerDirection="back"
                     expand="block"
-                    style={{ marginBottom: "30px" }}
                 >
                     Create new quiz
                 </IonButton>
                 {
                     quizzesListItems.length > 0 &&
-                    <IonText style={{ paddingLeft: "15px" }}>
-                        * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard
-                    </IonText>
+                    <IonCard>
+                        <IonCardContent style={{ textAlign: "justify" }}>
+                            Click on <IonIcon icon={keyOutline} /> to copy key to clipboard,
+                            on <IonIcon icon={refreshOutline} /> to refresh key,
+                            on <IonIcon icon={createOutline} /> to edit a quiz
+                            or on <IonIcon icon={trashBinOutline} /> to delete a quiz
+                        </IonCardContent>
+                    </IonCard>
                 }
-                <IonList lines="full" style={{ paddingTop: "15px" }}>
+                <IonList lines="full">
                     { quizzesListItems }
                 </IonList>
             </IonContent>
