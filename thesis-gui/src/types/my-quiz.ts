@@ -16,7 +16,7 @@ export type TeacherQuestionRequest = {
     answers: string[]
 }
 
-export type QuestionsSetCreateRequest = {
+export type QuestionsSetRequest = {
     questionsSetName: string,
     teacherQuestionsRequest: TeacherQuestionRequest[]
 }
@@ -35,7 +35,7 @@ export type TeacherQuestionResponse = {
     answers: string[]
 }
 
-export type QuizFullResponse = {
+export type QuestionsSetResponse = {
     questionsSetName: string,
     teacherQuestionsResponse: TeacherQuestionResponse[]
 };

@@ -1,5 +1,5 @@
 import React from "react";
-import {QuestionForm, QuestionsSetCreateRequest, TeacherQuestionRequest} from "../../types/my-quiz";
+import {QuestionForm, QuestionsSetRequest, TeacherQuestionRequest} from "../../types/my-quiz";
 import {QuizBuilder} from "./quiz-builder/QuizBuilder";
 import {PageHeader} from "../common/PageHeader";
 import {IonPage} from "@ionic/react";
@@ -21,7 +21,7 @@ export const QuizCreator: React.FC = () => {
         correct: 0
     }];
 
-    const createNewQuiz = (request: QuestionsSetCreateRequest) => {
+    const createNewQuiz = (request: QuestionsSetRequest) => {
         quizzesService.createNew(request)
             .then(() => history.push('/my-quizzes'))
             .catch(err => {

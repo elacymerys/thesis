@@ -1,8 +1,8 @@
 import React, {useEffect, useState} from "react";
 import {
     QuestionForm,
-    QuestionsSetCreateRequest,
-    QuizFullResponse,
+    QuestionsSetRequest,
+    QuestionsSetResponse,
     TeacherQuestionRequest
 } from "../../types/my-quiz";
 import {QuizBuilder} from "./quiz-builder/QuizBuilder";
@@ -29,7 +29,7 @@ export const QuizEditor: React.FC = () => {
         correct: 0
     }]);
 
-    const updateQuestionsSet = (quiz: QuizFullResponse) => {
+    const updateQuestionsSet = (quiz: QuestionsSetResponse) => {
         setQuestions(quiz.teacherQuestionsResponse.map(q => ({
             question: { value: q.question, errorMessage: '' },
             answers: { values: q.answers, errorMessages: ['', '', '', ''] },
@@ -52,7 +52,7 @@ export const QuizEditor: React.FC = () => {
 
     useEffect(getQuestionsSet, [key]);
 
-    const updateQuiz = (request: QuestionsSetCreateRequest) => {
+    const updateQuiz = (request: QuestionsSetRequest) => {
         quizzesService.update(key, request)
             .then(() => history.push('/my-quizzes'))
             .catch(err => {
