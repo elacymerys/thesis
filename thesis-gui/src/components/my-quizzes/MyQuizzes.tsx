@@ -10,7 +10,7 @@ import {
 import {useHistory} from "react-router";
 import {keyOutline} from "ionicons/icons";
 import {PageHeader} from "../common/PageHeader";
-import {quizzesService} from "../../services/quizzes-service";
+import {quizService} from "../../services/quiz-service";
 import {Quiz} from "../../types/my-quiz";
 import {useUserContext} from "../../context/UserContext";
 import {ApiError, isApiError} from "../../types/api-error";
@@ -61,7 +61,7 @@ export const MyQuizzes: React.FC = () => {
     const [quizzesList, setQuizzesList] = useState<Quiz[]>([]);
 
     const getQuizzesList = () => {
-        quizzesService.getList()
+        quizService.getList()
             .then(res => setQuizzesList(res))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {

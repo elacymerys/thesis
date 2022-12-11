@@ -1,7 +1,11 @@
 import { httpService } from "./http-service";
 import {QuestionsSetCreateRequest, QuestionsSetKeyResponse, Quiz} from "../types/my-quiz";
 
-export const quizzesService = {
+export const quizService = {
+    get(key: string): Promise<QuestionsSetCreateRequest> {
+        return httpService.get<QuestionsSetCreateRequest>(`/questions-sets/${key}`);
+    },
+
     getList() {
         return httpService.get<Quiz[]>('/questions-sets');
     },

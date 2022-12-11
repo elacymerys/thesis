@@ -3,7 +3,7 @@ import {QuestionForm, QuestionsSetCreateRequest, TeacherQuestionRequest} from ".
 import {QuizBuilder} from "./quiz-builder/QuizBuilder";
 import {PageHeader} from "../common/PageHeader";
 import {IonPage} from "@ionic/react";
-import {quizzesService} from "../../services/quizzes-service";
+import {quizService} from "../../services/quiz-service";
 import {useHistory} from "react-router";
 import {ApiError, isApiError} from "../../types/api-error";
 import {HttpStatusCode} from "../../utils/http-status-code";
@@ -22,7 +22,7 @@ export const QuizCreator: React.FC = () => {
     }];
 
     const createNewQuiz = (request: QuestionsSetCreateRequest) => {
-        quizzesService.createNew(request)
+        quizService.createNew(request)
             .then(() => history.push('/my-quizzes'))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {

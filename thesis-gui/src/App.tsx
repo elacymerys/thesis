@@ -20,8 +20,10 @@ import {HomePage} from "./components/category/HomePage";
 import {Question} from "./components/question/Question";
 import {MyAccount} from "./components/my-account/MyAccount";
 import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
-import {Quizz} from "./components/quiz/Quizz";
+import {Quiz} from "./components/quiz/Quiz";
 import {QuizCreator} from "./components/my-quizzes/QuizCreator";
+import {CategorySelect} from "./components/category/CategorySelect";
+import {PrivateQuizEntrance} from "./components/private-quiz/PrivateQuizEntrance";
 import {useUserContext} from "./context/UserContext";
 
 /* Core CSS required for Ionic components to work properly */
@@ -69,14 +71,20 @@ const App: FC = () => {
                         <Route exact path="/auth/sign-in">
                             <SignIn/>
                         </Route>
-                        <AuthRoute path="/categories">
+                        <AuthRoute path="/play">
                             <HomePage/>
+                        </AuthRoute>
+                        <AuthRoute path="/categories">
+                            <CategorySelect/>
+                        </AuthRoute>
+                        <AuthRoute path="/private-quiz">
+                            <PrivateQuizEntrance/>
                         </AuthRoute>
                         <AuthRoute path="/questions">
                             <Question/>
                         </AuthRoute>
-                        <AuthRoute path="/quizz">
-                            <Quizz/>
+                        <AuthRoute path="/quiz">
+                            <Quiz/>
                         </AuthRoute>
                         <AuthRoute path="/my-quizzes">
                             <MyQuizzes />
@@ -91,11 +99,11 @@ const App: FC = () => {
                             <ErrorPage/>
                         </Route>
                         <Route exact path="/">
-                            <Redirect to="/categories"/>
+                            <Redirect to="/play"/>
                         </Route>
                     </IonRouterOutlet>
                     <IonTabBar slot="bottom">
-                        <IonTabButton tab="tab1" href="/categories" disabled={ !user }>
+                        <IonTabButton tab="tab1" href="/play" disabled={ !user }>
                             <IonIcon icon={triangle} />
                             <IonLabel>Play</IonLabel>
                         </IonTabButton>
