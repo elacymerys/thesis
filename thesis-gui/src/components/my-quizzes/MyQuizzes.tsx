@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {
-    IonButton, IonButtons,
+    IonButton, IonButtons, IonCard, IonCardContent,
     IonContent, IonIcon,
     IonItem,
     IonLabel,
@@ -160,17 +160,21 @@ export const MyQuizzes: React.FC = () => {
                     routerLink="/quiz-creator"
                     routerDirection="back"
                     expand="block"
-                    style={{ marginBottom: "30px" }}
                 >
                     Create new quiz
                 </IonButton>
                 {
                     quizzesListItems.length > 0 &&
-                    <IonText style={{ paddingLeft: "15px" }}>
-                        * Click on <IonIcon icon={keyOutline} /> to copy key to clipboard, on <IonIcon icon={createOutline} /> to edit a quiz or on <IonIcon icon={trashBinOutline} /> to delete a quiz
-                    </IonText>
+                    <IonCard>
+                        <IonCardContent style={{ textAlign: "justify" }}>
+                            Click on <IonIcon icon={keyOutline} /> to copy key to clipboard,
+                            on <IonIcon icon={refreshOutline} /> to refresh key,
+                            on <IonIcon icon={createOutline} /> to edit a quiz
+                            or on <IonIcon icon={trashBinOutline} /> to delete a quiz
+                        </IonCardContent>
+                    </IonCard>
                 }
-                <IonList lines="full" style={{ paddingTop: "15px" }}>
+                <IonList lines="full">
                     { quizzesListItems }
                 </IonList>
             </IonContent>
