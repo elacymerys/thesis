@@ -4,11 +4,11 @@ import {
     IonContent,
     IonLoading,
     IonPage,
-    IonRouterLink
+    IonRouterLink, IonText
 } from "@ionic/react";
 import {useHistory} from "react-router";
-import {useCategoryContext} from "../../context/CategoryContext";
-import {PageHeader} from "../common/PageHeader";
+import {useCategoryContext} from "../context/CategoryContext";
+import {PageHeader} from "./common/PageHeader";
 
 const PAGE_NAME = 'Play';
 
@@ -28,24 +28,14 @@ export const HomePage: React.FC = () => {
             <IonContent class="ion-padding">
                 <IonLoading isOpen={loadingState === 'LOADING'} />
 
-                <IonCard>
-                    <IonCardContent>
-                        <IonCardTitle style={{ textAlign: "center" }}>
-                            Private Quiz
-                        </IonCardTitle>
-                        <IonCardSubtitle style={{ textAlign: "center" }}>
-                            Play to earn points and climb the leaderboard!
-                        </IonCardSubtitle>
-                        <IonCardSubtitle style={{ textAlign: "center" }}>
-                            Click <IonRouterLink routerLink="/private-quiz">here</IonRouterLink> to start the game
-                        </IonCardSubtitle>
-                    </IonCardContent>
-                </IonCard>
+                <IonText style={{ display: "block", textAlign: "center", marginBottom: "15px" }}>
+                    <h4>Choose quiz type ...</h4>
+                </IonText>
 
                 <IonCard>
                     <IonCardContent>
                         <IonCardTitle style={{ textAlign: "center" }}>
-                            Categories
+                            Ranked Quiz
                         </IonCardTitle>
                         <IonCardSubtitle style={{ textAlign: "center" }}>
                             Play to earn points and climb the leaderboard!
@@ -55,6 +45,25 @@ export const HomePage: React.FC = () => {
                         </IonCardSubtitle>
                     </IonCardContent>
                 </IonCard>
+
+                <IonText style={{ display: "block", textAlign: "center", marginBottom: "15px" }}>
+                    <h4>or</h4>
+                </IonText>
+
+                <IonCard>
+                    <IonCardContent>
+                        <IonCardTitle style={{ textAlign: "center" }}>
+                            Private Quiz
+                        </IonCardTitle>
+                        <IonCardSubtitle style={{ textAlign: "center" }}>
+                            Only for the chosen ones! You need a secret key
+                        </IonCardSubtitle>
+                        <IonCardSubtitle style={{ textAlign: "center" }}>
+                            Click <IonRouterLink routerLink="/private-quiz">here</IonRouterLink> to start the game
+                        </IonCardSubtitle>
+                    </IonCardContent>
+                </IonCard>
+
             </IonContent>
         </IonPage>
     );

@@ -13,19 +13,35 @@ import {
     IonList,
     IonLoading,
     IonPage,
-    IonRadioGroup,
+    IonRadioGroup, IonRouterLink,
 } from "@ionic/react";
 import {PageHeader} from "../common/PageHeader";
-import {QuestionsSetRequest, TeacherQuestionRequest} from "../../types/my-quiz";
-import {useQuizzContext} from "../../context/QuizzContext"
+import {QuestionsSetResponse, TeacherQuestionRequest} from "../../types/my-quiz";
+import {useQuizContext} from "../../context/QuizContext"
 
-const PAGE_NAME = "Quiz";
+const PAGE_NAME = "Private Quiz";
 
-export const Quiz: React.FC = () => {
+const WrongKeyErrorCard: React.FC<{ secretKey: string }> = ({ secretKey }) => {
+    return (
+        <IonCard>
+            <IonCardHeader>
+                <IonCardSubtitle>Error</IonCardSubtitle>
+                <IonCardTitle>Wrong Key</IonCardTitle>
+            </IonCardHeader>
+
+            <IonCardContent>
+                { `There's no private quiz with secret key '${secretKey}'!\nGet the right one and try again ` }
+                <IonRouterLink routerLink="/private-quiz">here</IonRouterLink>
+            </IonCardContent>
+        </IonCard>
+    );
+}
+
+export const PrivateQuiz: React.FC = () => {
     const [isCorrectKey, setIsCorrectKey] = useState<boolean>(true);
     const [showResult, setShowResult] = useState(false);
     const [selected, setSelected] = useState<string | undefined>(undefined);
-    const [quiz, setQuiz] = useState<QuestionsSetRequest | undefined>(undefined);
+    const [quiz, setQuiz] = useState<QuestionsSetResponse | undefined>(undefined);
     const [question, setQuestion] = useState<TeacherQuestionRequest | undefined>(undefined);
     const [questionNumber, setQuestionNumber] = useState(1);
     const [numberOfQuestions, setNumberOfQuestions] = useState(0);
@@ -34,7 +50,7 @@ export const Quiz: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [buttonName, setButtonName] = useState<string>('Next')
     const [showQuestionNumber,setShowQuestionNumber] = useState<string>(`Question ${questionNumber} of ${numberOfQuestions}`);
-    const { chosenKey } = useQuizzContext();
+    const { chosenKey } = useQuizContext();
     
     useEffect(() => {
         setShowLoading(true);
@@ -48,10 +64,10 @@ export const Quiz: React.FC = () => {
                 console.log(`Downloaded quiz: ${res.questionsSetName}`);
                 setSelected(undefined);
                 setQuiz(res);
-                setQuestion(res.teacherQuestionsRequest[0]);
+                setQuestion(res.teacherQuestionsResponse[0]);
                 setShowResult(false);
-                setNumberOfQuestions(res.teacherQuestionsRequest.length);
-                setShowQuestionNumber(`Question ${questionNumber} of ${res.teacherQuestionsRequest.length}`);
+                setNumberOfQuestions(res.teacherQuestionsResponse.length);
+                setShowQuestionNumber(`Question ${questionNumber} of ${res.teacherQuestionsResponse.length}`);
             })
             .catch(err => {
                 console.log(err);
@@ -70,7 +86,7 @@ export const Quiz: React.FC = () => {
     const getNextQuestion = () => {
         setShowResult(false);
         setQuestionNumber(prev => prev+1);
-        setQuestion(quiz?.teacherQuestionsRequest[questionNumber])
+        setQuestion(quiz?.teacherQuestionsResponse[questionNumber])
     }
 
     const checkAnswer = () => {
@@ -96,7 +112,7 @@ export const Quiz: React.FC = () => {
                 />
 
                 {
-                    !isCorrectKey ? <IonCard>ERROR</IonCard> :
+                    !isCorrectKey ? <WrongKeyErrorCard secretKey={chosenKey} /> :
                         <>
                             <IonCard>
                                 <IonCardHeader>

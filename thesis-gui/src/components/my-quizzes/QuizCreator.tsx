@@ -9,7 +9,7 @@ import {ApiError, isApiError} from "../../types/api-error";
 import {HttpStatusCode} from "../../utils/http-status-code";
 import {useUserContext} from "../../context/UserContext";
 
-const PAGE_NAME = 'Quiz Creator';
+const PAGE_NAME = 'PrivateQuiz Creator';
 
 export const QuizCreator: React.FC = () => {
     const history = useHistory();

@@ -33,7 +33,7 @@ export const QuizBuilder: React.FC<{
     );
 
     const currentQuestion = useMemo(
-        //if update of currentQuestionNumber happened before creating new question object, fallback to last question
+        //if update of currentQuestionNumber happened before creating new ranked-quiz object, fallback to last ranked-quiz
         () => questions[currentQuestionNumber] ?? questions[questions.length - 1],
         [questions, currentQuestionNumber]
     );

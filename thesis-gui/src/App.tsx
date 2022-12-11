@@ -16,11 +16,11 @@ import {ellipse, square, triangle} from "ionicons/icons";
 import {SignUp} from "./components/auth/sign-up/SignUp";
 import {SignIn} from "./components/auth/sign-in/SignIn";
 import {ErrorPage} from "./components/common/ErrorPage";
-import {HomePage} from "./components/category/HomePage";
-import {Question} from "./components/question/Question";
+import {HomePage} from "./components/HomePage";
+import {RankedQuiz} from "./components/ranked-quiz/RankedQuiz";
 import {MyAccount} from "./components/my-account/MyAccount";
 import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
-import {Quiz} from "./components/quiz/Quiz";
+import {PrivateQuiz} from "./components/private-quiz/PrivateQuiz";
 import {QuizCreator} from "./components/my-quizzes/QuizCreator";
 import {CategorySelect} from "./components/category/CategorySelect";
 import {PrivateQuizEntrance} from "./components/private-quiz/PrivateQuizEntrance";
@@ -82,10 +82,10 @@ const App: FC = () => {
                             <PrivateQuizEntrance/>
                         </AuthRoute>
                         <AuthRoute path="/questions">
-                            <Question/>
+                            <RankedQuiz/>
                         </AuthRoute>
                         <AuthRoute path="/quiz">
-                            <Quiz/>
+                            <PrivateQuiz/>
                         </AuthRoute>
                         <AuthRoute path="/my-quizzes">
                             <MyQuizzes />

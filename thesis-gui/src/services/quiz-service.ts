@@ -8,8 +8,8 @@ import {
 } from "../types/my-quiz";
 
 export const quizService = {
-    get(key: string): Promise<QuestionsSetRequest> {
-        return httpService.get<QuestionsSetRequest>(`/questions-sets/${key}`);
+    get(key: string) {
+        return httpService.get<QuestionsSetResponse>(`/questions-sets/${key}`);
     },
 
     getList() {

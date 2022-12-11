@@ -1,22 +1,22 @@
 import {createContext, FC, useContext, useEffect, useState} from "react";
 import {useUserContext} from "./UserContext";
 
-type QuizzContextType = {
+type QuizContextType = {
     chosenKey: string,
     chooseKey: (key: string) => void,
 };
 
-const QUIZZ_CONTEXT_INIT_STATE: QuizzContextType = {
+const QUIZ_CONTEXT_INIT_STATE: QuizContextType = {
     chosenKey: '',
     chooseKey: () => {}
 };
 
-const QuizzContext = createContext<QuizzContextType>(QUIZZ_CONTEXT_INIT_STATE);
+const QuizContext = createContext<QuizContextType>(QUIZ_CONTEXT_INIT_STATE);
 
-export const QuizzContextProvider: FC = ({ children }) => {
+export const QuizContextProvider: FC = ({ children }) => {
 
     const { user } = useUserContext();
-    const [chosenKey, setChosenKey] = useState<string>(QUIZZ_CONTEXT_INIT_STATE.chosenKey);
+    const [chosenKey, setChosenKey] = useState<string>(QUIZ_CONTEXT_INIT_STATE.chosenKey);
 
     useEffect(() => {
         if (user) {
@@ -30,10 +30,10 @@ export const QuizzContextProvider: FC = ({ children }) => {
     };
 
     return (
-        <QuizzContext.Provider value={{ chosenKey, chooseKey}}>
+        <QuizContext.Provider value={{ chosenKey, chooseKey}}>
             {children}
-        </QuizzContext.Provider>
+        </QuizContext.Provider>
     )
 };
 
-export const useQuizzContext = () => useContext(QuizzContext);
+export const useQuizContext = () => useContext(QuizContext);
