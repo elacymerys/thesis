@@ -58,7 +58,7 @@ const QuizzesListItem: React.FC<{
             })
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
-                    tryRefreshTokens().then(handleDelete);
+                    tryRefreshTokens().then(handleRefresh);
                 } else {
                     history.push('/error-page');
                 }
