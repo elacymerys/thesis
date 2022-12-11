@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {
     IonCard,
     IonCardContent,
@@ -17,15 +17,19 @@ const CategoryRanksItem: React.FC<{ name: string, rank: number }> = ({ name, ran
         <IonItem>
             <IonLabel>{ name }</IonLabel>
             <IonLabel slot="end">
-                { rank }
+                { Math.ceil(rank * 100) }
             </IonLabel>
         </IonItem>
     );
 }
 
 export const UserRanking = () => {
-    const { user } = useUserContext();
+    const { user, refreshUser } = useUserContext();
     const { categories } = useCategoryContext();
+
+    useEffect(() => {
+        refreshUser();
+    }, []);
 
     const getCategoryNameWithId = (id: number) => {
         return categories.find(category => category.id == id)?.name || '';
