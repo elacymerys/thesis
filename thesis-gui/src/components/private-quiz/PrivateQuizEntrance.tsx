@@ -10,16 +10,13 @@ export const PrivateQuizEntrance: React.FC = () => {
     const { loadingState } = useCategoryContext();
     const history = useHistory();
 
-    const [input, setInput] = useState<string>('');
-    const [disableQuiz, setDisableQuiz] = useState<boolean>(true);
-
-    const handleCodeLength = (code: string) => setDisableQuiz(code.length != 8);
+    const [key, setKey] = useState<string>('');
 
     useEffect(() => {
         if (loadingState === 'FAILURE') {
             history.push('/error-page');
         }
-    }, [loadingState, history])
+    }, [loadingState, history]);
 
     return (
         <IonPage>
@@ -29,19 +26,17 @@ export const PrivateQuizEntrance: React.FC = () => {
 
                 <IonItem>
                     <IonInput
-                        value={input}
-                        onIonChange={(e: any) => {
-                            setInput(e.target.value);
-                            handleCodeLength(e.target.value);
-                        }}
+                        value={key}
+                        onIonChange={(e: any) => setKey(e.target.value)}
                         placeholder="Enter quiz secret key"
+                        autofocus
                     ></IonInput>
                 </IonItem>
                 <IonButton
-                    routerLink={`/quiz/${input}`}
+                    routerLink={`/quiz/${key}`}
                     routerDirection="back"
                     expand="block"
-                    disabled={disableQuiz}
+                    disabled={ key.length != 8 }
                     style={{ marginTop: 20, marginBottom: 30 }}
                 >
                     Start
