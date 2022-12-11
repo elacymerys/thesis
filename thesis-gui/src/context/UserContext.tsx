@@ -41,7 +41,7 @@ export const UserContextProvider: FC = ({ children }) => {
             .then(() => setLoadingState('SUCCESS'))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
-                    tryRefreshTokens().then(getUser);
+                    tryRefreshTokens().then(refreshUser);
                 } else {
                     setUser(undefined);
                     setLoadingState('FAILURE');
