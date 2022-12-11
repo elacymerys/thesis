@@ -117,6 +117,7 @@ export const Quiz: React.FC = () => {
                         question={ question.question }
                         questionNumber={ questionNumber }
                         category={ category! }
+                        flagDisabled={showResult}
                         flagQuestion={() => flagQuestion(question?.correct.id)}
                     /> ) ||
                     ( question && question.type === QuestionType.PICTURE &&
@@ -125,6 +126,7 @@ export const Quiz: React.FC = () => {
                         questionNumber={ questionNumber }
                         category={ category! }
                         authorName={ question.authorName! }
+                        flagDisabled={showResult}
                         flagQuestion={() => flagQuestion(question?.correct.id)}
                     /> )
                 }

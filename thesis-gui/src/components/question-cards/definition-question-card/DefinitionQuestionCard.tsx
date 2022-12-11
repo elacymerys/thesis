@@ -14,6 +14,7 @@ export const DefinitionQuestionCard: React.FC<{
     question: string,
     questionNumber: number,
     category: CategoryType,
+    flagDisabled: boolean,
     flagQuestion: () => void
 }> = props => (
     <IonCard>
@@ -24,7 +25,10 @@ export const DefinitionQuestionCard: React.FC<{
             <IonCardTitle style={{display: 'flex', justifyContent: 'space-between'}}>
                 {`Question ${props.questionNumber || ''}`}
                 <IonButtons>
-                    <IonButton onClick={props.flagQuestion}>
+                    <IonButton
+                        disabled={props.flagDisabled}
+                        onClick={props.flagQuestion}
+                    >
                         <IonIcon slot="icon-only" icon={flagOutline}/>
                     </IonButton>
                 </IonButtons>
