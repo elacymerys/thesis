@@ -1,5 +1,11 @@
 import { httpService } from "./http-service";
-import {QuestionsSetCreateRequest, QuestionsSetKeyResponse, Quiz, QuizFullResponse} from "../types/my-quiz";
+import {
+    QuestionsSetCreateRequest,
+    QuestionsSetKeyRequest,
+    QuestionsSetKeyResponse,
+    Quiz,
+    QuizFullResponse
+} from "../types/my-quiz";
 
 export const quizzesService = {
     getList() {
@@ -20,5 +26,9 @@ export const quizzesService = {
 
     delete(key: string) {
         return httpService.delete<undefined, QuestionsSetKeyResponse>(`/questions-sets/${key}`, undefined);
+    },
+
+    refreshKey(key: QuestionsSetKeyRequest) {
+        return httpService.patch<QuestionsSetKeyRequest, QuestionsSetKeyResponse>('/questions-sets/refresh-key', key);
     }
 }

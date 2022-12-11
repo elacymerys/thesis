@@ -25,6 +25,10 @@ export type QuestionsSetKeyResponse = {
     questionsSetKey: string
 }
 
+export type QuestionsSetKeyRequest = {
+    questionsSetKey: string
+}
+
 export type TeacherQuestionResponse = {
     question: string,
     correct: string,

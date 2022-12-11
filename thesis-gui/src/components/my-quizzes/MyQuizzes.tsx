@@ -8,7 +8,7 @@ import {
     IonPage, IonText, useIonToast
 } from "@ionic/react";
 import {useHistory} from "react-router";
-import {keyOutline, create, trashBin} from "ionicons/icons";
+import {keyOutline, create, trashBin, refreshOutline} from "ionicons/icons";
 import {PageHeader} from "../common/PageHeader";
 import {quizzesService} from "../../services/quizzes-service";
 import {Quiz} from "../../types/my-quiz";
@@ -29,22 +29,40 @@ const QuizzesListItem: React.FC<{
     questionsSetKey,
     reloadQuizzes
 }) => {
+    const COPY_KEY_TOAST_MESSAGE = `"${name}" quiz key was copied to clipboard!`;
+    const REFRESH_KEY_TOAST_MESSAGE = `"${name}" quiz key was refreshed and copied to clipboard!`;
+
     const { tryRefreshTokens } = useUserContext();
     const history = useHistory();
 
     const [present] = useIonToast();
 
-    const presentToast = () => {
+    const presentToast = (toastMessage: string) => {
         present({
-            message: `"${name}" quiz key was copied to clipboard!`,
+            message: toastMessage,
             duration: 1500,
-            position: 'bottom'
+            position: 'top'
         });
     };
 
-    const copyKeyToClipboard = () => {
-        navigator.clipboard.writeText(questionsSetKey);
-        presentToast();
+    const copyKeyToClipboard = (key: string, toastMessage: string) => {
+        navigator.clipboard.writeText(key);
+        presentToast(toastMessage);
+    }
+
+    const handleRefresh = () => {
+        quizzesService.refreshKey({ questionsSetKey: questionsSetKey })
+            .then(res => {
+                copyKeyToClipboard(res.questionsSetKey, REFRESH_KEY_TOAST_MESSAGE);
+                reloadQuizzes();
+            })
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(handleDelete);
+                } else {
+                    history.push('/error-page');
+                }
+            });
     }
 
     const handleDelete = () => {
@@ -66,10 +84,18 @@ const QuizzesListItem: React.FC<{
                 <p>{ `${questionsNumber} question(s)` }</p>
             </IonLabel>
             <IonButtons>
-                <IonButton onClick={ copyKeyToClipboard }>
+                <IonButton onClick={ () => copyKeyToClipboard(questionsSetKey, COPY_KEY_TOAST_MESSAGE) }>
                     <IonIcon
                         slot="icon-only"
                         icon={keyOutline}
+                    ></IonIcon>
+                </IonButton>
+                <IonButton
+                    onClick={ handleRefresh }
+                >
+                    <IonIcon
+                        slot="icon-only"
+                        icon={refreshOutline}
                     ></IonIcon>
                 </IonButton>
                 <IonButton
