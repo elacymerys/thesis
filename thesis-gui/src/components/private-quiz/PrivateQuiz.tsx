@@ -17,7 +17,7 @@ import {
 } from "@ionic/react";
 import {PageHeader} from "../common/PageHeader";
 import {QuestionsSetResponse, TeacherQuestionRequest} from "../../types/my-quiz";
-import {useQuizContext} from "../../context/QuizContext"
+import {useParams} from "react-router";
 
 const PAGE_NAME = "Private Quiz";
 
@@ -38,6 +38,9 @@ const WrongKeyErrorCard: React.FC<{ secretKey: string }> = ({ secretKey }) => {
 }
 
 export const PrivateQuiz: React.FC = () => {
+    // @ts-ignore
+    const { key } = useParams();
+
     const [isCorrectKey, setIsCorrectKey] = useState<boolean>(true);
     const [showResult, setShowResult] = useState(false);
     const [selected, setSelected] = useState<string | undefined>(undefined);
@@ -50,17 +53,16 @@ export const PrivateQuiz: React.FC = () => {
     const [showAlert, setShowAlert] = useState(false);
     const [buttonName, setButtonName] = useState<string>('Next')
     const [showQuestionNumber,setShowQuestionNumber] = useState<string>(`Question ${questionNumber} of ${numberOfQuestions}`);
-    const { chosenKey } = useQuizContext();
-    
+
     useEffect(() => {
         setShowLoading(true);
         getQuiz().finally(() => setShowLoading(false));
     }, []);
 
     const getQuiz = () => {
-        return quizService.get(chosenKey)
+        return quizService.get(key)
             .then(res => {
-                console.log(`Chosen key: ${chosenKey}`);
+                console.log(`Chosen key: ${key}`);
                 console.log(`Downloaded quiz: ${res.questionsSetName}`);
                 setSelected(undefined);
                 setQuiz(res);
@@ -112,7 +114,7 @@ export const PrivateQuiz: React.FC = () => {
                 />
 
                 {
-                    !isCorrectKey ? <WrongKeyErrorCard secretKey={chosenKey} /> :
+                    !isCorrectKey ? <WrongKeyErrorCard secretKey={key} /> :
                         <>
                             <IonCard>
                                 <IonCardHeader>

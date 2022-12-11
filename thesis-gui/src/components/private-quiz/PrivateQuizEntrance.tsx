@@ -3,15 +3,13 @@ import {IonButton, IonContent, IonInput, IonItem, IonLoading, IonPage} from "@io
 import {PageHeader} from "../common/PageHeader";
 import {useCategoryContext} from "../../context/CategoryContext";
 import {useHistory} from "react-router";
-import {useQuizContext} from "../../context/QuizContext";
 
-const PAGE_NAME = "Private PrivateQuiz";
+const PAGE_NAME = "Private Quiz";
 
 export const PrivateQuizEntrance: React.FC = () => {
     const { loadingState } = useCategoryContext();
     const history = useHistory();
 
-    const { chooseKey } = useQuizContext();
     const [input, setInput] = useState<string>('');
     const [disableQuiz, setDisableQuiz] = useState<boolean>(true);
 
@@ -34,14 +32,13 @@ export const PrivateQuizEntrance: React.FC = () => {
                         value={input}
                         onIonChange={(e: any) => {
                             setInput(e.target.value);
-                            chooseKey(e.target.value);
                             handleCodeLength(e.target.value);
                         }}
                         placeholder="Enter quiz secret key"
                     ></IonInput>
                 </IonItem>
                 <IonButton
-                    routerLink="/quiz"
+                    routerLink={`/quiz/${input}`}
                     routerDirection="back"
                     expand="block"
                     disabled={disableQuiz}

@@ -84,7 +84,7 @@ const App: FC = () => {
                         <AuthRoute path="/questions">
                             <RankedQuiz/>
                         </AuthRoute>
-                        <AuthRoute path="/quiz">
+                        <AuthRoute path="/quiz/:key">
                             <PrivateQuiz/>
                         </AuthRoute>
                         <AuthRoute path="/my-quizzes">
