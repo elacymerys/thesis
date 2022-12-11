@@ -63,6 +63,12 @@ public class TeacherQuestionsSetService {
     }
 
     @Transactional
+    public QuestionsSetKeyResponse updateQuestionsSet(UserAuthDetails userAuthDetails, String questionsSetKey, QuestionsSetsRequest questionsSetsRequest) {
+        deleteQuestionsSet(userAuthDetails, questionsSetKey);
+        return createQuestionsSet(userAuthDetails, questionsSetsRequest);
+    }
+
+    @Transactional
     public void deleteQuestionsSet(UserAuthDetails userAuthDetails, String questionsSetKey) {
         var user = userRepository.findById(userAuthDetails.id())
                 .orElseThrow(() -> new UnknownUserException("Cannot delete questions set for user with id " + userAuthDetails.id()));
