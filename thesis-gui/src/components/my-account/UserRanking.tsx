@@ -17,7 +17,7 @@ const CategoryRanksItem: React.FC<{ name: string, rank: number }> = ({ name, ran
         <IonItem>
             <IonLabel>{ name }</IonLabel>
             <IonLabel slot="end">
-                { rank }
+                { Math.ceil(rank * 100) }
             </IonLabel>
         </IonItem>
     );
