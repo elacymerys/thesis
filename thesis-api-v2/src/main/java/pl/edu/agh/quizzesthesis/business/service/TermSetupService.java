@@ -78,6 +78,7 @@ public class TermSetupService {
                         word.frequency() / maxFrequency,
                         0L,
                         0L,
+                        0L,
                         1.0f - (word.frequency() / maxFrequency),
                         null,
                         null,
