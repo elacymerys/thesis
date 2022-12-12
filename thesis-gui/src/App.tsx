@@ -16,11 +16,14 @@ import {ellipse, square, triangle} from "ionicons/icons";
 import {SignUp} from "./components/auth/sign-up/SignUp";
 import {SignIn} from "./components/auth/sign-in/SignIn";
 import {ErrorPage} from "./components/common/ErrorPage";
-import {CategorySelect} from "./components/category/CategorySelect";
-import {Quiz} from "./components/quiz/Quiz";
+import {HomePage} from "./components/HomePage";
+import {RankedQuiz} from "./components/ranked-quiz/RankedQuiz";
 import {MyAccount} from "./components/my-account/MyAccount";
 import {MyQuizzes} from "./components/my-quizzes/MyQuizzes";
+import {PrivateQuiz} from "./components/private-quiz/PrivateQuiz";
 import {QuizCreator} from "./components/my-quizzes/QuizCreator";
+import {CategorySelect} from "./components/category/CategorySelect";
+import {PrivateQuizEntrance} from "./components/private-quiz/PrivateQuizEntrance";
 import {useUserContext} from "./context/UserContext";
 
 /* Core CSS required for Ionic components to work properly */
@@ -69,11 +72,20 @@ const App: FC = () => {
                         <Route exact path="/auth/sign-in">
                             <SignIn/>
                         </Route>
+                        <AuthRoute path="/play">
+                            <HomePage/>
+                        </AuthRoute>
                         <AuthRoute path="/categories">
                             <CategorySelect/>
                         </AuthRoute>
+                        <AuthRoute path="/private-quiz">
+                            <PrivateQuizEntrance/>
+                        </AuthRoute>
                         <AuthRoute path="/questions">
-                            <Quiz/>
+                            <RankedQuiz/>
+                        </AuthRoute>
+                        <AuthRoute path="/quiz/:key">
+                            <PrivateQuiz/>
                         </AuthRoute>
                         <AuthRoute path="/my-quizzes">
                             <MyQuizzes />
@@ -91,11 +103,11 @@ const App: FC = () => {
                             <ErrorPage/>
                         </Route>
                         <Route exact path="/">
-                            <Redirect to="/categories"/>
+                            <Redirect to="/play"/>
                         </Route>
                     </IonRouterOutlet>
                     <IonTabBar slot="bottom">
-                        <IonTabButton tab="tab1" href="/categories" disabled={ !user }>
+                        <IonTabButton tab="tab1" href="/play" disabled={ !user }>
                             <IonIcon icon={triangle} />
                             <IonLabel>Play</IonLabel>
                         </IonTabButton>

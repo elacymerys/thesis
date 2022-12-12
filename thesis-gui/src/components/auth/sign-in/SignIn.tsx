@@ -29,7 +29,7 @@ export const SignIn: React.FC = () => {
 
     const handleSignIn = () => {
         signIn({ login, password })
-            .then(() => history.push('/categories'))
+            .then(() => history.push('/play'))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
                     setApiError('Login or password incorrect!');

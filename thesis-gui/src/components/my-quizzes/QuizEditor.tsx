@@ -8,13 +8,13 @@ import {
 import {QuizBuilder} from "./quiz-builder/QuizBuilder";
 import {PageHeader} from "../common/PageHeader";
 import {IonPage} from "@ionic/react";
-import {quizzesService} from "../../services/quizzes-service";
+import {quizService} from "../../services/quiz-service";
 import {useHistory, useParams} from "react-router";
 import {ApiError, isApiError} from "../../types/api-error";
 import {HttpStatusCode} from "../../utils/http-status-code";
 import {useUserContext} from "../../context/UserContext";
 
-const PAGE_NAME = 'Quiz Editor';
+const PAGE_NAME = 'PrivateQuiz Editor';
 
 export const QuizEditor: React.FC = () => {
     // @ts-ignore
@@ -39,7 +39,7 @@ export const QuizEditor: React.FC = () => {
     };
 
     const getQuestionsSet = () => {
-        quizzesService.getQuiz(key)
+        quizService.getQuiz(key)
             .then(updateQuestionsSet)
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
@@ -53,7 +53,7 @@ export const QuizEditor: React.FC = () => {
     useEffect(getQuestionsSet, [key]);
 
     const updateQuiz = (request: QuestionsSetRequest) => {
-        quizzesService.update(key, request)
+        quizService.update(key, request)
             .then(() => history.push('/my-quizzes'))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {

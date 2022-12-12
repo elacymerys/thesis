@@ -7,7 +7,11 @@ import {
     QuestionsSetResponse
 } from "../types/my-quiz";
 
-export const quizzesService = {
+export const quizService = {
+    get(key: string) {
+        return httpService.get<QuestionsSetResponse>(`/questions-sets/${key}`);
+    },
+
     getList() {
         return httpService.get<Quiz[]>('/questions-sets');
     },

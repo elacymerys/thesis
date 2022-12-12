@@ -5,12 +5,12 @@ import {
     IonItem,
     IonLabel,
     IonList,
-    IonPage, IonText, useIonToast
+    IonPage, useIonToast
 } from "@ionic/react";
 import {useHistory} from "react-router";
 import {keyOutline, createOutline, trashBinOutline, refreshOutline} from "ionicons/icons";
 import {PageHeader} from "../common/PageHeader";
-import {quizzesService} from "../../services/quizzes-service";
+import {quizService} from "../../services/quiz-service";
 import {Quiz} from "../../types/my-quiz";
 import {useUserContext} from "../../context/UserContext";
 import {ApiError, isApiError} from "../../types/api-error";
@@ -51,7 +51,7 @@ const QuizzesListItem: React.FC<{
     }
 
     const handleRefresh = () => {
-        quizzesService.refreshKey({ questionsSetKey: questionsSetKey })
+        quizService.refreshKey({ questionsSetKey: questionsSetKey })
             .then(res => {
                 copyKeyToClipboard(res.questionsSetKey, REFRESH_KEY_TOAST_MESSAGE);
                 reloadQuizzes();
@@ -66,7 +66,7 @@ const QuizzesListItem: React.FC<{
     }
 
     const handleDelete = () => {
-        quizzesService.delete(questionsSetKey)
+        quizService.delete(questionsSetKey)
             .then(reloadQuizzes)
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
@@ -127,7 +127,7 @@ export const MyQuizzes: React.FC = () => {
     const [quizzesList, setQuizzesList] = useState<Quiz[]>([]);
 
     const getQuizzesList = () => {
-        quizzesService.getList()
+        quizService.getList()
             .then(res => setQuizzesList(res))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {

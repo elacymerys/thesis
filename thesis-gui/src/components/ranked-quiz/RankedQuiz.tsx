@@ -4,8 +4,7 @@ import {
     IonList, IonLoading,
     IonPage, IonRadioGroup
 } from '@ionic/react';
-import './Quiz.css';
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { HttpStatusCode } from "../../utils/http-status-code";
 import { CategoryType } from "../../types/category-type";
 import Answer from "../answer/Answer";
@@ -20,10 +19,10 @@ import {ApiError, isApiError} from "../../types/api-error";
 import {QuestionResponse} from "../../types/question-response";
 import {PageHeader} from "../common/PageHeader";
 
-const PAGE_NAME = "Questions";
+const PAGE_NAME = "Ranked Quiz";
 const NEW_QUESTION_DELAY_MS = 1500;
 
-export const Quiz: React.FC = () => {
+export const RankedQuiz: React.FC = () => {
     const { tryRefreshTokens } = useUserContext();
     const { chosenCategories, getRandom } = useCategoryContext();
     const history = useHistory();
