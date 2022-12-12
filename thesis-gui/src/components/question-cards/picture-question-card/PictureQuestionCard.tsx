@@ -7,7 +7,7 @@ import {
 } from '@ionic/react';
 import './PictureQuestionCard.css';
 import {CategoryType} from "../../../types/category-type";
-import {flagOutline} from "ionicons/icons";
+import {flag} from "ionicons/icons";
 
 export const PictureQuestionCard: React.FC<{
     question: string,
@@ -16,27 +16,34 @@ export const PictureQuestionCard: React.FC<{
     authorName: string,
     flagDisabled: boolean,
     flagQuestion: () => void
-}> = props => (
+}> = ({
+    question,
+    questionNumber,
+    category,
+    authorName,
+    flagDisabled,
+    flagQuestion
+}) => (
     <IonCard>
-        <img src={props.question} alt=""/>
+        <img src={question} alt=""/>
         <IonItem lines="none">
             <IonNote>
-                {`Author: ${props.authorName}`}
+                {`Author: ${authorName}`}
             </IonNote>
         </IonItem>
 
         <IonCardHeader>
             <IonCardSubtitle>
-                {`Category: ${!!props.category ? props.category.name : ''}`}
+                {`Category: ${!!category ? category.name : ''}`}
             </IonCardSubtitle>
             <IonCardTitle style={{display: 'flex', justifyContent: 'space-between'}}>
-                {`Question ${props.questionNumber || ''}`}
+                {`Question ${questionNumber || ''}`}
                 <IonButtons>
                     <IonButton
-                        disabled={props.flagDisabled}
-                        onClick={props.flagQuestion}
+                        disabled={flagDisabled}
+                        onClick={flagQuestion}
                     >
-                        <IonIcon slot="icon-only" icon={flagOutline}/>
+                        <IonIcon slot="icon-only" icon={flag}/>
                     </IonButton>
                 </IonButtons>
             </IonCardTitle>

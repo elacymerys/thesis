@@ -8,7 +8,7 @@ import {
 } from '@ionic/react';
 import './DefinitionQuestionCard.css';
 import {CategoryType} from "../../../types/category-type";
-import {flagOutline} from "ionicons/icons";
+import {flag} from "ionicons/icons";
 
 export const DefinitionQuestionCard: React.FC<{
     question: string,
@@ -16,27 +16,33 @@ export const DefinitionQuestionCard: React.FC<{
     category: CategoryType,
     flagDisabled: boolean,
     flagQuestion: () => void
-}> = props => (
+}> = ({
+    question,
+    questionNumber,
+    category,
+    flagDisabled,
+    flagQuestion
+}) => (
     <IonCard>
         <IonCardHeader>
             <IonCardSubtitle>
-                {`Category: ${!!props.category ? props.category.name : ''}`}
+                {`Category: ${!!category ? category.name : ''}`}
             </IonCardSubtitle>
             <IonCardTitle style={{display: 'flex', justifyContent: 'space-between'}}>
-                {`Question ${props.questionNumber || ''}`}
+                {`Question ${questionNumber || ''}`}
                 <IonButtons>
                     <IonButton
-                        disabled={props.flagDisabled}
-                        onClick={props.flagQuestion}
+                        disabled={flagDisabled}
+                        onClick={flagQuestion}
                     >
-                        <IonIcon slot="icon-only" icon={flagOutline}/>
+                        <IonIcon slot="icon-only" icon={flag}/>
                     </IonButton>
                 </IonButtons>
             </IonCardTitle>
         </IonCardHeader>
 
         <IonCardContent style={{textAlign: "justify"}}>
-            {props.question.replaceAll('*****', '_____')}
+            {question.replaceAll('*****', '_____')}
         </IonCardContent>
     </IonCard>
 );

@@ -1,16 +1,26 @@
 import { IonItem, IonLabel, IonRadio } from "@ionic/react";
 import './Answer.css';
 
-const Answer: React.FC<{ name: string, showCorrect: boolean, showWrong: boolean, disabled: boolean }> = props => {
+const Answer: React.FC<{
+    name: string,
+    showCorrect: boolean,
+    showWrong: boolean,
+    disabled: boolean
+}> = ({
+    name,
+    showCorrect,
+    showWrong,
+    disabled
+}) => {
     return (
-        <IonItem color={ props.showCorrect ? 'correct': (props.showWrong ? 'wrong' : '') }>
+        <IonItem color={ showCorrect ? 'correct': (showWrong ? 'wrong' : '') }>
             <IonLabel>
-                { props.name }
+                { name }
             </IonLabel>
             <IonRadio
                 slot="start"
-                value={ props.name }
-                disabled={ props.disabled }
+                value={ name }
+                disabled={ disabled }
             />
         </IonItem>
     );
