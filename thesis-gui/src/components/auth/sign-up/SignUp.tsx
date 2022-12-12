@@ -33,7 +33,7 @@ export const SignUp: React.FC = () => {
 
     const handleSignUp = () => {
         signUp({ nick, email, password })
-            .then(() => history.push('/categories'))
+            .then(() => history.push('/play'))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.CONFLICT) {
                     setApiError('User with this nick or email already exists!');

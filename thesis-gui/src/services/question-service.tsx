@@ -16,6 +16,10 @@ export const questionService = {
 
     sendAnswer(body: AnswerRequest) {
         return httpService.post<AnswerRequest, any>('/answers', body);
+    },
+
+    flag(termId: number) {
+        return httpService.post<undefined, undefined>(`/terms/${termId}/flags`, undefined);
     }
 }
 

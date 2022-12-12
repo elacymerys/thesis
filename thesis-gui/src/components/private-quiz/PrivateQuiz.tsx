@@ -122,6 +122,7 @@ export const PrivateQuiz: React.FC = () => {
             name={ answer }
             showCorrect={ showResult && answer === currentQuestion.correct }
             showWrong={ showResult && answer === selected && answer !== currentQuestion.correct }
+            disabled={showResult}
             key={ answer }
         />
     );

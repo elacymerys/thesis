@@ -20,6 +20,7 @@ import {QuestionResponse} from "../../types/question-response";
 import {PageHeader} from "../common/PageHeader";
 
 const PAGE_NAME = "Ranked Quiz";
+const NEW_QUESTION_DELAY_MS = 1500;
 
 export const RankedQuiz: React.FC = () => {
     const { tryRefreshTokens } = useUserContext();
@@ -48,21 +49,20 @@ export const RankedQuiz: React.FC = () => {
             name={ answer }
             showCorrect={ showResult && answer === question.correct.name }
             showWrong={ showResult && answer === selected && answer !== question.correct.name }
+            disabled={showResult}
             key={ answer }
         />
     );
 
     const checkAnswer = () => {
-        console.log(`${selected === question!.correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
         setShowResult(true);
 
         questionService.sendAnswer({ termId: question!.correct.id, answerCorrect: selected === question!.correct.name })
-            .then(() => setTimeout(getNewQuestion, 1500))
+            .then(() => setTimeout(getNewQuestion, NEW_QUESTION_DELAY_MS))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
                     tryRefreshTokens().then(checkAnswer);
                 } else {
-                    console.log(err);
                     history.push('/error-page');
                 }
             });
@@ -82,12 +82,24 @@ export const RankedQuiz: React.FC = () => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
                     tryRefreshTokens().then(getNewQuestion);
                 } else {
-                    console.log(err);
                     history.push('/error-page');
                 }
             })
             .finally(() => setShowResult(false));
     }
+
+    const flagQuestion = (termId: number) => {
+        setShowResult(true);
+        questionService.flag(termId)
+            .then(() => setTimeout(getNewQuestion, NEW_QUESTION_DELAY_MS))
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(() => flagQuestion(termId));
+                } else {
+                    history.push('/error-page');
+                }
+            });
+    };
 
     return (
         <IonPage>
@@ -104,6 +116,8 @@ export const RankedQuiz: React.FC = () => {
                         question={ question.question }
                         questionNumber={ questionNumber }
                         category={ category! }
+                        flagDisabled={showResult}
+                        flagQuestion={() => flagQuestion(question?.correct.id)}
                     /> ) ||
                     ( question && question.type === QuestionType.PICTURE &&
                     <PictureQuestionCard
@@ -111,6 +125,8 @@ export const RankedQuiz: React.FC = () => {
                         questionNumber={ questionNumber }
                         category={ category! }
                         authorName={ question.authorName! }
+                        flagDisabled={showResult}
+                        flagQuestion={() => flagQuestion(question?.correct.id)}
                     /> )
                 }
 
