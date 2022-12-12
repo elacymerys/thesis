@@ -19,6 +19,7 @@ import {QuestionsSetResponse, TeacherQuestionResponse} from "../../types/my-quiz
 import {useParams} from "react-router";
 
 const PAGE_NAME = "Private Quiz";
+const NEW_QUESTION_DELAY_MS = 1500;
 
 const WrongKeyErrorCard: React.FC<{ secretKey: string }> = ({ secretKey }) => {
     return (
@@ -108,7 +109,7 @@ export const PrivateQuiz: React.FC = () => {
     const checkAnswer = () => {
         selected === question?.correct ? setCorrectAnswers(prev => prev+1) : setCorrectAnswers(prev => prev);
         setShowResult(true);
-        setTimeout(getNextQuestion, 1500);
+        setTimeout(getNextQuestion, NEW_QUESTION_DELAY_MS);
     }
 
     const answerItems = question && question.answers.map(answer =>
