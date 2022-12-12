@@ -37,6 +37,7 @@ export const UserRanking = () => {
 
     const categoryRanksItems = Object.entries(user!.categoryRanks)
         .filter(([id, _]) => user!.categoryTotalAnswersCounter[parseInt(id)] > 0)
+        .sort((categoryRank1, categoryRank2) => categoryRank2[1] - categoryRank1[1])
         .map(([id, rank]) => (
             <CategoryRanksItem
                 name={ getCategoryNameWithId(parseInt(id)) }
