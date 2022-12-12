@@ -1,29 +1,16 @@
-import React, {useEffect, useState} from "react";
-import {IonButton, IonContent, IonInput, IonItem, IonLoading, IonPage} from "@ionic/react";
+import React, {useState} from "react";
+import {IonButton, IonContent, IonInput, IonItem, IonPage} from "@ionic/react";
 import {PageHeader} from "../common/PageHeader";
-import {useCategoryContext} from "../../context/CategoryContext";
-import {useHistory} from "react-router";
 
 const PAGE_NAME = "Private Quiz";
 
 export const PrivateQuizEntrance: React.FC = () => {
-    const { loadingState } = useCategoryContext();
-    const history = useHistory();
-
     const [key, setKey] = useState<string>('');
-
-    useEffect(() => {
-        if (loadingState === 'FAILURE') {
-            history.push('/error-page');
-        }
-    }, [loadingState, history]);
 
     return (
         <IonPage>
             <PageHeader name={ PAGE_NAME } />
             <IonContent class="ion-padding">
-                <IonLoading isOpen={loadingState === 'LOADING'}/>
-
                 <IonItem>
                     <IonInput
                         value={key}

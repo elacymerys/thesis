@@ -1,33 +1,19 @@
-import React, { useEffect } from "react";
+import React from "react";
 import {
     IonCard, IonCardContent, IonCardSubtitle, IonCardTitle,
     IonContent,
-    IonLoading,
     IonPage,
     IonRouterLink, IonText
 } from "@ionic/react";
-import {useHistory} from "react-router";
-import {useCategoryContext} from "../context/CategoryContext";
 import {PageHeader} from "./common/PageHeader";
 
 const PAGE_NAME = 'Play';
 
 export const HomePage: React.FC = () => {
-    const { loadingState } = useCategoryContext();
-    const history = useHistory();
-
-    useEffect(() => {
-        if (loadingState === 'FAILURE') {
-            history.push('/error-page');
-        }
-    }, [loadingState, history])
-
     return (
         <IonPage>
             <PageHeader name={ PAGE_NAME } />
             <IonContent class="ion-padding">
-                <IonLoading isOpen={loadingState === 'LOADING'} />
-
                 <IonText style={{ display: "block", textAlign: "center", marginBottom: "15px" }}>
                     <h4>Choose quiz type ...</h4>
                 </IonText>
@@ -63,7 +49,6 @@ export const HomePage: React.FC = () => {
                         </IonCardSubtitle>
                     </IonCardContent>
                 </IonCard>
-
             </IonContent>
         </IonPage>
     );

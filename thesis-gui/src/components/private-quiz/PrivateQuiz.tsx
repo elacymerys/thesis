@@ -46,6 +46,8 @@ const QuizResultCard: React.FC<{
         correctAnswers,
         numberOfQuestions
 }) => {
+    const studentPercentageResult = Math.round(correctAnswers / numberOfQuestions * 100);
+
     return (
         <IonCard>
             <IonCardHeader>
@@ -57,7 +59,7 @@ const QuizResultCard: React.FC<{
                 </IonCardTitle>
             </IonCardHeader>
             <IonCardContent>
-                { `Your result is: ${correctAnswers} / ${numberOfQuestions} (${Math.round(correctAnswers / numberOfQuestions * 100)}%)` }
+                { `Your result is: ${correctAnswers} / ${numberOfQuestions} (${studentPercentageResult}%)` }
             </IonCardContent>
         </IonCard>
     );
@@ -73,8 +75,8 @@ export const PrivateQuiz: React.FC = () => {
 
     const [quiz, setQuiz] = useState<QuestionsSetResponse | undefined>(undefined);
     const [numberOfQuestions, setNumberOfQuestions] = useState(0);
-    const [question, setQuestion] = useState<TeacherQuestionResponse | undefined>(undefined);
-    const [questionNumber, setQuestionNumber] = useState(1);
+    const [currentQuestion, setCurrentQuestion] = useState<TeacherQuestionResponse | undefined>(undefined);
+    const [questionNumber, setQuestionNumber] = useState(0);
 
     const [correctAnswers, setCorrectAnswers] = useState(0);
     const [showLoading, setShowLoading] = useState(false);
@@ -84,6 +86,10 @@ export const PrivateQuiz: React.FC = () => {
         getQuiz().finally(() => setShowLoading(false));
     }, []);
 
+    useEffect(() => {
+        setCurrentQuestion(quiz?.teacherQuestionsResponse[questionNumber]);
+    }, [questionNumber]);
+
     const getQuiz = () => {
         return quizService.get(key)
             .then(res => {
@@ -92,7 +98,7 @@ export const PrivateQuiz: React.FC = () => {
 
                 setQuiz(res);
                 setNumberOfQuestions(res.teacherQuestionsResponse.length);
-                setQuestion(res.teacherQuestionsResponse[0]);
+                setCurrentQuestion(res.teacherQuestionsResponse[questionNumber]);
             })
             .catch(err => {
                 console.log(err);
@@ -103,20 +109,19 @@ export const PrivateQuiz: React.FC = () => {
     const getNextQuestion = () => {
         setShowResult(false);
         setQuestionNumber(prev => prev+1);
-        setQuestion(quiz?.teacherQuestionsResponse[questionNumber])
     }
 
     const checkAnswer = () => {
-        selected === question?.correct ? setCorrectAnswers(prev => prev+1) : setCorrectAnswers(prev => prev);
+        selected === currentQuestion?.correct ? setCorrectAnswers(prev => prev+1) : setCorrectAnswers(prev => prev);
         setShowResult(true);
         setTimeout(getNextQuestion, NEW_QUESTION_DELAY_MS);
     }
 
-    const answerItems = question && question.answers.map(answer =>
+    const answerItems = currentQuestion && currentQuestion.answers.map(answer =>
         <Answer
             name={ answer }
-            showCorrect={ showResult && answer === question.correct }
-            showWrong={ showResult && answer === selected && answer !== question.correct }
+            showCorrect={ showResult && answer === currentQuestion.correct }
+            showWrong={ showResult && answer === selected && answer !== currentQuestion.correct }
             key={ answer }
         />
     );
@@ -134,7 +139,7 @@ export const PrivateQuiz: React.FC = () => {
                     !isCorrectKey ? <WrongKeyErrorCard secretKey={key} /> :
                         <>
                             {
-                                !question ?
+                                !currentQuestion ?
                                     <QuizResultCard
                                         questionsSetName={ quiz ? quiz.questionsSetName : ''  }
                                         correctAnswers={ correctAnswers }
@@ -147,11 +152,11 @@ export const PrivateQuiz: React.FC = () => {
                                                     { `Quiz: ${ quiz ? quiz.questionsSetName : '' }` }
                                                 </IonCardSubtitle>
                                                 <IonCardTitle>
-                                                    { `Question ${questionNumber} of ${numberOfQuestions}` }
+                                                    { `Question ${questionNumber+1} of ${numberOfQuestions}` }
                                                 </IonCardTitle>
                                             </IonCardHeader>
                                             <IonCardContent style={{ textAlign: "justify" }}>
-                                                { question?.question }
+                                                { currentQuestion?.question }
                                             </IonCardContent>
                                         </IonCard>
                                         <IonList>
