@@ -27,7 +27,7 @@ export const validatePassword = (password: string): string => {
 
 export const validateQuestion = (question: string): string => {
     if (!question || question.length < 1 || question.length > 200) {
-        return 'RankedQuiz must be 1-200 characters long!';
+        return 'Question must be 1-200 characters long!';
     } else {
         return '';
     }
