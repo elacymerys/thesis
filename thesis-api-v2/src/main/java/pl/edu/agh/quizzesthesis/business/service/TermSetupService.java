@@ -14,6 +14,7 @@ import pl.edu.agh.quizzesthesis.data.repository.TermRepository;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -64,22 +65,27 @@ public class TermSetupService {
         }
 
         newTermsFromApi = getNewTermsFromApiTaken(numberOfTermsBySearchPhrase, newTermsFromApi, searchPhrase);
-        var maxFrequency = termsFromApi.stream().max((wf1, wf2) -> Float.compare(wf1.frequency(), wf2.frequency()))
-                .map(WordFrequency::frequency).orElse(0F);
+        newTermsFromApi = newTermsFromApi.stream().sorted((wf1, wf2) -> Float.compare(wf2.frequency(), wf1.frequency())).toList();
+        List<WordFrequency> termsFromApiChanged = new ArrayList<WordFrequency>();
+        var i = 0;
+        for (WordFrequency term : newTermsFromApi) {
+            termsFromApiChanged.add(new WordFrequency(term.word, (float) i / newTermsFromApi.size()));
+            i++;
+        }
 
-        termRepository.saveAll(getTermsToSave(searchPhrase, newTermsFromApi, maxFrequency));
+        termRepository.saveAll(getTermsToSave(searchPhrase, termsFromApiChanged));
     }
 
-    private List<Term> getTermsToSave(SearchPhrase searchPhrase, List<WordFrequency> newTermsFromApi, float maxFrequency) {
+    private List<Term> getTermsToSave(SearchPhrase searchPhrase, List<WordFrequency> newTermsFromApi) {
         return newTermsFromApi.stream()
                 .map(word -> new Term(
                         null,
                         word.word(),
-                        word.frequency() / maxFrequency,
+                        word.frequency(),
                         0L,
                         0L,
                         0L,
-                        1.0f - (word.frequency() / maxFrequency),
+                        word.frequency(),
                         null,
                         null,
                         searchPhrase,
