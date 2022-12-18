@@ -84,6 +84,7 @@ public class TermSetupService {
                         word.frequency(),
                         0L,
                         0L,
+                        0L,
                         word.frequency(),
                         null,
                         null,
