@@ -24,6 +24,7 @@ public class Term {
     private Float initialDifficulty;
     private Long wrongAnswersCounter;
     private Long totalAnswersCounter;
+    private Long flagCounter;
     private Float difficulty;
     private String pictureURL;
     private String authorName;

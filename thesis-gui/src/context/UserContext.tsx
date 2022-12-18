@@ -15,7 +15,8 @@ type UserContextType = {
     tryRefreshTokens: () => Promise<any>,
     signIn: (request: SignInRequest) => Promise<any>,
     signUp: (request: SignUpRequest) => Promise<any>,
-    signOut: () => Promise<any>
+    signOut: () => Promise<any>,
+    refreshUser: () => Promise<any>
 };
 
 const USER_CONTEXT_INIT_STATE: UserContextType = {
@@ -24,7 +25,8 @@ const USER_CONTEXT_INIT_STATE: UserContextType = {
     tryRefreshTokens: () => Promise.reject(),
     signIn: () => Promise.reject(),
     signUp: () => Promise.reject(),
-    signOut: () => Promise.reject()
+    signOut: () => Promise.reject(),
+    refreshUser: () => Promise.reject()
 };
 
 const UserContext = createContext<UserContextType>(USER_CONTEXT_INIT_STATE);
@@ -33,19 +35,23 @@ export const UserContextProvider: FC = ({ children }) => {
     const [loadingState, setLoadingState] = useState<UserContextLoadingState>(USER_CONTEXT_INIT_STATE.loadingState);
     const [user, setUser] = useState<User | undefined>(USER_CONTEXT_INIT_STATE.user);
 
-    const getUser = () => {
-        setLoadingState('LOADING');
-        userService.getUser()
+    const refreshUser = () => {
+        return userService.getUser()
             .then(setUser)
             .then(() => setLoadingState('SUCCESS'))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
-                    tryRefreshTokens().then(getUser);
+                    tryRefreshTokens().then(refreshUser);
                 } else {
                     setUser(undefined);
                     setLoadingState('FAILURE');
                 }
             });
+    };
+
+    const getUser = () => {
+        setLoadingState('LOADING');
+        refreshUser();
     };
 
     const tryRefreshTokens = () => {
@@ -107,10 +113,10 @@ export const UserContextProvider: FC = ({ children }) => {
     useEffect(getUser, []);
 
     return (
-        <UserContext.Provider value={{ loadingState, user, tryRefreshTokens, signIn, signUp, signOut }}>
+        <UserContext.Provider value={{ loadingState, user, tryRefreshTokens, signIn, signUp, signOut, refreshUser }}>
             {children}
         </UserContext.Provider>
     )
-};
+}
 
 export const useUserContext = () => useContext(UserContext);

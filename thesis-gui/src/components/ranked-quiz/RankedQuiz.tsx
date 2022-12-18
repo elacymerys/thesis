@@ -4,7 +4,6 @@ import {
     IonList, IonLoading,
     IonPage, IonRadioGroup
 } from '@ionic/react';
-import './Quiz.css';
 import { useEffect, useState } from "react";
 import { HttpStatusCode } from "../../utils/http-status-code";
 import { CategoryType } from "../../types/category-type";
@@ -20,8 +19,10 @@ import {ApiError, isApiError} from "../../types/api-error";
 import {QuestionResponse} from "../../types/question-response";
 import {PageHeader} from "../common/PageHeader";
 
+const PAGE_NAME = "Ranked Quiz";
+const NEW_QUESTION_DELAY_MS = 1500;
 
-export const Quiz: React.FC = () => {
+export const RankedQuiz: React.FC = () => {
     const { tryRefreshTokens } = useUserContext();
     const { chosenCategories, getRandom } = useCategoryContext();
     const history = useHistory();
@@ -48,21 +49,20 @@ export const Quiz: React.FC = () => {
             name={ answer }
             showCorrect={ showResult && answer === question.correct.name }
             showWrong={ showResult && answer === selected && answer !== question.correct.name }
+            disabled={showResult}
             key={ answer }
         />
     );
 
     const checkAnswer = () => {
-        console.log(`${selected === question!.correct.name ? 'CORRECT' : 'NOT CORRECT'}`);
         setShowResult(true);
 
         questionService.sendAnswer({ termId: question!.correct.id, answerCorrect: selected === question!.correct.name })
-            .then(() => setTimeout(getNewQuestion, 1500))
+            .then(() => setTimeout(getNewQuestion, NEW_QUESTION_DELAY_MS))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
                     tryRefreshTokens().then(checkAnswer);
                 } else {
-                    console.log(err);
                     history.push('/error-page');
                 }
             });
@@ -77,25 +77,38 @@ export const Quiz: React.FC = () => {
                 setQuestion(res);
                 setSelected(undefined);
                 setQuestionNumber(prev => prev + 1);
-                setShowResult(false)
-            }
-            )
-            .catch(err =>
-            {
-            console.log(err);
-            getNewQuestion();
-            });
+            })
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(getNewQuestion);
+                } else {
+                    history.push('/error-page');
+                }
+            })
+            .finally(() => setShowResult(false));
     }
+
+    const flagQuestion = (termId: number) => {
+        setShowResult(true);
+        questionService.flag(termId)
+            .then(() => setTimeout(getNewQuestion, NEW_QUESTION_DELAY_MS))
+            .catch(err => {
+                if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
+                    tryRefreshTokens().then(() => flagQuestion(termId));
+                } else {
+                    history.push('/error-page');
+                }
+            });
+    };
 
     return (
         <IonPage>
-            <PageHeader name={ "Questions" } condense={ false } />
+            <PageHeader name={ PAGE_NAME } />
             <IonContent fullscreen>
                 <IonLoading
                     isOpen={ showLoading }
                     message={ 'Loading...' }
                 />
-                <PageHeader name={ "Questions" } condense={ true } />
 
                 {
                     ( question && question.type === QuestionType.DEFINITION &&
@@ -103,6 +116,8 @@ export const Quiz: React.FC = () => {
                         question={ question.question }
                         questionNumber={ questionNumber }
                         category={ category! }
+                        flagDisabled={showResult}
+                        flagQuestion={() => flagQuestion(question?.correct.id)}
                     /> ) ||
                     ( question && question.type === QuestionType.PICTURE &&
                     <PictureQuestionCard
@@ -110,6 +125,8 @@ export const Quiz: React.FC = () => {
                         questionNumber={ questionNumber }
                         category={ category! }
                         authorName={ question.authorName! }
+                        flagDisabled={showResult}
+                        flagQuestion={() => flagQuestion(question?.correct.id)}
                     /> )
                 }
 
@@ -121,7 +138,7 @@ export const Quiz: React.FC = () => {
 
                 <IonButton
                     onClick={ checkAnswer }
-                    disabled={ showResult }
+                    disabled={ selected === undefined || showResult }
                     expand="block"
                     style={{ marginTop: 20, marginBottom: 30 }}
                 >
@@ -131,4 +148,4 @@ export const Quiz: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}

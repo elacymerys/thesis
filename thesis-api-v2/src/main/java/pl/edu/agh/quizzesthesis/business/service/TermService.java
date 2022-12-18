@@ -15,13 +15,12 @@ import java.util.Random;
 public class TermService {
 
     private static final int INITIAL_DIFFICULTY_WEIGHT = 100;
-    private static final int SINGLE_TERM_PAGE_SIZE = 1;
 
     private final TermRepository termRepository;
     private final Random random;
 
     @Transactional
-    public Term getWithDifficulty(int categoryId, float difficulty){
+    public Term getWithDifficulty(int categoryId, float difficulty) {
         var termsWithSimilarDifficulty = termRepository.findByCategoryAndDifficulty(categoryId, difficulty);
         int termCounter = termsWithSimilarDifficulty.size();
         if (termCounter == 0) {
@@ -32,8 +31,7 @@ public class TermService {
     }
 
     public Term updateTermDifficulty(int termId, boolean isAnswerCorrect) {
-        var term = termRepository.findById(termId)
-                .orElseThrow(() -> new NotFoundException("Cannot find term with id %d".formatted(termId)));
+        var term = getTermOrThrow(termId);
 
         term.setTotalAnswersCounter(term.getTotalAnswersCounter() + 1);
         if (!isAnswerCorrect) {
@@ -52,15 +50,26 @@ public class TermService {
 
     @Transactional
     public void updateTermPicture(int termId, TermPictureUpdateRequest request) {
-        var term = termRepository.findById(termId)
-                .orElseThrow(() -> new NotFoundException("Cannot find term with id %d".formatted(termId)));
+        var term = getTermOrThrow(termId);
 
         term.setPictureURL(request.pictureURL());
         term.setAuthorName(request.authorName());
         termRepository.save(term);
     }
 
+    @Transactional
+    public void flagTerm(int termId) {
+        var term = getTermOrThrow(termId);
+        term.setFlagCounter(term.getFlagCounter() + 1);
+        termRepository.save(term);
+    }
+
     public boolean existsOfCategory(String termName, int categoryId) {
         return termRepository.existsByNameAndCategoryId(termName, categoryId);
+    }
+
+    private Term getTermOrThrow(int termId) {
+        return termRepository.findById(termId)
+                .orElseThrow(() -> new NotFoundException("Cannot find term with id %d".formatted(termId)));
     }
 }

@@ -13,6 +13,8 @@ import {validateEmail, validateNick, validatePassword} from "../../../utils/vali
 import {FormErrorMessage} from "../../common/FormErrorMessage";
 import {PageHeader} from "../../common/PageHeader";
 
+const PAGE_NAME = "Sign In";
+
 export const SignIn: React.FC = () => {
     const { signIn } = useUserContext();
     const history = useHistory();
@@ -27,7 +29,7 @@ export const SignIn: React.FC = () => {
 
     const handleSignIn = () => {
         signIn({ login, password })
-            .then(() => history.push('/categories'))
+            .then(() => history.push('/play'))
             .catch(err => {
                 if (isApiError(err) && (err as ApiError).apiStatusCode === HttpStatusCode.UNAUTHORIZED) {
                     setApiError('Login or password incorrect!');
@@ -67,9 +69,8 @@ export const SignIn: React.FC = () => {
 
     return (
         <IonPage>
-            <PageHeader name={ "Sign In" } condense={ false } />
+            <PageHeader name={ PAGE_NAME } />
             <IonContent class="ion-padding">
-                <PageHeader name={ "Sign In" } condense={ true } />
                 <IonItem>
                     <IonLabel position="floating">Login</IonLabel>
                     <IonInput onIonChange={e => handleLoginChange(e.detail.value as string)} type="text" required/>
@@ -93,4 +94,4 @@ export const SignIn: React.FC = () => {
             </IonContent>
         </IonPage>
     );
-};
+}
