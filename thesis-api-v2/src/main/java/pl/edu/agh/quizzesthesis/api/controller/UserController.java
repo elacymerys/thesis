@@ -55,6 +55,8 @@ public class UserController {
     @DeleteMapping("/users/current")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void signOut(HttpServletResponse response) {
+        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8100");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
         clearAuthTokens(response);
     }
 
@@ -62,6 +64,9 @@ public class UserController {
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<UserResponse> signUp(@Valid @RequestBody SignUpRequest request,
                                                HttpServletResponse response) {
+//        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8100");
+//        response.setHeader("Access-Control-Allow-Credentials", "true");
+
         var userAuthTriple = authService.signUp(request);
         setAuthTokensCookies(response, userAuthTriple);
 
@@ -71,6 +76,9 @@ public class UserController {
 
     @PostMapping("/access-token")
     public UserResponse signIn(@Valid @RequestBody SignInRequest request, HttpServletResponse response) {
+//        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8100");
+//        response.setHeader("Access-Control-Allow-Credentials", "true");
+
         var userAuthTriple = authService.signIn(request);
         setAuthTokensCookies(response, userAuthTriple);
 
@@ -80,6 +88,9 @@ public class UserController {
     @PostMapping("/refresh-token")
     public UserResponse refreshTokens(@CookieValue(name = REFRESH_TOKEN_COOKIE_NAME, defaultValue = "") String refreshToken,
                                                 HttpServletResponse response) {
+//        response.setHeader("Access-Control-Allow-Origin", "http://localhost:8100");
+//        response.setHeader("Access-Control-Allow-Credentials", "true");
+
         var userAuthTriple = authService.refreshTokens(refreshToken);
         setAuthTokensCookies(response, userAuthTriple);
 
