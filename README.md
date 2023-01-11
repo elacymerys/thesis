@@ -1,5 +1,9 @@
 # Thesis
 
+## Overview
+
+Temat pracy: Aplikacja do zdobywania i utrwalania wiedzy encyklopedycznej
+
 ## Run backend
 
 From main directory:
