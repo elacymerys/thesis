@@ -1,10 +1,15 @@
 import { CapacitorConfig } from '@capacitor/cli';
 
 const config: CapacitorConfig = {
-  appId: 'io.ionic.starter',
+  appId: 'com.gui.thesis',
   appName: 'thesis-gui',
   webDir: 'build',
-  bundledWebRuntime: false
+  bundledWebRuntime: false,
+  plugins: {
+    CapacitorHttp: {
+      enabled: true
+    }
+  }
 };
 
 export default config;
