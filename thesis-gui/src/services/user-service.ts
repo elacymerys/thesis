@@ -5,22 +5,22 @@ import {SignUpRequest} from "../types/sign-up-request";
 
 export const userService = {
     getUser() {
-        return httpService.get<User>('auth/users/current');
+        return httpService.get<User>('/auth/users/current');
     },
 
     signIn(request: SignInRequest) {
-        return httpService.post<SignInRequest, User>('auth/access-token', request);
+        return httpService.post<SignInRequest, User>('/auth/access-token', request);
     },
 
     signUp(request: SignUpRequest) {
-        return httpService.post<SignUpRequest, User>('auth/users', request);
+        return httpService.post<SignUpRequest, User>('/auth/users', request);
     },
 
     signOut() {
-        return httpService.delete<undefined, undefined>('auth/users/current', undefined);
+        return httpService.delete<undefined, undefined>('/auth/users/current', undefined);
     },
 
     refreshTokens() {
-        return httpService.post<undefined, User>('auth/refresh-token', undefined);
+        return httpService.post<undefined, User>('/auth/refresh-token', undefined);
     }
 };

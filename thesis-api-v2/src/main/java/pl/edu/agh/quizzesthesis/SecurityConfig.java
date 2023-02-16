@@ -3,6 +3,7 @@ package pl.edu.agh.quizzesthesis;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -54,6 +55,7 @@ public class SecurityConfig {
                 .httpBasic().disable()
                 .authorizeRequests()
                 // TODO protect endpoints after authentication on frontend finished
+                .antMatchers(HttpMethod.OPTIONS, "/api/**").permitAll()
                 .antMatchers("/api/auth/access-token").permitAll()
                 .antMatchers("/api/auth/refresh-token").permitAll()
                 .antMatchers("/api/auth/users").permitAll()

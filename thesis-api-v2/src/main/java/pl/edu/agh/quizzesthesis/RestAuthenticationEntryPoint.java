@@ -19,6 +19,9 @@ public class RestAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse, AuthenticationException e) throws IOException {
+        httpServletResponse.setHeader("Access-Control-Allow-Origin", httpServletRequest.getRemoteHost());
+        httpServletResponse.setHeader("Access-Control-Allow-Credentials", "true");
+        httpServletResponse.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,PATCH,DELETE,OPTIONS");
         httpServletResponse.setStatus(401);
         httpServletResponse.getWriter().print(objectMapper.writeValueAsString(new TextResponse("Unauthorized")));
     }
