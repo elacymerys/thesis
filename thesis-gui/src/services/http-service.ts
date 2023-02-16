@@ -1,18 +1,17 @@
-import {HttpStatusCode} from "../utils/http-status-code";
-
 export const httpService = {
     request(path: string, method: string, body?: any) {
         return fetch(
-            `/api/${path}`,
+            `/api${path}`,
             {
                 method: method,
                 headers: { 'Content-Type': 'application/json; charset=utf-8' },
                 credentials: 'include',
+                mode: "cors",
                 body: body && JSON.stringify(body)
             }
         ).then(res => {
             if (res.ok) {
-                return res.status === HttpStatusCode.NO_CONTENT ? undefined : res.json();
+                return res.json();
             } else {
                 return Promise.reject({ apiStatusCode: res.status });
             }

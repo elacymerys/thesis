@@ -20,18 +20,13 @@ const PAGE_NAME = "My Quizzes";
 
 const QuizzesListItem: React.FC<{
     name: string,
-    questionsNumber: number,
     questionsSetKey: string,
     reloadQuizzes: () => void
 }> = ({
     name,
-    questionsNumber,
     questionsSetKey,
     reloadQuizzes
 }) => {
-    const COPY_KEY_TOAST_MESSAGE = `"${name}" quiz key was copied to clipboard!`;
-    const REFRESH_KEY_TOAST_MESSAGE = `"${name}" quiz key was refreshed and copied to clipboard!`;
-
     const { tryRefreshTokens } = useUserContext();
     const history = useHistory();
 
@@ -45,15 +40,10 @@ const QuizzesListItem: React.FC<{
         });
     };
 
-    const copyKeyToClipboard = (key: string, toastMessage: string) => {
-        navigator.clipboard.writeText(key);
-        presentToast(toastMessage);
-    }
-
     const handleRefresh = () => {
         quizService.refreshKey({ questionsSetKey: questionsSetKey })
             .then(res => {
-                copyKeyToClipboard(res.questionsSetKey, REFRESH_KEY_TOAST_MESSAGE);
+                presentToast(`"${name}" quiz key was refreshed!`);
                 reloadQuizzes();
             })
             .catch(err => {
@@ -81,15 +71,15 @@ const QuizzesListItem: React.FC<{
         <IonItem>
             <IonLabel>
                 <h2>{ name }</h2>
-                <p>{ `${questionsNumber} question(s)` }</p>
-            </IonLabel>
-            <IonButtons>
-                <IonButton onClick={ () => copyKeyToClipboard(questionsSetKey, COPY_KEY_TOAST_MESSAGE) }>
+                <p>
                     <IonIcon
                         slot="icon-only"
                         icon={keyOutline}
                     ></IonIcon>
-                </IonButton>
+                    { ` ${questionsSetKey}` }
+                </p>
+            </IonLabel>
+            <IonButtons>
                 <IonButton
                     onClick={ handleRefresh }
                 >
@@ -146,7 +136,6 @@ export const MyQuizzes: React.FC = () => {
         return <QuizzesListItem
             key={quiz.questionsSetKey}
             name={ quiz.questionsSetName }
-            questionsNumber={ quiz.numberOfQuestionsInSet }
             questionsSetKey={ quiz.questionsSetKey }
             reloadQuizzes={getQuizzesList}
         />
@@ -167,8 +156,7 @@ export const MyQuizzes: React.FC = () => {
                     quizzesListItems.length > 0 &&
                     <IonCard>
                         <IonCardContent style={{ textAlign: "justify" }}>
-                            Click on <IonIcon icon={keyOutline} /> to copy key to clipboard,
-                            on <IonIcon icon={refreshOutline} /> to refresh key,
+                            Click on <IonIcon icon={refreshOutline} /> to refresh key,
                             on <IonIcon icon={createOutline} /> to edit a quiz
                             or on <IonIcon icon={trashBinOutline} /> to delete a quiz
                         </IonCardContent>
